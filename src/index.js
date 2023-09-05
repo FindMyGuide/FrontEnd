@@ -5,10 +5,22 @@ import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 
+import { Provider } from 'react-redux';
+import { store } from './store/store';
+import { BrowserRouter } from 'react-router-dom';
+// 리덕스 상태 유지를 위한 persist store
+// import { PersistGate } from 'redux-persist/integration/react';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Provider store={store}>
+        {/* <PersistGate loading={null} persistor={persistor}> */}
+        <App />
+      </Provider>
+      {/* </PersistGate> */}
+    </BrowserRouter>
   </React.StrictMode>
 );
 
