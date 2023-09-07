@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
 
-function RouteLink(props) {
+function RouteLink() {
   return (
-    <div>
+    <>
       <Routes>
         {/* <Route path="/" element={<Home />} />
         <Route path="/products" element={<Themeproduct />} />
@@ -18,7 +18,7 @@ function RouteLink(props) {
         <Route path="/tour/:id" element={<ProductDetail />} />
         <Route path="/mypage/:id" element={<Mypage />} /> */}
       </Routes>
-    </div>
+    </>
   );
 }
 

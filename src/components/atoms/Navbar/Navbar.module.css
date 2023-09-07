@@ -1,0 +1,12 @@
+.navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.logoImage {
+  width: 15vw;
+}
+
+.pageLink > a {
+  font-size: 0.7vmax;
+}
