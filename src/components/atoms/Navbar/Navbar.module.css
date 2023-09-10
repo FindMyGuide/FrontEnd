@@ -1,12 +1,22 @@
-.navbar {
+.webNav {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
-.logoImage {
-  width: 15vw;
+.navLogoImage {
+  width: 12vw;
+  padding: 0;
+  margin: 0;
 }
 
 .pageLink > a {
   font-size: 0.7vmax;
+}
+
+.appNav {
+  display: flex;
+  justify-content: space-between;
 }

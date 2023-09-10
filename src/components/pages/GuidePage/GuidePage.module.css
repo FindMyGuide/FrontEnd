@@ -1,0 +1,26 @@
+/* webGuide */
+
+.famousGuide {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+}
+
+.guideBox {
+  border: 1px solid black;
+  margin: 10px;
+}
+
+.guideSearchBox {
+  border: 1px solid black;
+  display: flex;
+}
+.SearchConditionBox {
+  border: 1px solid black;
+  flex: 1;
+}
+
+.resultSearchBox {
+  border: 1px solid black;
+  flex: 3;
+}
