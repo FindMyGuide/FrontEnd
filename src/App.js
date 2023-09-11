@@ -2,12 +2,13 @@ import React from 'react';
 import './App.css';
 
 import Navbar from './components/atoms/Navbar/Navbar';
+import RouteLink from './routes/route';
 
 function App() {
   return (
     <div className="App">
       <Navbar></Navbar>
-      {/* <RouterLink></RouterLink> */}
+      <RouteLink></RouteLink>
     </div>
   );
 }
