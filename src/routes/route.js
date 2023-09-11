@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import MainPage from '../components/pages/MainPage/MainPage.jsx';
 import GuidePage from '../components/pages/GuidePage/GuidePage.jsx';
 import GuideDetailPage from '../components/pages/GuideDetailPage/GuideDetailPage.jsx';
+import AreaPage from '../components/pages/AreaPage/AreaPage.jsx';
 
 function RouteLink() {
   return (
@@ -13,9 +14,9 @@ function RouteLink() {
         {/* <Route path="/login" element={<Login />} /> */}
         {/* <Route path="/signup" element={<Signup />} /> */}
         {/* <Route path="/create" element={<Createproduct />} /> */}
-        {/* <Route path="/areaproduct" element={<Areaproduct />} /> */}
+        <Route path="/area" element={<AreaPage />} />
         <Route path="/guide" element={<GuidePage />} />
-        <Route path="/guide" element={<GuideDetailPage />} />
+        <Route path="/guidedetail" element={<GuideDetailPage />} />
         {/* <Route path="/allproduct" element={<Allproduct />} /> */}
         {/* <Route path="/Maptest" element={<Map />} /> */}
         {/* <Route path="/wantproduct" element={<Wantproduct />} /> */}

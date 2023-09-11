@@ -40,6 +40,8 @@ function Navbar() {
             <Link to="/products">추천 </Link>
             <Link to="/areaproduct">지역별상품 </Link>
             <Link to="/guide">가이드별상품 </Link>
+            <Link to="/guidedetail">가이드 디테일 </Link>
+            <Link to="/area">지역별 </Link>
             <Link to="/allproduct">전체상품 </Link>
             <Link to="/Maptest">지도테스트 </Link>
             <Link to="/wantproduct">원해요 </Link>

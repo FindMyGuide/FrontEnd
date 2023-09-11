@@ -1,7 +1,7 @@
 import React from 'react';
 import { isMobile } from 'react-device-detect';
 
-import { styles } from 'GuideDetailPage.module.css';
+import styles from './GuideDetailPage.module.css';
 
 const GuideDetailPage = () => {
   return (
@@ -13,13 +13,18 @@ const GuideDetailPage = () => {
       ) : (
         <>
           <div className={styles.webGuideDetail}>
-            <div></div>
-            <div>
+            <div className={styles.guideprofile}>
+              <p>가이드 프로필</p>
+            </div>
+            <div className={styles.tourofguide}>
               <div>
-                <h1>현재 진행중인 투어</h1>
+                <h3>현재 진행중인 투어</h3>
+                <div>
+                  <div></div>
+                </div>
               </div>
               <div>
-                <h1>가이드 투어 후기</h1>
+                <h3>가이드 투어 후기</h3>
               </div>
             </div>
           </div>
