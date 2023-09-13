@@ -1,0 +1,16 @@
+.background {
+  background-image: url('../../asset/images/mainImage.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-family: 'Pretendard-Regular';
+}
+
+input {
+  background-color: #eaeaea;
+  opacity: 0.8;
+  width: 50%;
+  height: 2rem;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+}

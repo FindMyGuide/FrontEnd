@@ -44,7 +44,7 @@ function Navbar() {
             <Link to="/area">지역별 </Link>
             <Link to="/allproduct">전체상품 </Link>
             <Link to="/Maptest">지도테스트 </Link>
-            <Link to="/wantproduct">원해요 </Link>
+            <Link to="/wanttour">원해요 </Link>
             <Link to="/mypage/:id">마이페이지</Link>
           </div>
           <div>

@@ -1,10 +1,11 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes } from 'react-router-dom';
 
-import MainPage from "../components/pages/MainPage/MainPage.jsx";
-import GuidePage from "../components/pages/GuidePage/GuidePage.jsx";
-import GuideDetailPage from "../components/pages/GuideDetailPage/GuideDetailPage.jsx";
-import AreaPage from "../components/pages/AreaPage/AreaPage.jsx";
-import Mypage from "../components/pages/MyPage/Mypage.jsx";
+import MainPage from '../pages/MainPage/MainPage.jsx';
+import GuidePage from '../pages/GuidePage/GuidePage.jsx';
+import GuideDetailPage from '../pages/GuideDetailPage/GuideDetailPage.jsx';
+import AreaPage from '../pages/AreaPage/AreaPage.jsx';
+import Mypage from '../pages/MyPage/Mypage.jsx';
+import WantTour from '../pages/WantTour/WantTourList.jsx';
 
 function RouteLink() {
   return (
@@ -20,7 +21,7 @@ function RouteLink() {
         <Route path="/guidedetail" element={<GuideDetailPage />} />
         {/* <Route path="/allproduct" element={<Allproduct />} /> */}
         {/* <Route path="/Maptest" element={<Map />} /> */}
-        {/* <Route path="/wantproduct" element={<Wantproduct />} /> */}
+        <Route path="/wanttour" element={<WantTour />} />
         {/* <Route path="/resetpassword" element={<ResetPassword />} /> */}
         {/* <Route path="/tour/:id" element={<ProductDetail />} /> */}
         <Route path="/mypage/:id" element={<Mypage />} />
