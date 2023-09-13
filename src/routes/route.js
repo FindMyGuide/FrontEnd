@@ -1,9 +1,10 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from "react-router-dom";
 
-import MainPage from '../components/pages/MainPage/MainPage.jsx';
-import GuidePage from '../components/pages/GuidePage/GuidePage.jsx';
-import GuideDetailPage from '../components/pages/GuideDetailPage/GuideDetailPage.jsx';
-import AreaPage from '../components/pages/AreaPage/AreaPage.jsx';
+import MainPage from "../components/pages/MainPage/MainPage.jsx";
+import GuidePage from "../components/pages/GuidePage/GuidePage.jsx";
+import GuideDetailPage from "../components/pages/GuideDetailPage/GuideDetailPage.jsx";
+import AreaPage from "../components/pages/AreaPage/AreaPage.jsx";
+import Mypage from "../components/pages/MyPage/Mypage.jsx";
 
 function RouteLink() {
   return (
@@ -22,7 +23,7 @@ function RouteLink() {
         {/* <Route path="/wantproduct" element={<Wantproduct />} /> */}
         {/* <Route path="/resetpassword" element={<ResetPassword />} /> */}
         {/* <Route path="/tour/:id" element={<ProductDetail />} /> */}
-        {/* <Route path="/mypage/:id" element={<Mypage />} /> */}
+        <Route path="/mypage/:id" element={<Mypage />} />
       </Routes>
     </>
   );
