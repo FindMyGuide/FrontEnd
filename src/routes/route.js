@@ -5,7 +5,12 @@ import GuidePage from '../pages/GuidePage/GuidePage.jsx';
 import GuideDetailPage from '../pages/GuideDetailPage/GuideDetailPage.jsx';
 import AreaPage from '../pages/AreaPage/AreaPage.jsx';
 import Mypage from '../pages/MyPage/Mypage.jsx';
-import WantTour from '../pages/WantTour/WantTourList.jsx';
+
+// WantTour
+import WantTourList from '../pages/WantTour/WantTourList.jsx';
+import WantTourDetail from '../pages/WantTour/WantTourDetail.jsx';
+import WantTourRegist from '../pages/WantTour/WantTourRegist.jsx';
+import WantTourUpdate from '../pages/WantTour/WantTourUpdate.jsx';
 
 function RouteLink() {
   return (
@@ -21,7 +26,10 @@ function RouteLink() {
         <Route path="/guidedetail" element={<GuideDetailPage />} />
         {/* <Route path="/allproduct" element={<Allproduct />} /> */}
         {/* <Route path="/Maptest" element={<Map />} /> */}
-        <Route path="/wanttour" element={<WantTour />} />
+        <Route path="/wanttour" element={<WantTourList />} />
+        <Route path="/wanttour/regist" element={<WantTourRegist />} />
+        <Route path="/wanttour/detail/:id" element={<WantTourDetail />} />
+        <Route path="/wanttour/update/:id" element={<WantTourUpdate />} />
         {/* <Route path="/resetpassword" element={<ResetPassword />} /> */}
         {/* <Route path="/tour/:id" element={<ProductDetail />} /> */}
         <Route path="/mypage/:id" element={<Mypage />} />

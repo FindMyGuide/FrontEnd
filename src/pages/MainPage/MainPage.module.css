@@ -1,11 +1,13 @@
 .background {
-  background-image: url('../../asset/images/mainImage.png');
+  background-image: url('../../asset/images/maintest.png');
   background-size: cover;
   background-repeat: no-repeat;
-  font-family: 'Pretendard-Regular';
+  background-position: 50%;
+  width: 100%;
+  height: 500px;
 }
 
-input {
+.searchbar {
   background-color: #eaeaea;
   opacity: 0.8;
   width: 50%;

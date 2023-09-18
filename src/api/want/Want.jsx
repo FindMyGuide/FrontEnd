@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios from 'axios';
 
 //글 목록 조회
 export async function WantAll() {
   try {
-    const res = await axios.get("v1/wanttour", {}, {});
+    const res = await axios.get('v1/wanttour', {}, {});
     return res;
   } catch (e) {
     console.error(e);
@@ -14,13 +14,13 @@ export async function WantAll() {
 export async function MyArticle() {
   try {
     const res = await axios.get(
-      "v1/wanttour/me",
+      'v1/wanttour/me',
       {},
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("token"),
-        },
+          'Content-Type': 'application/json',
+          Authorization: sessionStorage.getItem('token')
+        }
       }
     );
     return res;
@@ -32,32 +32,31 @@ export async function MyArticle() {
 //대기 상태 글 목록 조회
 export async function WaitAll() {
   try {
-    const res = await axios.get("v1/wanttour/wait", {}, {});
+    const res = await axios.get('v1/wanttour/wait', {}, {});
     return res;
   } catch (e) {
     console.error(e);
   }
 }
 
-//글작성
+//글 작성
 export async function CreateArticle(props) {
   try {
     const res = await axios.get(
-      "v1/wanttour/create",
+      'v1/wanttour/create',
       {
         title: props.title,
-        tour_date: props.tour_date,
-        theme: props.theme,
-        wish: props.wish,
-        detail: props.detail,
-        persons: props.persons,
-        price: props.price,
+        date: props.date,
+        themes: props.themes,
+        locations: props.locations,
+        content: props.content,
+        persons: props.persons
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("token"),
-        },
+          'Content-Type': 'application/json',
+          Authorization: sessionStorage.getItem('token')
+        }
       }
     );
     return res;
@@ -66,7 +65,7 @@ export async function CreateArticle(props) {
   }
 }
 
-//글수정
+//글 수정
 export async function UpdateArticle(props) {
   try {
     const res = await axios.patch(
@@ -78,13 +77,13 @@ export async function UpdateArticle(props) {
         wish: props.wish,
         detail: props.detail,
         persons: props.persons,
-        price: props.price,
+        price: props.price
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("token"),
-        },
+          'Content-Type': 'application/json',
+          Authorization: sessionStorage.getItem('token')
+        }
       }
     );
     return res;
@@ -93,7 +92,7 @@ export async function UpdateArticle(props) {
   }
 }
 
-//글삭제
+//글 삭제
 export async function DeleteArticle(props) {
   try {
     const res = await axios.delete(
@@ -101,9 +100,9 @@ export async function DeleteArticle(props) {
       {},
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("token"),
-        },
+          'Content-Type': 'application/json',
+          Authorization: sessionStorage.getItem('token')
+        }
       }
     );
     return res;
@@ -118,13 +117,13 @@ export async function DetailArticle(props) {
   try {
     const res = await axios.get(
       `v1/wanttour/update/${props}`,
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("token"),
-        },
-      }
+      {}
+      // {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     Authorization: sessionStorage.getItem('token')
+      //   }
+      // }
     );
     return res;
   } catch (e) {
