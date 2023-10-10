@@ -1,12 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import styles from './GuidePage.module.css';
 
-import { FormControl, InputLabel, Select, Slider } from '@mui/material';
+import { FormControl, InputLabel, Radio, RadioGroup, Select, Slider } from '@mui/material';
+import { GuidePopular } from '../../api/guide/Guide';
+import GuideCard from '../../components/PopularGuideCard/GuideCard';
+import { FormLabel } from 'react-bootstrap';
 
 const GuidePage = () => {
-  const [ageValue, setAgeValue] = useState([20, 37]);
-  const [personName, setPersonName] = React.useState([]);
+  //가이드 검색
+  const [ageValue, setAgeValue] = useState([30, 37]);
+  const [personName, setPersonName] = useState([]);
+  const [gender, setGender] = useState('all');
+  //인기 가이드
+  const [popularGuide, setPopularGuide] = useState([]);
+
+  useEffect(() => {
+    GuidePopular()
+      .then((getPopularGuideList) => {
+        const popularGuideList = getPopularGuideList;
+        setPopularGuide(popularGuideList);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   const names = [
     'Oliver Hansen',
@@ -24,10 +42,14 @@ const GuidePage = () => {
   const handleAge = (event, newValue) => {
     setAgeValue(newValue);
   };
+  const handleGender = (event) => {
+    setGender(event.target.value);
+  };
 
   const handleChangeMultiple = (event) => {
     const { options } = event.target;
     const value = [];
+    // 가이드 언어 계속 추가만 됨 여기 수정 필요
     for (let i = 0, l = options.length; i < l; i += 1) {
       if (options[i].selected && !value.includes(options[i])) {
         value.push(options[i].value);
@@ -47,32 +69,38 @@ const GuidePage = () => {
           <div className="webGuide">
             <p>인기가이드</p>
             <div className={styles.famousGuide}>
-              <div className={styles.guideBox}>
-                <div></div>
-                <div>
-                  <h1>name</h1>
-                  <p>설명</p>
-                  <img src="" alt="" />
-                </div>
-              </div>
-              <div className={styles.guideBox}>
-                <div></div>
-                <div>
-                  <h1>name</h1>
-                  <p>설명</p>
-                  <img src="" alt="" />
-                </div>
-              </div>
+              {popularGuide ? (
+                popularGuide.map((guide) => (
+                  <GuideCard
+                    key={parseInt(guide.guideId)}
+                    guideId={guide?.guideId}
+                    name={guide?.guideName}
+                    tour={guide?.tourProductTitles[0]?.title}
+                  ></GuideCard>
+                ))
+              ) : (
+                <></>
+              )}
             </div>
 
             <div className={styles.guideSearchBox}>
               <div className={styles.SearchConditionBox}>
                 <p>가이드검색</p>
                 <div>
-                  <p>성별</p>
-                  <button type="button">전체</button>
-                  <button type="button">남자</button>
-                  <button type="button">여자</button>
+                  <FormControl>
+                    <FormLabel>성별</FormLabel>
+                    <RadioGroup
+                      defaultValue="all"
+                      name="controlled-radio-buttons-group"
+                      value={gender}
+                      onChange={handleGender}
+                      sx={{ my: 0 }}
+                    >
+                      <Radio value="all" label="전체" />
+                      <Radio value="male" label="남성" />
+                      <Radio value="female" label="여성" />
+                    </RadioGroup>
+                  </FormControl>
                 </div>
                 <div>
                   <p>나이</p>
@@ -81,6 +109,7 @@ const GuidePage = () => {
                     value={ageValue}
                     onChange={handleAge}
                     min={20}
+                    max={60}
                     valueLabelDisplay="auto"
                     // getAriaValueText={valuetext}
                   />
