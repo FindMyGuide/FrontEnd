@@ -1,7 +1,7 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const baseAxios = axios.create({
-  baseURL: 'https://find-my-guide.site/api/'
+  baseURL: "http://find-my-guide.site:9000/api/",
   // baseURL: '',
   // headers: {
   //   "Content-Type": "application/json",

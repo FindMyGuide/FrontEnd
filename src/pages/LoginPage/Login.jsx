@@ -1,17 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import LoginImage from "./Login.png";
 import styles from "./Login.module.css";
 import { styled } from "styled-components";
 import { TextField } from "@mui/material";
 import { UserLogin } from "../../api/user/User";
-
-const Input = styled.input`
-  width: 100%;
-  height: 60px;
-  background: #eaf0f7;
-  border-radius: 12px;
-  border: none;
-`;
+import { useForm } from "react-hook-form";
 
 const Button = styled.button`
   width: 100%;
@@ -23,13 +16,16 @@ const Button = styled.button`
 `;
 
 function Login() {
-  const loginSubmit = async (e) => {
-    e.preventDefault();
-    const sendData = {
-      email: e.target[0].value,
-      password: e.target[2].value,
-    };
-    const res = await UserLogin(sendData);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const loginHandler = async (e) => {
+    const res = await UserLogin(e);
+    console.log(e);
   };
   return (
     <div className={styles.container}>
@@ -42,9 +38,23 @@ function Login() {
         </h1>
       </div>
 
-      <form onSubmit={loginSubmit} className={styles.formBox}>
-        <TextField fullWidth label="이메일"></TextField>
-        <TextField fullWidth label="비밀번호" type="password"></TextField>
+      <form onSubmit={handleSubmit(loginHandler)} className={styles.formBox}>
+        <TextField
+          required
+          fullWidth
+          className={styles.margin}
+          label="이메일"
+          {...register("email")}
+        ></TextField>
+        <TextField
+          required
+          fullWidth
+          className={styles.margin}
+          label="비밀번호"
+          type="password"
+          {...register("password")}
+        ></TextField>
+
         <Button type="submit">Login</Button>
         <h5>
           Not a member? <a href="/signup">Sign up now</a>

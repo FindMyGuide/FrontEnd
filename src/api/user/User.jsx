@@ -2,6 +2,7 @@ import { baseAxios } from "../Axios";
 
 //회원가입
 export async function UserSignup(props) {
+  console.log(props);
   try {
     const res = await baseAxios.post("find-my-guide/member/initiate-sign-up", {
       name: props.name,
@@ -10,10 +11,9 @@ export async function UserSignup(props) {
       nickname: props.nickname,
       nationality: props.nationality,
       gender: props.gender,
-      birth_date: props.birth_date,
-      phone_number: props.phone_number,
-      national_certification_of_quide_yn:
-        props.national_certification_of_quide_yn,
+      birthDate: props.birthDate,
+      phoneNumber: props.phoneNumber,
+      nationalCertificationOfGuideYn: props.nationalCertificationOfGuideYn,
     });
     return res;
   } catch (e) {
