@@ -1,18 +1,28 @@
 .card {
   border: 1px solid #c9c9c9;
-  border-radius: 15px;
+  border-radius: 7px;
   background-color: white;
-  width: 260px;
+  width: 300px;
   margin: 10px;
+  transition: box-shadow 0.15s ease-out, transform 0.15s ease-out;
+  font-family: 'LINESeedKR-Bd';
+}
+
+.card:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
 }
 
 .content {
   position: relative;
+  text-align: center;
 }
 
 .mainImg {
-  border-radius: 15px;
-  width: 100%;
+  border-radius: 7px;
+  width: 280px;
+  height: 170px;
+  margin: auto;
 }
 
 .likebg {
@@ -30,3 +40,5 @@
   top: 3.5px;
   right: 3px;
 }
+
+transition: box-shadow 0.15s ease-out;

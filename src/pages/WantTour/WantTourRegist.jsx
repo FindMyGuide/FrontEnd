@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CreateArticle } from '../../api/want/Want';
+import { CreateArticle } from 'api/want/Want';
 import styles from './WantTourRegist.module.css';
 
 // component, icon
-import Location from '../../components/Location/Location';
-import Themes from '../../components/Theme/Themes';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import Location from 'components/Location/Location';
+import Themes from 'components/Theme/Themes';
+// import Form from 'react-bootstrap/Form';
+// import Button from 'react-bootstrap/Button';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
 
 function WantTourRegist() {
-  // const isLoggedIn = sessionStorage.getItem('token');
   const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
@@ -23,41 +22,39 @@ function WantTourRegist() {
   const [location, setLocaiton] = useState('');
   const [locations, setLocations] = useState([]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // 글 등록 axios
-    // 등록이 잘 되었으면 list 페이지로 이동
+  const handleSubmit = (event) => {
+    event.preventDefault();
     CreateArticle({ title, content, date, persons, themes, locations });
     console.log(themes);
     navigate('/wanttour');
   };
 
-  const onTitleHandler = (e) => {
-    setTitle(e.target.value);
+  const onTitleHandler = (event) => {
+    setTitle(event.target.value);
   };
 
-  const onContentHandler = (e) => {
-    setContent(e.target.value);
+  const onContentHandler = (event) => {
+    setContent(event.target.value);
   };
 
-  const increment = (e) => {
-    e.preventDefault();
+  const increment = (event) => {
+    event.preventDefault();
     setPersons(persons + 1);
   };
 
-  const decrement = (e) => {
-    e.preventDefault();
+  const decrement = (event) => {
+    event.preventDefault();
     if (persons > 1) {
       setPersons(persons - 1);
     }
   };
 
-  const onLocationHandler = (e) => {
-    setLocaiton(e.target.value);
+  const onLocationHandler = (event) => {
+    setLocaiton(event.target.value);
   };
 
-  const onLocationsHandler = (e) => {
-    e.preventDefault();
+  const onLocationsHandler = (event) => {
+    event.preventDefault();
     const cleanedInput = location.trim();
     if (cleanedInput) {
       if (!locations.includes(cleanedInput)) {
@@ -77,54 +74,81 @@ function WantTourRegist() {
   };
 
   return (
-    <div className="container">
-      <h3>원하는 투어를 등록해보세요</h3>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="formPlaintextEmail">
-          <Form.Label>제목</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="제목을 입력하세요"
-            value={title}
-            onChange={onTitleHandler}
-            maxLength="20"
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formTextarea">
-          <Form.Label>내용</Form.Label>
-          <Form.Control
-            as="textarea"
-            placeholder="원하는 투어에 대해 남겨주세요"
-            value={content}
-            onChange={onContentHandler}
-            style={{ height: '140px' }}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formDate">
-          <Form.Label>원하는 투어 날짜를 선택하세요</Form.Label>
-          {/* 달력 컴포넌트 */}
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formPersons">
-          <Form.Label>원하는 투어 인원을 선택하세요</Form.Label>
-          <IndeterminateCheckBoxIcon onClick={decrement} style={{ fill: '#979797' }}></IndeterminateCheckBoxIcon>
-          <input type="number" readOnly value={persons} className={styles.price} />
-          <AddBoxIcon onClick={increment} style={{ fill: '#979797' }}></AddBoxIcon>
-          <span>명</span>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formTheme">
-          <Form.Label>원하는 투어 테마를 선택하세요</Form.Label>
-          <Themes selectedThemes={themes} setSelectedThemes={setThemes} />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formLocation">
-          <Form.Label>꼭 가고싶은 장소를 입력하세요</Form.Label>
-          <Form.Control type="text" placeholder="장소 입력" value={location} onChange={onLocationHandler} />
-          <button onClick={onLocationsHandler}>추가하기</button>
-          {locations.map((location, index) => (
-            <Location key={index} location={location} removeLocation={removeLocation} />
-          ))}
-        </Form.Group>
-        <Button type="submit">글 작성하기</Button>
-      </Form>
+    <div style={{ backgroundColor: '#F9FAFB' }}>
+      <div className="container" style={{ padding: '70px 0' }}>
+        <div className={styles.container}>
+          <div className={styles.title}>
+            원하는 투어를 <span className="color">직접</span> 등록해보세요
+          </div>
+          <div className={styles.explain}>
+            <div>본인이 원하는 투어를 찾지 못하였다면 원하는 투어의 내용을 작성하여 등록해보세요</div>
+            <div>등록한 후, 가이드를 연락을 기다리시면 됩니다 !</div>
+          </div>
+          <hr />
+          <form onSubmit={handleSubmit}>
+            <div className={styles.content}>
+              <div className={styles.subtitle}>제목</div>
+              <input
+                type="text"
+                placeholder="제목을 입력하세요"
+                value={title}
+                onChange={onTitleHandler}
+                maxLength="20"
+                className={styles.input}
+              />
+            </div>
+            <div className={styles.content}>
+              <div className={styles.subtitle}>내용</div>
+              <textarea
+                placeholder="원하는 투어에 대한 상세 설명을 남겨주세요"
+                value={content}
+                onChange={onContentHandler}
+              />
+            </div>
+            <div className={styles.content}>
+              <div className={styles.subtitle}>꼭 가고싶은 장소</div>
+              <div className={styles.location}>
+                <input
+                  type="text"
+                  placeholder="장소 입력"
+                  value={location}
+                  onChange={onLocationHandler}
+                  style={{ width: '88%' }}
+                  className={styles.input}
+                />
+                <button onClick={onLocationsHandler} className={styles.add}>
+                  추가하기
+                </button>
+                <div>
+                  {locations.map((location, index) => (
+                    <Location key={index} location={location} removeLocation={removeLocation} />
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className={styles.content}>
+              <div className={styles.subtitle}>투어 날짜</div>
+              {/* 달력 */}
+            </div>
+            <div className={styles.content}>
+              <div className={styles.subtitle}>투어 인원</div>
+              <IndeterminateCheckBoxIcon onClick={decrement} style={{ fill: '#979797' }}></IndeterminateCheckBoxIcon>
+              <input type="number" readOly value={persons} className={styles.price} />
+              <AddBoxIcon onClick={increment} style={{ fill: '#979797' }}></AddBoxIcon>
+              <span>명</span>
+            </div>
+            <div className={styles.content}>
+              <div className={styles.subtitle}>투어 테마</div>
+              <Themes selectedThemes={themes} setSelectedThemes={setThemes} />
+            </div>
+            <div className={styles.flex}>
+              <button type="submit" className={styles.submit}>
+                글 작성하기
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
