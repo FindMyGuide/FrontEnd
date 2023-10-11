@@ -1,12 +1,12 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const baseAxios = axios.create({
-  baseURL: 'http://find-my-guide.site:9000/api/'
+  baseURL: "http://find-my-guide.site:9000/api/",
   // baseURL: '',
-  // headers: {
-  //   "Content-Type": "application/json",
-  //   Authorization: sessionStorage.getItem("token"),
-  // },
+  headers: {
+    "Content-Type": "application/json",
+    // Authorization: sessionStorage.getItem("token"),
+  },
 });
 
 // axiosInstance.interceptors.request.use(
