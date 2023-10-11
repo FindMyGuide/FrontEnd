@@ -5,6 +5,7 @@ import { styled } from "styled-components";
 import { TextField } from "@mui/material";
 import { UserLogin } from "../../api/user/User";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const Button = styled.button`
   width: 100%;
@@ -16,16 +17,20 @@ const Button = styled.button`
 `;
 
 function Login() {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm();
 
   const loginHandler = async (e) => {
     const res = await UserLogin(e);
-    console.log(e);
+    console.log(res);
+    if (res != null) {
+      sessionStorage.setItem("accessToken", res.data.accessToken);
+      localStorage.setItem("refreshToken", res.data.refreshToken);
+      window.alert("로그인 성공! 메인페이지로 이동합니다.");
+      navigate("/");
+    } else {
+      window.alert("아이디나 비밀번호가 틀립니다.");
+    }
   };
   return (
     <div className={styles.container}>
