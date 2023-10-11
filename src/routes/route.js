@@ -37,7 +37,7 @@ function RouteLink() {
         {/* <Route path="/create" element={<Createproduct />} /> */}
         <Route path="/area" element={<AreaPage />} />
         <Route path="/guide" element={<GuidePage />} />
-        <Route path="/guidedetail" element={<GuideDetailPage />} />
+        <Route path="/guide/detail/:id" element={<GuideDetailPage />} />
         {/* <Route path="/allproduct" element={<Allproduct />} /> */}
         {/* <Route path="/Maptest" element={<Map />} /> */}
         <Route path="/wanttour" element={<WantTourList />} />
