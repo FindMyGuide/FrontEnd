@@ -30,7 +30,7 @@ function MainPage() {
             <SearchBar />
           </header>
           <div className={styles.subtitle}>인기 투어를 구경해보세요</div>
-          {/* <Carousel list={tourList}></Carousel> */}
+          <Carousel list={tourList}></Carousel>
           <div className={styles.subtitle}>인기 가이드를 구경해보세요</div>
           <div className={styles.subtitle}>여러가지 축제가 진행중입니다</div>
           <div className={styles.subtitle}>인기 여행지를 구경해보세요</div>

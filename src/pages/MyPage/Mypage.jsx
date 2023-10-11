@@ -316,10 +316,10 @@ function EditProfile() {
 // 왼쪽
 function Left() {
   // 개인정보 조회
-  sessionStorage.setItem(
-    "token",
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ4b2RuanM4Mjg3QG5hdmVyLmNvbSIsImV4cCI6MTcwMDYyMTI3MywiaXNzIjoiZmluZG15Z3VpZGUuY29tIn0.nndOrq19RvWzKZz-loEPzvXFeCpaVLc0VUpTNjt4NZo"
-  );
+  // sessionStorage.setItem(
+  //   "token",
+  //   "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ4b2RuanM4Mjg3QG5hdmVyLmNvbSIsImV4cCI6MTcwMDYyMTI3MywiaXNzIjoiZmluZG15Z3VpZGUuY29tIn0.nndOrq19RvWzKZz-loEPzvXFeCpaVLc0VUpTNjt4NZo"
+  // );
 
   const dispatch = useDispatch();
 

@@ -33,7 +33,7 @@ function Navbar({ isMain }) {
           </button>
         </div>
       ) : (
-        <div className={`${styles.webNav} ${isMain ? styles.main : ''}`}>
+        <div className={`${styles.webNav} ${isMain ? styles.main : styles.notMain}`}>
           <div>
             <Link to="/">
               <img className={styles.navLogoImage} src={logoImage} alt="" />

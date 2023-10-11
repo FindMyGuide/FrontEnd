@@ -5,7 +5,7 @@ import './App.css';
 
 import Navbar from './components/atoms/Navbar/Navbar';
 import RouteLink from './routes/route';
-// import Footer
+// import Footer from 'components/Footer/Footer';
 
 function App() {
   const location = useLocation();
@@ -15,6 +15,7 @@ function App() {
     <div className="App">
       <Navbar isMain={isMain}></Navbar>
       <RouteLink></RouteLink>
+      {/* <Footer /> */}
     </div>
   );
 }

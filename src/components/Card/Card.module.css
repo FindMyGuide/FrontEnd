@@ -1,11 +1,10 @@
 .card {
   border: 1px solid #c9c9c9;
-  border-radius: 7px;
+  border-radius: 5px;
   background-color: white;
   width: 300px;
   margin: 10px;
   transition: box-shadow 0.15s ease-out, transform 0.15s ease-out;
-  font-family: 'LINESeedKR-Bd';
 }
 
 .card:hover {
@@ -19,13 +18,22 @@
 }
 
 .mainImg {
-  border-radius: 7px;
+  border-radius: 5px;
   width: 280px;
-  height: 170px;
+  height: 180px;
   margin: auto;
+  padding-bottom: 10px;
 }
 
-.likebg {
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  padding-bottom: 8px;
+  color: #70aeca;
+}
+
+/* .likebg {
   width: 30px;
   height: 30px;
   background-color: white;
@@ -33,12 +41,10 @@
   position: absolute;
   top: 10px;
   right: 10px;
-}
+} */
 
 .like {
   position: absolute;
   top: 3.5px;
   right: 3px;
 }
-
-transition: box-shadow 0.15s ease-out;
