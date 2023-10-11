@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../MainPage/MainPage.module.css';
-import styles2 from './TourRegist.module.css';
-import { TourAll } from '../../api/tour/Tour.jsx';
+import TourAll from '../../api/tour/Tour.jsx';
 import Card from '../../components/Card/Card';
-// import tourListStyle from './TourList.module.css';
+import SearchBar from 'components/SearchBar/SearchBar';
+import tourListStyle from './TourList.module.css';
 
 function TourList() {
   const navigate = useNavigate();
@@ -67,45 +67,41 @@ function TourList() {
 
   return (
     <div className={styles.background}>
-      <div className="styles2.search">
-        당신이 가고싶은 여행을 검색하세요
-        <form onSubmit={handleSearch}>
-          <input value={inputValue} type="text" onChange={handleInput} className={styles.searchbar} />
-          <button type="submit">
-            검색
-            {/* <img src={searchIcon} alt="searchIcon" /> */}
-          </button>
-        </form>
+      <div className="tourListStyle.search">
+        <header className={styles.header}>
+          <span className={styles.title}>당신이 가고싶은 여행을 검색하세요</span>
+          <SearchBar />
+        </header>
       </div>
       <div>
-        <div className={styles2.topdiv}>TOP</div>
-        <div className={styles2.topcard}>
+        <div className={tourListStyle.topdiv}>TOP</div>
+        <div className={tourListStyle.topcard}>
           <div style={{ position: 'relative', marginLeft: '20px' }}>
             <Card></Card>
-            <div className={styles2.cardovertext}>1</div>
+            <div className={tourListStyle.cardovertext}>1</div>
           </div>
           <div style={{ position: 'relative' }}>
             <Card></Card>
-            <div className={styles2.cardovertext}>2</div>
+            <div className={tourListStyle.cardovertext}>2</div>
           </div>
           <div style={{ position: 'relative' }}>
             <Card></Card>
-            <div className={styles2.cardovertext}>3</div>
+            <div className={tourListStyle.cardovertext}>3</div>
           </div>
         </div>
       </div>
 
       <div>
-        <div className={styles2.selectedtheme}>
+        <div className={tourListStyle.selectedtheme}>
           #&nbsp;<div style={{ color: '#0052b4' }}>{selectedThemes.join(', ')}</div>
           &nbsp;투어
         </div>
         <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
-          <div className={styles2.themes}>
+          <div className={tourListStyle.themes}>
             {themes.map((theme) => (
               <div
                 key={theme}
-                className={`${styles2.tourtheme} ${selectedThemes.includes(theme) ? styles2.selected : ''}`}
+                className={`${tourListStyle.tourtheme} ${selectedThemes.includes(theme) ? tourListStyle.selected : ''}`}
                 onClick={() => toggleTheme(theme)}
               >
                 {theme}
@@ -113,7 +109,6 @@ function TourList() {
             ))}
           </div>
         </div>
-        <hr />
 
         {selectedDatas.map((tour) => (
           <div key={tour.id}>
