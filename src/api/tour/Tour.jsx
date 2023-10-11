@@ -13,8 +13,9 @@ export default async function TourAll() {
 //인기 투어 조회
 export async function TourPopular() {
   try {
-    const res = await baseAxios.get('v1/tour/popular', {}, {});
-    return res;
+    const res = await baseAxios.get('tourProduct/top-10', {}, {});
+    console.log(res.data);
+    return res.data;
   } catch (e) {
     console.error(e);
   }

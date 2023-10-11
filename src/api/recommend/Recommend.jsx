@@ -1,4 +1,4 @@
-import { baseAxios } from "../Axios";
+import { baseAxios } from '../Axios';
 
 //맛집목록 조회
 export async function TastySearch(props) {
@@ -43,7 +43,7 @@ export async function TravelDetail(props) {
 //축제목록 조회
 export async function FestivalSearch(props) {
   try {
-    const res = await baseAxios.get(`v1/recommend/festival`, {}, {});
+    const res = await baseAxios.get(`/festival/recommend/`, {}, {});
     return res;
   } catch (e) {
     console.error(e);
@@ -51,9 +51,9 @@ export async function FestivalSearch(props) {
 }
 
 //축제상세 조회
-export async function FestivalDetail(props) {
+export async function FestivalInfo(id) {
   try {
-    const res = await baseAxios.get(`v1/recommend/festival/${props}`, {}, {});
+    const res = await baseAxios.get(`/festivalDetail/${id}`, {}, {});
     return res;
   } catch (e) {
     console.error(e);
