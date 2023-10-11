@@ -3,7 +3,7 @@ import { isMobile } from 'react-device-detect';
 import styles from './GuidePage.module.css';
 
 import { Autocomplete, FormControl, FormControlLabel, Radio, RadioGroup, Slider, TextField } from '@mui/material';
-import { GuidePopular } from '../../api/guide/Guide';
+import { GuideFilter, GuidePopular } from '../../api/guide/Guide';
 import GuideCard from '../../components/PopularGuideCard/GuideCard';
 import { FormLabel, Stack } from 'react-bootstrap';
 
@@ -22,9 +22,10 @@ const GuidePage = () => {
   ];
   //가이드 검색
   const [ageValue, setAgeValue] = useState([30, 37]);
-  const [gender, setGender] = useState('all');
+  const [gender, setGender] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState(['KOREAN']);
-
+  //검색 결과
+  const [searchResult, serSearchResult] = useState([]);
   //인기 가이드
   const [popularGuide, setPopularGuide] = useState([]);
 
@@ -87,7 +88,7 @@ const GuidePage = () => {
                         my: 1
                       }}
                     >
-                      <FormControlLabel value="all" control={<Radio />} label="전체" />
+                      <FormControlLabel value="" control={<Radio />} label="전체" />
                       <FormControlLabel value="male" control={<Radio />} label="남성" />
                       <FormControlLabel value="female" control={<Radio />} label="여성" />
                     </RadioGroup>
@@ -140,9 +141,14 @@ const GuidePage = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    console.log(gender);
-                    console.log(ageValue);
-                    console.log(selectedLanguage);
+                    GuideFilter({ gender: gender, age: ageValue, language: selectedLanguage })
+                      .then((getSearchList) => {
+                        const searchGuideList = getSearchList;
+                        console.log(searchGuideList);
+                      })
+                      .catch((error) => {
+                        console.error(error);
+                      });
                   }}
                 >
                   검색

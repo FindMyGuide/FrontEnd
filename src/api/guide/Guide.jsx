@@ -23,13 +23,13 @@ export async function GuideAll() {
 //가이드 필터링
 export async function GuideFilter(props) {
   try {
+    console.log(props.gender);
     const res = await baseAxios.post(
-      'find-my-guide/guides',
+      'find-my-guide/guide/search',
       {
         gender: props.gender,
         age: props.age,
-        language: props.language,
-        date: props.date
+        language: props.language
       },
       {}
     );
