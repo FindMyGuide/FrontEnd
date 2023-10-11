@@ -2,16 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import styles from './GuidePage.module.css';
 
-import { FormControl, InputLabel, Radio, RadioGroup, Select, Slider } from '@mui/material';
+import { Autocomplete, FormControl, FormControlLabel, Radio, RadioGroup, Slider, TextField } from '@mui/material';
 import { GuidePopular } from '../../api/guide/Guide';
 import GuideCard from '../../components/PopularGuideCard/GuideCard';
-import { FormLabel } from 'react-bootstrap';
+import { FormLabel, Stack } from 'react-bootstrap';
 
 const GuidePage = () => {
+  const languageList = [
+    { title: '', value: '--' },
+    { title: '한국어', value: 'KOREAN' },
+    { title: '영어', value: 'ENGLISH' },
+    { title: '스페인어', value: 'SPANISH' },
+    { title: '일본어', value: 'JAPANESE' },
+    { title: '중국어', value: 'CHINESE' },
+    { title: '베트남어', value: 'KKK' },
+    { title: '프랑스어', value: 'FRENCH' },
+    { title: '러시아어', value: 'RUSSIAN' },
+    { title: '이탈리아어', value: 'ITALIAN' }
+  ];
   //가이드 검색
   const [ageValue, setAgeValue] = useState([30, 37]);
-  const [personName, setPersonName] = useState([]);
   const [gender, setGender] = useState('all');
+  const [selectedLanguage, setSelectedLanguage] = useState(['KOREAN']);
+
   //인기 가이드
   const [popularGuide, setPopularGuide] = useState([]);
 
@@ -26,36 +39,11 @@ const GuidePage = () => {
       });
   }, []);
 
-  const names = [
-    'Oliver Hansen',
-    'Van Henry',
-    'April Tucker',
-    'Ralph Hubbard',
-    'Omar Alexander',
-    'Carlos Abbott',
-    'Miriam Wagner',
-    'Bradley Wilkerson',
-    'Virginia Andrews',
-    'Kelly Snyder'
-  ];
-
   const handleAge = (event, newValue) => {
     setAgeValue(newValue);
   };
   const handleGender = (event) => {
     setGender(event.target.value);
-  };
-
-  const handleChangeMultiple = (event) => {
-    const { options } = event.target;
-    const value = [];
-    // 가이드 언어 계속 추가만 됨 여기 수정 필요
-    for (let i = 0, l = options.length; i < l; i += 1) {
-      if (options[i].selected && !value.includes(options[i])) {
-        value.push(options[i].value);
-      }
-    }
-    setPersonName([...personName, value]);
   };
 
   return (
@@ -90,15 +78,18 @@ const GuidePage = () => {
                   <FormControl>
                     <FormLabel>성별</FormLabel>
                     <RadioGroup
+                      row
                       defaultValue="all"
                       name="controlled-radio-buttons-group"
                       value={gender}
                       onChange={handleGender}
-                      sx={{ my: 0 }}
+                      sx={{
+                        my: 1
+                      }}
                     >
-                      <Radio value="all" label="전체" />
-                      <Radio value="male" label="남성" />
-                      <Radio value="female" label="여성" />
+                      <FormControlLabel value="all" control={<Radio />} label="전체" />
+                      <FormControlLabel value="male" control={<Radio />} label="남성" />
+                      <FormControlLabel value="female" control={<Radio />} label="여성" />
                     </RadioGroup>
                   </FormControl>
                 </div>
@@ -116,32 +107,46 @@ const GuidePage = () => {
                 </div>
                 <div>
                   <p>언어</p>
-                  <div>{personName}</div>
+
                   <div>
-                    <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 300 }}>
-                      <InputLabel shrink htmlFor="select-multiple-native">
-                        Native
-                      </InputLabel>
-                      <Select
+                    <Stack spacing={3} sx={{ width: 1000 }}>
+                      <Autocomplete
                         multiple
-                        native
-                        value={personName}
-                        onChange={handleChangeMultiple}
-                        label="Native"
-                        inputProps={{
-                          id: 'select-multiple-native'
+                        id="tags-outlined"
+                        size="small"
+                        options={languageList}
+                        getOptionLabel={(option) => option.title}
+                        defaultValue={[languageList[1]]}
+                        filterSelectedOptions
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            InputProps={{
+                              ...params.InputProps,
+                              placeholder: selectedLanguage.length > 0 ? '' : '언어 검색'
+                            }}
+                            size="small"
+                          />
+                        )}
+                        isOptionEqualToValue={(option, value) => option.title === value.title}
+                        onChange={(event, value) => {
+                          const selectedLanguageTitles = value.map((language) => language.value);
+                          setSelectedLanguage(selectedLanguageTitles);
                         }}
-                      >
-                        {names.map((name) => (
-                          <option key={name} value={name}>
-                            {name}
-                          </option>
-                        ))}
-                      </Select>
-                    </FormControl>
+                      />
+                    </Stack>
                   </div>
                 </div>
-                <button type="button">검색</button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    console.log(gender);
+                    console.log(ageValue);
+                    console.log(selectedLanguage);
+                  }}
+                >
+                  검색
+                </button>
               </div>
               <div className={styles.resultSearchBox}>
                 <p>검색결과</p>
