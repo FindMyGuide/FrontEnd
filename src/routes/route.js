@@ -21,6 +21,11 @@ import RestaurantDetail from 'pages/RecommendPage/RestaurantDetail.jsx';
 import LocationList from 'pages/RecommendPage/LocationList.jsx';
 import LocationDetail from 'pages/RecommendPage/LocationDetail.jsx';
 
+// Tour
+import TourList from '../pages/Tour/TourList.jsx';
+import TourRegist from '../pages/Tour/TourRegist.jsx';
+import TourDetailPage from '../pages/Tour/TourDetail.jsx';
+
 function RouteLink() {
   return (
     <>
@@ -45,7 +50,9 @@ function RouteLink() {
         <Route path="/recommend/restaurant/:id" element={<RestaurantDetail />} />
         <Route path="/recommend/location" element={<LocationList />} />
         <Route path="/recommend/location/:id" element={<LocationDetail />} />
-
+        <Route path="/tour/tourlist" element={<TourList />} />
+        <Route path="/tour/tourregist" element={<TourRegist />} />
+        <Route path="/tour/tourdetail/:id" element={<TourDetailPage />} />
         {/* <Route path="/resetpassword" element={<ResetPassword />} /> */}
         {/* <Route path="/tour/:id" element={<ProductDetail />} /> */}
         <Route path="/mypage/:id" element={<Mypage />} />
