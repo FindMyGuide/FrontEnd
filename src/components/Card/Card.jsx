@@ -1,23 +1,26 @@
 import React from 'react';
 import styles from './Card.module.css';
-import Img from '../../asset/images/wanttourImage.png';
+import Img from 'asset/images/wanttourImage.png';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 
-function Card(props) {
-  const title = props.title;
-  const like = props.like;
-  const imgSrc = props.image;
+function Card({ title, likes, price, img }) {
+  // const title = props.title;
+  const like = likes;
+  // const imgSrc = props.img;
 
   return (
     <div className={styles.card}>
       <div style={{ padding: '10px' }}>
         <div className={styles.content}>
-          <img src={Img} alt="img" className={styles.mainImg} />
-          <div className={styles.likebg}>
-            <FavoriteRoundedIcon className={styles.like} style={{ fill: like ? '#FF6073' : '#767676' }} />
+          <div>
+            <img src={Img} alt="img" className={styles.mainImg} />
+          </div>
+          <div>
+            <FavoriteRoundedIcon className={styles.like} style={{ fill: like ? '#FF6073' : '#FFFFFF' }} />
           </div>
         </div>
-        <div>{title}</div>
+        <div className={styles.title}>{title}</div>
+        <div>￦&nbsp;{price}</div>
       </div>
     </div>
   );

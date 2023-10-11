@@ -34,7 +34,7 @@ export async function MyArticle() {
 export async function WaitAll() {
   try {
     const res = await baseAxios.get('v1/wanttour/wait', {}, {});
-    return res;
+    return res.data;
   } catch (e) {
     console.error(e);
   }
