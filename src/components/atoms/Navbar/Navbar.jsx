@@ -1,11 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import LogoImage from '../../../asset/FindLogo.png';
+import LogoImage from 'asset/FindLogo.png';
+import LogoWhiteImage from 'asset/FindLogo_white.png';
 import styles from './Navbar.module.css';
 import { isMobile } from 'react-device-detect';
 
-function Navbar() {
+function Navbar({ isMain }) {
+  const logoImage = isMain ? LogoWhiteImage : LogoImage;
+
   return (
     <>
       {isMobile ? (
@@ -30,12 +33,13 @@ function Navbar() {
           </button>
         </div>
       ) : (
-        <div className={styles.webNav}>
+        <div className={`${styles.webNav} ${isMain ? styles.main : ''}`}>
           <div>
-            <img className={styles.navLogoImage} src={LogoImage} alt="" />
+            <Link to="/">
+              <img className={styles.navLogoImage} src={logoImage} alt="" />
+            </Link>
           </div>
           <div className={styles.pageLink}>
-            <Link to="/">홈 </Link>
             <Link to="/create">상품등록 </Link>
             <Link to="/products">추천 </Link>
             <Link to="/areaproduct">지역별상품 </Link>

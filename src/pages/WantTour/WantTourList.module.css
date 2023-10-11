@@ -1,5 +1,5 @@
 .background {
-  background-image: url('../../asset/images/wanttourImage.png');
+  background-image: url('asset/images/test.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: 50%;
@@ -8,15 +8,27 @@
 }
 
 .header {
-  font-family: KBO-Dia-Gothic_bold;
-  padding-top: 280px;
+  font-family: 'Happiness-Sans-Title';
+  padding: 260px 0 20px 0;
   color: white;
   filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.3));
 }
 
 .listContainer {
-  background-color: white;
+  background-color: #ffffff;
   min-height: 500px;
   border-radius: 20px;
   border: 1px solid #c0c0c0;
+}
+
+.button {
+  background-color: #12aaff;
+  border-radius: 10px;
+  color: #ffffff;
+  border: none;
+  padding: 5px 10px;
+
+  &:hover {
+    background-color: #129eed;
+  }
 }

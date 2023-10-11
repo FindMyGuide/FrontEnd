@@ -3,7 +3,8 @@ import { baseAxios } from '../Axios';
 //투어 전체 목록 조회
 export default async function TourAll() {
   try {
-    const res = await baseAxios.get('/tourProducts');
+    const res = await baseAxios.get('tourProducts');
+    console.log('전체 투어 목록', res.data);
     return res.data;
   } catch (e) {
     console.error(e);
@@ -13,8 +14,9 @@ export default async function TourAll() {
 //인기 투어 조회
 export async function TourPopular() {
   try {
-    const res = await baseAxios.get('v1/tour/popular', {}, {});
-    return res;
+    const res = await baseAxios.get('tourProduct/top-10', {}, {});
+    console.log(res.data);
+    return res.data;
   } catch (e) {
     console.error(e);
   }
@@ -23,7 +25,8 @@ export async function TourPopular() {
 //투어 상세 조회
 export async function TourDetail(props) {
   try {
-    const res = await baseAxios.get(`v1/tourProduct/${props}`, {}, {});
+    const res = await baseAxios.get(`tourProduct/${props}`, {}, {});
+    console.log('투어 디테일', res);
     return res;
   } catch (e) {
     console.error(e);
@@ -33,7 +36,7 @@ export async function TourDetail(props) {
 //테마별 투어 목록 조회
 export async function TourTheme(props) {
   try {
-    const res = await baseAxios.get(`v1/tour/${props}`, {}, {});
+    const res = await baseAxios.get(`tour/${props}`, {}, {});
     return res;
   } catch (e) {
     console.error(e);
@@ -44,7 +47,7 @@ export async function TourTheme(props) {
 export async function TourReservation(props) {
   try {
     const res = await baseAxios.get(
-      `v1/tour/reservation`,
+      `tour/reservation`,
       {
         tour_id: props.tour_id,
         tour_date: props.tour_date,
@@ -62,7 +65,7 @@ export async function TourReservation(props) {
 export async function TourCancel(props) {
   try {
     const res = await baseAxios.post(
-      `v1/mypage/tour/cancel/${props}`,
+      `mypage/tour/cancel/${props}`,
       {
         content: props.content
       },

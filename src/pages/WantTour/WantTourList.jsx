@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { WantAll, MyArticle, WaitAll } from '../../api/want/Want';
+import { WantAll, MyArticle, WaitAll } from 'api/want/Want';
 import styles from './WantTourList.module.css';
 
 function WantTour() {
+  const navigate = useNavigate();
+  const isLoggedIn = sessionStorage.getItem('AccessToken');
+
+  const [isSelect, setIsSelect] = useState(false);
   const [list, setList] = useState([]);
   const [myArticle, setMyArticle] = useState(false);
-  const isLoggedIn = sessionStorage.getItem('token');
-  const navigate = useNavigate();
 
   useEffect(() => {
-    // 게시글 조회 axios
-    // 확인 필요
+    async function fetchTourList() {
+      const wantList = await WantAll();
+      // const guidePopular = await GuidePopular();
+      // setTourList(tourPopular);
+      // setGuideList(guidePopular);
+    }
+
+    fetchTourList();
     // const res = WantAll();
     // console.log(res);
     // setList(res.data);
@@ -51,12 +59,20 @@ function WantTour() {
         </div>
         <div className={styles.listContainer}>
           {myArticle ? (
-            <button onClick={handleArticle}>전체 보기</button>
+            <button onClick={handleArticle} className={styles.button}>
+              전체 보기
+            </button>
           ) : (
-            <button onClick={handleArticle}>내가 쓴 글 보기</button>
+            <button onClick={handleArticle} className={styles.button}>
+              내가 쓴 글 보기
+            </button>
           )}
-          <button onClick={handleWait}>대기 상태 글 보기</button>
-          <button onClick={handleRegist}>글 작성하기</button>
+          <button onClick={handleWait} className={styles.button}>
+            대기 상태 글 보기
+          </button>
+          <button onClick={handleRegist} className={styles.button}>
+            글 작성하기
+          </button>
           {list.length ? (
             {
               /* <ul>
