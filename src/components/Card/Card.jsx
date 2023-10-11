@@ -1,18 +1,16 @@
 import React from 'react';
 import styles from './Card.module.css';
-import Img from '../../asset/images/mainImage.png';
+import Img from '../../asset/images/wanttourImage.png';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 
 function Card(props) {
-  // const title = props.title
-  const title = '정말 재미있는 부산투어';
-  // const like = props.like;
-  const like = false;
-  // const imgSrc = props.image;
+  const title = props.title;
+  const like = props.like;
+  const imgSrc = props.image;
 
   return (
     <div className={styles.card}>
-      <div style={{ padding: '13px' }}>
+      <div style={{ padding: '10px' }}>
         <div className={styles.content}>
           <img src={Img} alt="img" className={styles.mainImg} />
           <div className={styles.likebg}>
@@ -20,7 +18,6 @@ function Card(props) {
           </div>
         </div>
         <div>{title}</div>
-        <div>{like}</div>
       </div>
     </div>
   );

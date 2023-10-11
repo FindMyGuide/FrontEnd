@@ -1,0 +1,45 @@
+.container {
+  height: calc(100% - 100px);
+  width: 1060px;
+  margin-left: 10%;
+  margin-right: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imgBox {
+  width: 70%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgba(238, 190, 242, 0.25) 0%,
+    rgba(217, 217, 217, 0) 100%
+  );
+}
+
+.welcome {
+  z-index: 1;
+  position: absolute;
+  top: 100px;
+  left: 50px;
+  font-size: 50px;
+}
+
+.formBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 30%;
+  gap: 40px;
+}
+
+.loginImage {
+  width: 500px;
+  height: 500px;
+}

@@ -1,7 +1,7 @@
 import { baseAxios } from '../Axios';
 
 //투어 전체 목록 조회
-export async function TourAll() {
+export default async function TourAll() {
   try {
     const res = await baseAxios.get('tourProducts');
     console.log('전체 투어 목록', res.data);
@@ -14,8 +14,9 @@ export async function TourAll() {
 //인기 투어 조회
 export async function TourPopular() {
   try {
-    const res = await baseAxios.get('tour/popular', {}, {});
-    return res;
+    const res = await baseAxios.get('tourProduct/top-10', {}, {});
+    console.log(res.data);
+    return res.data;
   } catch (e) {
     console.error(e);
   }
