@@ -2,19 +2,31 @@ import { baseAxios } from "../Axios";
 
 //회원가입
 export async function UserSignup(props) {
+  console.log(props);
   try {
-    const res = await baseAxios.post("find-my-guide/member/initiate-sign-up", {
-      name: props.name,
-      email: props.email,
-      password: props.password,
-      nickname: props.nickname,
-      nationality: props.nationality,
-      gender: props.gender,
-      birth_date: props.birth_date,
-      phone_number: props.phone_number,
-      national_certification_of_quide_yn:
-        props.national_certification_of_quide_yn,
-    });
+    const res = await baseAxios.post(
+      "find-my-guide/member/initiate-sign-up",
+      {
+        name: props.name,
+        email: props.email,
+        password: props.password,
+        nickname: props.nickname,
+        nationality: props.nationality,
+        gender: props.gender,
+        birthDate: props.birthDate,
+        phoneNumber: props.phoneNumber,
+        nationalCertificationOfGuideYn: props.nationalCertificationOfGuideYn,
+        guideExperience: "",
+        guideIntroduction: "",
+        guideProfilePicture: "",
+        languages: ["CHINESE"],
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return res;
   } catch (e) {
     console.error(e);
@@ -39,6 +51,30 @@ export async function UserEmailcheck(props) {
   try {
     const res = await baseAxios.post("find-my-guide/member/check-duplicate", {
       email: props,
+    });
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+//닉네임 중복확인
+export async function UserNicknamecheck(props) {
+  try {
+    const res = await baseAxios.post("find-my-guide/member/check-nickname", {
+      nickname: props,
+    });
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+//핸드폰 중복확인
+export async function UserPhonecheck(props) {
+  try {
+    const res = await baseAxios.post("find-my-guide/member/check-phoneNumber", {
+      phoneNumber: props,
     });
     return res;
   } catch (e) {

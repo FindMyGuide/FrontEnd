@@ -4,7 +4,6 @@ import { baseAxios } from '../Axios';
 export async function GuidePopular() {
   try {
     const res = await baseAxios.get('find-my-guide/guide/popular-guide', {}, {});
-    console.log(res.data, '인기 가이드');
     return res.data;
   } catch (e) {
     console.error(e);
@@ -24,17 +23,17 @@ export async function GuideAll() {
 //가이드 필터링
 export async function GuideFilter(props) {
   try {
+    console.log(props.gender);
     const res = await baseAxios.post(
-      'find-my-guide/guides',
+      'find-my-guide/guide/search',
       {
         gender: props.gender,
         age: props.age,
-        language: props.language,
-        date: props.date
+        language: props.language
       },
       {}
     );
-    return res;
+    return res.data;
   } catch (e) {
     console.error(e);
   }
@@ -43,8 +42,8 @@ export async function GuideFilter(props) {
 //가이드 상세조회
 export async function GuideDetail(props) {
   try {
-    const res = await baseAxios.get(`find-my-guide/guides/detail/${props}`, {}, {});
-    return res;
+    const res = await baseAxios.get(`find-my-guide/guide/guides/detail/${props}`, {}, {});
+    return res.data;
   } catch (e) {
     console.error(e);
   }
@@ -54,7 +53,7 @@ export async function GuideDetail(props) {
 export async function GuideTourReview(props) {
   try {
     const res = await baseAxios.get(`find-my-guide/guides/all/${props}`, {}, {});
-    return res;
+    return res.data;
   } catch (e) {
     console.error(e);
   }
