@@ -3,8 +3,8 @@ import { isMobile } from 'react-device-detect';
 
 import styles from './GuideDetailPage.module.css';
 import { useParams } from 'react-router-dom';
-import { GuideDetail, GuideTourReview } from '../../api/guide/Guide';
-import { cleanString } from '@mui/x-date-pickers/internals/hooks/useField/useField.utils';
+import { GuideDetail } from '../../api/guide/Guide';
+import { Card } from 'react-bootstrap';
 
 const GuideDetailPage = () => {
   const { id } = useParams();
@@ -63,10 +63,7 @@ const GuideDetailPage = () => {
                 <h3>현재 진행중인 투어</h3>
                 <div style={{ display: 'flex' }}>
                   {guideDetail.tourProductTitles?.map((tour) => (
-                    <div key={tour.title}>
-                      <img src="" alt="투어 이미지" />
-                      <p>tour</p>
-                    </div>
+                    <Card key={tour.title} title={tour.title} price={20000}></Card>
                   ))}
                 </div>
               </div>

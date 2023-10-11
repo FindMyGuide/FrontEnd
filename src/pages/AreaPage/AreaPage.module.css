@@ -8,8 +8,13 @@
 }
 
 .mapsearch {
-  flex: 1;
+  width: 500px;
 }
 .map {
-  flex: 3;
+  width: 1000px;
+}
+
+.searcharea {
+  width: 200px;
+  height: 100px;
 }

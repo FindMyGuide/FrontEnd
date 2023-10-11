@@ -89,8 +89,8 @@ const GuidePage = () => {
                       }}
                     >
                       <FormControlLabel value="" control={<Radio />} label="전체" />
-                      <FormControlLabel value="male" control={<Radio />} label="남성" />
-                      <FormControlLabel value="female" control={<Radio />} label="여성" />
+                      <FormControlLabel value="남" control={<Radio />} label="남성" />
+                      <FormControlLabel value="여" control={<Radio />} label="여성" />
                     </RadioGroup>
                   </FormControl>
                 </div>
@@ -144,7 +144,7 @@ const GuidePage = () => {
                     GuideFilter({ gender: gender, age: ageValue, language: selectedLanguage })
                       .then((getSearchList) => {
                         const searchGuideList = getSearchList;
-                        console.log(searchGuideList);
+                        console.log(`하하하${searchGuideList}`);
                       })
                       .catch((error) => {
                         console.error(error);
