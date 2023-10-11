@@ -22,12 +22,13 @@ import Card from '../Card/Card';
 //   );
 // };
 
-function Carousel(props) {
-  const list = props;
+function Carousel({ list }) {
+  const tourlist = list;
+  console.log(tourlist, '캐러셀');
 
   return (
     <div style={{ width: '1000px' }}>
-      {/* <Slider
+      <Slider
         infinite
         slidesToShow={3}
         slidesToScroll={1}
@@ -46,12 +47,12 @@ function Carousel(props) {
           </button>
         }
       >
-        {list?.map((api) => (
+        {tourlist?.map((tour) => (
           <div>
-            <Card apiId={api.apiId} title={api.title} category={api.category} />
+            <Card title={tour.title} likes={tour.likes} price={tour.price} img={tour.bestImage} />
           </div>
         ))}
-      </Slider> */}
+      </Slider>
     </div>
   );
 }
