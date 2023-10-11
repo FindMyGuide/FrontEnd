@@ -1,10 +1,11 @@
-import axios from 'axios';
+import { baseAxios } from '../Axios';
 
 //글 목록 조회
 export async function WantAll() {
   try {
-    const res = await axios.get('v1/wanttour', {}, {});
-    return res;
+    const res = await baseAxios.get('wantTourProducts', {}, {});
+    console.log(res.data);
+    return res.data;
   } catch (e) {
     console.error(e);
   }
@@ -13,7 +14,7 @@ export async function WantAll() {
 //내가 쓴 글 목록 조회
 export async function MyArticle() {
   try {
-    const res = await axios.get(
+    const res = await baseAxios.get(
       'v1/wanttour/me',
       {},
       {
@@ -32,7 +33,7 @@ export async function MyArticle() {
 //대기 상태 글 목록 조회
 export async function WaitAll() {
   try {
-    const res = await axios.get('v1/wanttour/wait', {}, {});
+    const res = await baseAxios.get('v1/wanttour/wait', {}, {});
     return res;
   } catch (e) {
     console.error(e);
@@ -42,8 +43,8 @@ export async function WaitAll() {
 //글 작성
 export async function CreateArticle(props) {
   try {
-    const res = await axios.get(
-      'v1/wanttour/create',
+    const res = await baseAxios.get(
+      'wantTourProduct/register',
       {
         title: props.title,
         date: props.date,
@@ -68,7 +69,7 @@ export async function CreateArticle(props) {
 //글 수정
 export async function UpdateArticle(props) {
   try {
-    const res = await axios.patch(
+    const res = await baseAxios.patch(
       `v1/wanttour/update/${props.want_id}`,
       {
         title: props.title,
@@ -95,7 +96,7 @@ export async function UpdateArticle(props) {
 //글 삭제
 export async function DeleteArticle(props) {
   try {
-    const res = await axios.delete(
+    const res = await baseAxios.delete(
       `v1/wanttour/update/${props}`,
       {},
       {
@@ -115,7 +116,7 @@ export async function DeleteArticle(props) {
 
 export async function DetailArticle(props) {
   try {
-    const res = await axios.get(
+    const res = await baseAxios.get(
       `v1/wanttour/update/${props}`,
       {}
       // {

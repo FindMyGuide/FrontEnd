@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import Pimg from "./img.png";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import moment from "moment";
 import Card from "../../components/Card/Card";
+import { setUserInformation } from "./UserInformationSlice";
+import { setLastTour } from "./LastTourSlice";
+import "./MypageCalendar.css";
+
+import Pimg from "./img.png";
 import { ReactComponent as heartIcon } from "../../asset/Icon/heart.svg";
 import { style } from "@mui/system";
+
+// API
+import { UserInfo, CompletedTours } from "../../api/Mypage/MyUser";
 
 // 전체
 const MyPage = styled.div`
@@ -43,6 +50,10 @@ const EditButton = styled(BasicButton)`
 `;
 
 const MyTour = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   width: 10rem;
   height: 6rem;
   border: 2px solid #000000;
@@ -64,7 +75,7 @@ const ChatList = styled.button`
 // 왼쪽 개인정보 변경 모달창
 const EditModalContainer = styled.div`
   width: 600px;
-  height: 400px;
+  height: 480px;
   z-index: 999;
   border: 2px solid #000;
   border-radius: 10px;
@@ -94,6 +105,27 @@ const EditModalTop = styled.div`
   align-items: center;
 `;
 
+const EditModalBottom = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+`;
+
+const EditCompleteButton = styled.button`
+  width: 100px;
+  height: 35px;
+  background-color: #12aaff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+`;
+
+const IntroductionP = styled.p`
+  width: 120px;
+  word-wrap: break-word;
+`;
+
 // 개인정보
 const PrivacyContainer = styled.div`
   display: flex;
@@ -117,22 +149,6 @@ const PrivacyContent = styled.input`
   background-color: #ececec;
   border-radius: 5px;
   border: none;
-`;
-
-const EditModalBottom = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-`;
-
-const EditCompleteButton = styled.button`
-  width: 100px;
-  height: 35px;
-  background-color: #12aaff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
 `;
 
 // 오른쪽
@@ -163,6 +179,7 @@ const MemberMenuContainer = styled.div`
   align-items: center;
   border-width: 1px 1px 1px 1px;
   border-style: solid;
+  gap: 100px;
 `;
 
 const CardContainer = styled.div`
@@ -170,10 +187,13 @@ const CardContainer = styled.div`
 `;
 
 // 오른쪽 - MemberBookedTour
-const MemberBookedTourTitle = styled.div``;
+const MemberBookedTourTitle = styled.div`
+  margin-top: 50px;
+`;
 
 const MemberBookedTourContainer = styled.div`
   display: flex;
+  gap: 50px;
 `;
 
 const BookedTourBody = styled.div`
@@ -196,32 +216,47 @@ const TourDetailButton = styled.button`
 // 왼쪽 - 개인정보 수정
 // 개인 정보
 function Privacy() {
+  const userInformation = useSelector((state) => state.user);
+
   return (
     <PrivacyContainer>
       <PrivacyBox>
         <b>이름</b>
-        <PrivacyContent placeholder="김가이드" />
+        <PrivacyContent placeholder={userInformation.name} />
       </PrivacyBox>
       <PrivacyBox>
         <b>국적</b>
-        <PrivacyContent placeholder="대한민국" />
+        <PrivacyContent placeholder={userInformation.nationality} />
       </PrivacyBox>
       <PrivacyBox>
         <b>닉네임</b>
-        <PrivacyContent placeholder="가이드킴" />
+        <PrivacyContent placeholder={userInformation.nickname} />
       </PrivacyBox>
       <PrivacyBox>
         <b>성별</b>
-        <PrivacyContent placeholder="여성" />
+        <PrivacyContent placeholder={userInformation.gender} />
       </PrivacyBox>
       <PrivacyBox>
         <b>핸드폰</b>
-        <PrivacyContent placeholder="000-0000-0000" />
+        <PrivacyContent placeholder={userInformation.phoneNumber} />
       </PrivacyBox>
       <PrivacyBox>
         <b>e-mail</b>
-        <PrivacyContent placeholder="findmyguide@kakao.com" />
+        <PrivacyContent placeholder={userInformation.email} />
       </PrivacyBox>
+      {userInformation.languages.length > 0 && (
+        <PrivacyBox>
+          <b>언어</b>
+          <PrivacyContent placeholder={userInformation.languages} />
+        </PrivacyBox>
+      )}
+
+      {userInformation.guideExperience && (
+        <PrivacyBox>
+          <b>경력</b>
+          <PrivacyContent placeholder={userInformation.guideExperience} />
+        </PrivacyBox>
+      )}
     </PrivacyContainer>
   );
 }
@@ -232,11 +267,16 @@ function EditModal({ setEditModal }) {
     setEditModal(false);
   };
 
+  const userInformation = useSelector((state) => state.user);
+
   return (
     <EditModalContainer>
       <EditCloseButton onClick={closeModal}>X</EditCloseButton>
       <EditModalTop>
         <ProfileImg src={Pimg} />
+        {userInformation.guideIntroduction && (
+          <IntroductionP> {userInformation.guideIntroduction} </IntroductionP>
+        )}
       </EditModalTop>
 
       <Privacy />
@@ -268,14 +308,42 @@ function EditProfile() {
 
 // 왼쪽
 function Left() {
+  // 개인정보 조회
+  sessionStorage.setItem(
+    "token",
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ4b2RuanM4Mjg3QG5hdmVyLmNvbSIsImV4cCI6MTcwMDYyMTI3MywiaXNzIjoiZmluZG15Z3VpZGUuY29tIn0.nndOrq19RvWzKZz-loEPzvXFeCpaVLc0VUpTNjt4NZo"
+  );
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchUserInformatioin = async () => {
+      try {
+        const res = await UserInfo();
+        dispatch(setUserInformation(res.data));
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    fetchUserInformatioin();
+  }, [dispatch]);
+
+  // redux를 이용한 회원정보
+  const userInformation = useSelector((state) => state.user);
+
+  // redux를 이용한 완료된 여행 정보
+  const lastTour = useSelector((state) => state.lastTour);
+
   return (
     <MyPageLeft>
       <ProfileImg src={Pimg} />
-      <BoldP>닉네임</BoldP>
+      {/* <ProfileImg src={userInformation.guideProfilePicture} /> */}
+      <BoldP>{userInformation.nickname}</BoldP>
       <EditProfile />
       <MyTour>
-        <BoldP>예정된 투어</BoldP>
-        <BoldP>지난 투어</BoldP>
+        <BoldP>예정된 투어 : </BoldP>
+        <BoldP>지난 투어 : {lastTour.length}</BoldP>
       </MyTour>
       <ChatList>대화목록</ChatList>
     </MyPageLeft>
@@ -324,6 +392,26 @@ function MemberBookedTour() {
 }
 
 function LastTour() {
+  // 완료된 여행 조회
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchLastTourtInformatioin = async () => {
+      try {
+        const res = await CompletedTours();
+        dispatch(setLastTour(res.data));
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    fetchLastTourtInformatioin();
+  }, [dispatch]);
+
+  // redux를 이용한 완료된 여행 정보
+  const lastTour = useSelector((state) => state.lastTour);
+  console.log(lastTour);
+
   return (
     <div>
       <h4>지난 투어</h4>

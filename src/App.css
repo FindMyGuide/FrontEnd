@@ -12,9 +12,16 @@
 }
 
 @font-face {
-  font-family: 'KBO-Dia-Gothic_bold';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/KBO-Dia-Gothic_bold.woff') format('woff');
+  font-family: 'LINESeedKR-Bd';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2') format('woff2');
   font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Happiness-Sans-Title';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/Happiness-Sans-Title.woff2') format('woff2');
+  font-weight: normal;
   font-style: normal;
 }
 
@@ -26,4 +33,20 @@
   width: 1000px;
   margin: 0 auto;
   font-family: 'Pretendard-Regular';
+}
+
+.color {
+  color: #50abf2;
+}
+
+.blue-button {
+  background-color: #12aaff;
+  border-radius: 5px;
+  color: #ffffff;
+  border: none;
+  padding: 5px 10px;
+
+  &:hover {
+    background-color: #129eed;
+  }
 }
