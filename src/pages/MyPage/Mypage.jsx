@@ -4,13 +4,13 @@ import styled from "styled-components";
 import Calendar from "react-calendar";
 import moment from "moment";
 import Card from "../../components/Card/Card";
-import { setUserInformation } from "./UserInformationSlice";
-import { setLastTour } from "./LastTourSlice";
 import "./MypageCalendar.css";
-
 import Pimg from "./img.png";
 import { ReactComponent as heartIcon } from "../../asset/Icon/heart.svg";
-import { style } from "@mui/system";
+
+// Slice
+import { setUserInformation } from "../../slices/UserInformationSlice";
+import { setLastTour } from "../../slices/LastTourSlice";
 
 // API
 import { UserInfo, CompletedTours } from "../../api/Mypage/MyUser";
@@ -173,6 +173,7 @@ const ButtonBox = styled.div`
 
 const PageRightBody = styled.div``;
 
+// 오른쪽 - 회원전용
 const MemberMenuContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -213,20 +214,20 @@ const TourDetailButton = styled.button`
   font-size: 14px;
 `;
 
+// 오른쪽 - 가이드 전용
+
 // 왼쪽 - 개인정보 수정
 // 개인 정보
 function Privacy() {
   const userInformation = useSelector((state) => state.user);
+
+  console.log(userInformation);
 
   return (
     <PrivacyContainer>
       <PrivacyBox>
         <b>이름</b>
         <PrivacyContent placeholder={userInformation.name} />
-      </PrivacyBox>
-      <PrivacyBox>
-        <b>국적</b>
-        <PrivacyContent placeholder={userInformation.nationality} />
       </PrivacyBox>
       <PrivacyBox>
         <b>닉네임</b>
@@ -243,6 +244,12 @@ function Privacy() {
       <PrivacyBox>
         <b>e-mail</b>
         <PrivacyContent placeholder={userInformation.email} />
+      </PrivacyBox>
+      <PrivacyBox>
+        <b>자격증 </b>
+        <PrivacyContent
+          placeholder={userInformation.nationalCertificationOfGuideYn}
+        />
       </PrivacyBox>
       {userInformation.languages.length > 0 && (
         <PrivacyBox>
@@ -464,18 +471,23 @@ function MemberMenu() {
 }
 
 // 가이드 전용
+
+// 등록한 투어
 function RegisteredTour() {
   return <></>;
 }
 
+// 예약된 투어
 function GuideBookedTour() {
   return <></>;
 }
 
+// 원해요 매칭
 function GuideWantList() {
   return <></>;
 }
 
+// 가이드 전체
 function GuideMenu() {
   return (
     <>

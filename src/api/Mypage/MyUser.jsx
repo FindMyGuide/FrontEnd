@@ -199,6 +199,10 @@ export async function UserInfoChange(props) {
         phoneNumber: props.phoneNumber,
         national_certification_of_quide_yn:
           props.national_certification_of_quide_yn,
+        guideExperience: props.guideExperience,
+        profilePicture: props.profilePicture,
+        languages: props.languages,
+        guideIntro: props.guideIntro,
       },
       {
         headers: {

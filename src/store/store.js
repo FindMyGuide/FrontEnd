@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "../pages/MyPage/UserInformationSlice";
-import lastTourReducer from "../pages/MyPage/LastTourSlice";
+import userReducer from "../slices/UserInformationSlice";
+import lastTourReducer from "../slices/LastTourSlice";
 
 export const store = configureStore({
   reducer: {
