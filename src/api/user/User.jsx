@@ -16,10 +16,10 @@ export async function UserSignup(props) {
         birthDate: props.birthDate,
         phoneNumber: props.phoneNumber,
         nationalCertificationOfGuideYn: props.nationalCertificationOfGuideYn,
-        guideExperience: "",
-        guideIntroduction: "",
+        guideExperience: Number(props.guideExperience),
+        guideIntroduction: props.guideIntroduction,
         guideProfilePicture: "",
-        languages: ["CHINESE"],
+        languages: props.languages,
       },
       {
         headers: {
@@ -116,11 +116,19 @@ export async function UserLogout(props) {
 
 //아이디 찾기
 export async function UserFindId(props) {
+  console.log(props);
   try {
     const res = await baseAxios.post(
       "find-my-guide/member/find-email",
-      { email: props },
-      {}
+      {
+        name: props.name,
+        phoneNumber: props.phoneNumber,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
     return res;
   } catch (e) {
