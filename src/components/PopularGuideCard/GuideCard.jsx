@@ -1,6 +1,8 @@
 import React from 'react';
 import styles from './GuideCard.module.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
+import profileImg from 'asset/images/emptyprofile.png';
 
 const GuideCard = ({ guideId, name, tour, imageLink }) => {
   const movePage = useNavigate();
@@ -12,8 +14,15 @@ const GuideCard = ({ guideId, name, tour, imageLink }) => {
   return (
     <>
       <div className={styles.guideBox} onClick={goToDetailPage}>
-        <div></div>
-        <h1>{name}</h1>
+        <div style={{ display: 'flex' }}>
+          <h1>{name}</h1>
+          <img
+            style={{ width: '60px', textAlign: 'center', position: 'relative' }}
+            src={profileImg}
+            alt="얼굴 이미지"
+          />
+        </div>
+
         <p>{tour}</p>
         <img src={{ imageLink } ? { imageLink } : ''} alt="" />
       </div>

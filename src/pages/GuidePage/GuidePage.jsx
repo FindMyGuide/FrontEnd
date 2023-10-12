@@ -75,25 +75,43 @@ const GuidePage = () => {
             <div className={styles.guideSearchBox}>
               <div className={styles.SearchConditionBox}>
                 <p>가이드검색</p>
-                <div>
-                  <FormControl>
-                    <FormLabel>성별</FormLabel>
-                    <RadioGroup
-                      row
-                      defaultValue="all"
-                      name="controlled-radio-buttons-group"
-                      value={gender}
-                      onChange={handleGender}
-                      sx={{
-                        my: 1
-                      }}
-                    >
-                      <FormControlLabel value="" control={<Radio />} label="전체" />
-                      <FormControlLabel value="남" control={<Radio />} label="남성" />
-                      <FormControlLabel value="여" control={<Radio />} label="여성" />
-                    </RadioGroup>
-                  </FormControl>
-                </div>
+
+                <FormControl sx={{ width: '100%' }}>
+                  <FormLabel>성별</FormLabel>
+                  <RadioGroup
+                    row
+                    defaultValue="all"
+                    name="controlled-radio-buttons-group"
+                    value={gender}
+                    onChange={handleGender}
+                    sx={{
+                      margin: 0,
+                      padding: 2,
+                      my: 1,
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <FormControlLabel
+                      value=""
+                      control={<Radio sx={{ margin: 0, padding: 0 }} />}
+                      sx={{ border: '1px solid black' }}
+                      label="전체"
+                    />
+                    <FormControlLabel
+                      value="남"
+                      control={<Radio sx={{ margin: 0, padding: 0 }} />}
+                      sx={{ border: '1px solid black' }}
+                      label="남성"
+                    />
+                    <FormControlLabel
+                      value="여"
+                      control={<Radio sx={{ margin: 0, padding: 0 }} />}
+                      sx={{ border: '1px solid black' }}
+                      label="여성"
+                    />
+                  </RadioGroup>
+                </FormControl>
+
                 <div>
                   <p>나이</p>
                   <Slider
