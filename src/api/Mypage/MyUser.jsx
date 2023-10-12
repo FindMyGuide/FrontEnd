@@ -1,18 +1,14 @@
 import { baseAxios } from "../Axios";
 
 //예약한 투어 조회
-export async function FutureReservation() {
+export async function UpcomingTours() {
   try {
-    const res = await baseAxios.get(
-      "v1/mypage/reservation/future",
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("token"),
-        },
-      }
-    );
+    const res = await baseAxios.get("my-page/reservation/upcoming-tours", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionStorage.getItem("accessToken"),
+      },
+    });
     return res;
   } catch (e) {
     console.error(e);
@@ -25,7 +21,7 @@ export async function CompletedTours() {
     const res = await baseAxios.get("my-page/reservation/completed-tours", {
       headers: {
         "Content-Type": "application/json",
-        Authorization: sessionStorage.getItem("token"),
+        Authorization: sessionStorage.getItem("accessToken"),
       },
     });
     return res;
@@ -47,7 +43,7 @@ export async function ReviewResister(props) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("token"),
+          Authorization: sessionStorage.getItem("accessToken"),
         },
       }
     );
@@ -66,7 +62,7 @@ export async function LikeTour(props) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("token"),
+          Authorization: sessionStorage.getItem("accessToken"),
         },
       }
     );
@@ -85,7 +81,7 @@ export async function LikeLocation(props) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("token"),
+          Authorization: sessionStorage.getItem("accessToken"),
         },
       }
     );
@@ -104,7 +100,7 @@ export async function LikeGuide(props) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("token"),
+          Authorization: sessionStorage.getItem("accessToken"),
         },
       }
     );
@@ -126,7 +122,7 @@ export async function CertificationResister(props) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("token"),
+          Authorization: sessionStorage.getItem("accessToken"),
         },
       }
     );
@@ -145,7 +141,7 @@ export async function CheckCertification(props) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("token"),
+          Authorization: sessionStorage.getItem("accessToken"),
         },
       }
     );
@@ -164,7 +160,7 @@ export async function GuideResister(props) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("token"),
+          Authorization: sessionStorage.getItem("accessToken"),
         },
       }
     );
@@ -180,7 +176,7 @@ export async function UserInfo(props) {
     const res = await baseAxios.get("find-my-guide/member/detail", {
       headers: {
         "Content-Type": "application/json",
-        Authorization: sessionStorage.getItem("token"),
+        Authorization: sessionStorage.getItem("accessToken"),
       },
     });
     return res;
@@ -192,7 +188,7 @@ export async function UserInfo(props) {
 //개인정보 수정
 export async function UserInfoChange(props) {
   try {
-    const res = await baseAxios.get(
+    const res = await baseAxios.post(
       "find-my-guide/member/update",
       {
         nickname: props.nickname,
@@ -207,7 +203,30 @@ export async function UserInfoChange(props) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("token"),
+          Authorization: sessionStorage.getItem("accessToken"),
+        },
+      }
+    );
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// 비밀번호 변경
+export async function PassWordChange(props) {
+  try {
+    const res = await baseAxios.post(
+      "find-my-guide/member/change-password",
+      {
+        password: props.password,
+        newPassword: props.newPassword,
+        newPasswordAgain: props.newPasswordAgain,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: sessionStorage.getItem("accessToken"),
         },
       }
     );
