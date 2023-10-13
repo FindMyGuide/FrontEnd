@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FestivalSearch } from 'api/recommend/Recommend';
-// import SideBar from 'components/Recommend/SideBar';
 import FestivalCard from 'components/Card/FestivalCard';
 import styles from './Recommend.module.css';
 import SideBar from 'components/Recommend/SideBar';
@@ -32,9 +31,6 @@ function FestivalList() {
           <SideBar />
         </header>
         <div className={styles.container}>
-          {/* <div className={styles.sidebar}>
-            <SideBar />
-          </div> */}
           <div className={styles.content}>
             <div className={styles.length}>
               # 총 <span className="color">{list.length}</span>개의 축제가 있습니다

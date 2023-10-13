@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TourPopular } from 'api/tour/Tour';
 import { GuidePopular } from 'api/guide/Guide';
-import { ReviewRecent } from 'api/review/Review';
+import { ReviewRecent } from 'api/review/review';
 import Carousel from 'components/Carousel/Carousel';
 import VerticalCarousel from 'components/Carousel/VerticalCarousel';
 import SearchBar from 'components/SearchBar/SearchBar';
