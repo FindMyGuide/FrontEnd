@@ -8,7 +8,7 @@
 }
 
 .header {
-  padding: 300px 0 100px 0;
+  padding: 260px 0 80px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,5 +26,9 @@
   font-family: 'Happiness-Sans-Title';
   font-size: 25px;
   font-weight: 800;
-  margin: 20px 0;
+  margin: 60px 0 20px 0;
+}
+
+.content {
+  margin-bottom: 100px;
 }
