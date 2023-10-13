@@ -6,26 +6,25 @@ FormGroup {
   display: flex;
 }
 
-.search {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
 .topdiv {
-  font-size: 80px;
+  position: absolute;
+  top: -40%;
+  /* left: -10%; */
+  font-size: 90px;
   font-weight: bold;
-  margin-left: 20px;
 }
 
 .topcard {
   display: flex;
+  justify-content: space-evenly;
+  margin-top: 30px;
+  padding-top: 20px;
 }
 
 .cardovertext {
   position: absolute;
-  left: 30px;
+  top: 68%;
+  left: 10%;
   bottom: 50px;
   font-size: 50px;
   font-weight: bold;
@@ -34,28 +33,54 @@ FormGroup {
 
 .selectedtheme {
   display: flex;
-  font-size: 30px;
+  font-size: 40px;
   font-weight: bold;
-  margin: 30px 20px 20px 20px;
+  margin: 100px 0px 30px;
 }
 .themes {
-  width: 70%;
+  width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .tourtheme {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 0.7px solid;
-  border-radius: 6px;
-  width: 60px;
-  height: 25px;
+  border: 2px solid #b7b7ba;
+  border-radius: 18px;
+  width: 13%;
+  height: 60px;
   padding: 2px;
+  font-size: 25px;
 }
 
 .selected {
   background-color: #0052b4;
   color: white;
+  font-weight: bold;
+}
+
+.listItems {
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.item {
+  padding: 2%;
+  display: flex;
+}
+
+.itemImg {
+  width: 50%;
+}
+
+.itemDetail {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+  font-size: 18px;
 }
