@@ -3,7 +3,7 @@ import { baseAxios } from '../Axios';
 //글 목록 조회
 export async function WantAll() {
   try {
-    const res = await baseAxios.get('wantTourProducts', {}, {});
+    const res = await baseAxios.get('want-tourProducts', {}, {});
     console.log(res.data);
     return res.data;
   } catch (e) {
