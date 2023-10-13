@@ -1,0 +1,9 @@
+.container {
+  border: 1px solid #c9c9c9;
+}
+
+.guideCardWrapper {
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}

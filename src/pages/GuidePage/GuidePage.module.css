@@ -1,0 +1,23 @@
+/* webGuide */
+
+.famousGuide {
+  display: flex;
+  justify-content: space-evenly;
+  border: 1px solid black;
+}
+
+.guideSearchBox {
+  border: 1px solid black;
+  display: flex;
+  padding: 15px;
+}
+.SearchConditionBox {
+  border: 1px solid black;
+  flex: 1;
+  padding: 30px;
+}
+
+.resultSearchBox {
+  border: 1px solid black;
+  flex: 3;
+}

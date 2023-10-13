@@ -1,0 +1,27 @@
+.bar {
+  background-color: #eaeaea;
+  padding: 3px 7px;
+  opacity: 0.8;
+  width: 700px;
+  height: 2.5rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+input {
+  width: 88%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+.search {
+  width: 20px;
+  margin: 0 10px;
+}

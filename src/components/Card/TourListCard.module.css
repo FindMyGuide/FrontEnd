@@ -1,0 +1,52 @@
+.card {
+  border: 1px solid #c9c9c9;
+  border-radius: 10px;
+  background-color: white;
+  width: 300px;
+  height: 100%;
+  margin: 30px 10px 10px;
+  padding-bottom: 6px;
+  transition: box-shadow 0.15s ease-out, transform 0.15s ease-out;
+}
+
+.card:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+}
+
+.content {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.mainImg {
+  border-radius: 10px;
+  width: 280px;
+  height: 180px;
+  margin: auto 5px;
+  /* padding: 3px; */
+  padding-bottom: 10px;
+}
+
+.title {
+  position: absolute;
+  right: 10%;
+  font-size: 20px;
+  font-weight: 600;
+  /* margin-top: 3%; */
+  padding-bottom: 8px;
+  color: #70aeca;
+}
+
+.like {
+  position: absolute;
+  right: 26%;
+  margin-top: 8%;
+}
+.likecount {
+  position: absolute;
+  right: 10%;
+  margin-top: 8%;
+  color: #828282;
+}

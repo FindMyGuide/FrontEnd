@@ -1,0 +1,12 @@
+.appGuideDetail {
+}
+.webGuideDetail {
+  border: 1px solid black;
+  display: flex;
+}
+.guideprofile {
+  border: 1px solid black;
+}
+.tourofguide {
+  border: 1px solid black;
+}
