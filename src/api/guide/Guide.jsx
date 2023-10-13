@@ -28,7 +28,7 @@ export async function GuideFilter(props) {
     const res = await baseAxios.post('find-my-guide/guide/search', {
       params: {
         gender: props.gender,
-        age: `${props.age[0]}-${props.age[0]}`,
+        age: `${props.age[0]}-${props.age[1]}`,
         language: props.language
       }
     });

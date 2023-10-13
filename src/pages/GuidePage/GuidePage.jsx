@@ -9,16 +9,17 @@ import { FormLabel, Stack } from 'react-bootstrap';
 
 const GuidePage = () => {
   const languageList = [
-    { title: '', value: '--' },
+    { title: '전체', value: '' },
     { title: '한국어', value: 'KOREAN' },
     { title: '영어', value: 'ENGLISH' },
     { title: '스페인어', value: 'SPANISH' },
     { title: '일본어', value: 'JAPANESE' },
     { title: '중국어', value: 'CHINESE' },
-    { title: '베트남어', value: 'KKK' },
+    { title: '포루투갈어', value: 'PORTUGUESE' },
     { title: '프랑스어', value: 'FRENCH' },
     { title: '러시아어', value: 'RUSSIAN' },
-    { title: '이탈리아어', value: 'ITALIAN' }
+    { title: '이탈리아어', value: 'ITALIAN' },
+    { title: '독일어', value: 'GERMAN' }
   ];
   //가이드 검색
   const [ageValue, setAgeValue] = useState([30, 37]);
@@ -59,14 +60,16 @@ const GuidePage = () => {
             <p>인기가이드</p>
             <div className={styles.famousGuide}>
               {popularGuide ? (
-                popularGuide.map((guide) => (
-                  <GuideCard
-                    key={parseInt(guide.guideId)}
-                    guideId={guide?.guideId}
-                    name={guide?.guideName}
-                    tour={guide?.tourProductTitles[0]?.title}
-                  ></GuideCard>
-                ))
+                popularGuide
+                  .slice(0, 4)
+                  .map((guide) => (
+                    <GuideCard
+                      key={parseInt(guide.guideId)}
+                      guideId={guide?.guideId}
+                      name={guide?.guideName}
+                      tour={guide?.tourProductTitles[0]?.title}
+                    ></GuideCard>
+                  ))
               ) : (
                 <></>
               )}
@@ -98,13 +101,13 @@ const GuidePage = () => {
                       label="전체"
                     />
                     <FormControlLabel
-                      value="남"
+                      value="MALE"
                       control={<Radio sx={{ margin: 0, padding: 0 }} />}
                       sx={{ border: '1px solid black' }}
                       label="남성"
                     />
                     <FormControlLabel
-                      value="여"
+                      value="FEMALE"
                       control={<Radio sx={{ margin: 0, padding: 0 }} />}
                       sx={{ border: '1px solid black' }}
                       label="여성"
@@ -157,6 +160,7 @@ const GuidePage = () => {
                   </div>
                 </div>
                 <button
+                  className={styles.serachbutton}
                   type="button"
                   onClick={() => {
                     GuideFilter({ gender: gender, age: ageValue, language: selectedLanguage })
