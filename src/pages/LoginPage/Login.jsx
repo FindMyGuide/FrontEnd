@@ -1,24 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import LoginImage from "./Login.png";
 import styles from "./Login.module.css";
-import { styled } from "styled-components";
+import { Button } from "@mui/material";
 import { TextField } from "@mui/material";
-import { UserLogin } from "../../api/user/User";
+import { UserFindId, UserLogin } from "../../api/user/User";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-const Button = styled.button`
-  width: 100%;
-  height: 56px;
-  background: #4461f2;
-  border-radius: 12px;
-  color: white;
-  border: none;
-`;
-
 function Login() {
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm();
+  const { register, watch, handleSubmit } = useForm();
+  const [mode, setMode] = useState(1);
 
   const loginHandler = async (e) => {
     const res = await UserLogin(e);
@@ -32,39 +24,102 @@ function Login() {
       window.alert("아이디나 비밀번호가 틀립니다.");
     }
   };
+
+  const findEmail = async (e) => {
+    const data = {
+      name: watch("name"),
+      phoneNumber: watch("phoneNumber"),
+    };
+    const res = await UserFindId(data);
+    console.log(res);
+  };
   return (
-    <div className={styles.container}>
-      <div className={styles.imgBox}>
-        <img src={LoginImage} alt="" className={styles.loginImage} />
-        <h1 className={styles.welcome}>
-          Welcome to
-          <br />
-          Find My Guide!
-        </h1>
-      </div>
+    <div className="container">
+      {mode === 1 && (
+        <>
+          <form
+            onSubmit={handleSubmit(loginHandler)}
+            className={styles.formBox}
+          >
+            <div className={styles.imgBox}>
+              <img src={LoginImage} alt="" className={styles.loginImage} />
+            </div>
 
-      <form onSubmit={handleSubmit(loginHandler)} className={styles.formBox}>
-        <TextField
-          required
-          fullWidth
-          className={styles.margin}
-          label="이메일"
-          {...register("email")}
-        ></TextField>
-        <TextField
-          required
-          fullWidth
-          className={styles.margin}
-          label="비밀번호"
-          type="password"
-          {...register("password")}
-        ></TextField>
+            <div className={styles.inputBox}>
+              <TextField
+                required
+                fullWidth
+                className={styles.margin}
+                label="이메일"
+                {...register("email")}
+              ></TextField>
+              <TextField
+                required
+                fullWidth
+                className={styles.margin}
+                label="비밀번호"
+                type="password"
+                {...register("password")}
+              ></TextField>
 
-        <Button type="submit">Login</Button>
-        <h5>
-          Not a member? <a href="/signup">Sign up now</a>
-        </h5>
-      </form>
+              <Button type="submit" variant="contained" fullWidth>
+                Login
+              </Button>
+              <Button
+                onClick={() => {
+                  setMode(2);
+                }}
+              >
+                이메일 찾기
+              </Button>
+              <h5 style={{ marginTop: "30px" }}>
+                Are you a member? <a href="/signup">Signup now</a>
+              </h5>
+            </div>
+          </form>
+        </>
+      )}
+      {mode === 2 && (
+        <>
+          <form onSubmit={handleSubmit(findEmail)} className={styles.formBox}>
+            <div className={styles.imgBox}>
+              <img src={LoginImage} alt="" className={styles.loginImage} />
+            </div>
+
+            <div className={styles.inputBox}>
+              <p>이메일을 찾기위해 정보를 입력해주세요.</p>
+              <TextField
+                required
+                fullWidth
+                className={styles.margin}
+                label="이름"
+                {...register("name")}
+              ></TextField>
+              <TextField
+                required
+                fullWidth
+                className={styles.margin}
+                label="핸드폰 번호"
+                {...register("phoneNumber")}
+              ></TextField>
+
+              <Button onClick={findEmail} variant="contained" fullWidth>
+                이메일 확인
+              </Button>
+              <Button
+                onClick={() => {
+                  setMode(1);
+                }}
+              >
+                이전으로 돌아가기
+              </Button>
+              <h5 style={{ marginTop: "30px" }}>
+                Are you a member? <a href="/signup">Signup now</a>
+              </h5>
+            </div>
+          </form>
+        </>
+      )}
     </div>
   );
 }

@@ -44,7 +44,7 @@ export async function TravelDetail(props) {
 export async function FestivalSearch(props) {
   try {
     const res = await baseAxios.get(`/festival/recommend/`, {}, {});
-    return res;
+    return res.data;
   } catch (e) {
     console.error(e);
   }

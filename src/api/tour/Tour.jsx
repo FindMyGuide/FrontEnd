@@ -15,7 +15,6 @@ export default async function TourAll() {
 export async function TourPopular() {
   try {
     const res = await baseAxios.get('tourProduct/top-10', {}, {});
-    console.log(res.data);
     return res.data;
   } catch (e) {
     console.error(e);

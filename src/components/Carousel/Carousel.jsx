@@ -49,7 +49,7 @@ function Carousel({ list }) {
       >
         {tourlist?.map((tour) => (
           <div>
-            <Card title={tour.title} likes={tour.likes} price={tour.price} img={tour.bestImage} />
+            <Card tour={tour} />
           </div>
         ))}
       </Slider>
