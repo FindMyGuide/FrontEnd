@@ -166,7 +166,7 @@ const GuidePage = () => {
                     GuideFilter({ gender: gender, age: ageValue, language: selectedLanguage })
                       .then((getSearchList) => {
                         const searchGuideList = getSearchList;
-                        console.log(`하하하${searchGuideList}`);
+                        serSearchResult(searchGuideList);
                       })
                       .catch((error) => {
                         console.error(error);
@@ -177,7 +177,24 @@ const GuidePage = () => {
                 </button>
               </div>
               <div className={styles.resultSearchBox}>
-                <p>검색결과</p>
+                {searchResult?.length !== 0 ? (
+                  <>
+                    <p>검색결과</p>
+                    <div className={styles.searchguides}>
+                      {searchResult?.slice(0, 3).map((guide) => (
+                        <GuideCard
+                          className={styles.guidecard}
+                          key={parseInt(guide.guideId)}
+                          guideId={guide?.guideId}
+                          name={guide?.guideName}
+                          tour={guide?.tourProductTitles[0]?.title}
+                        ></GuideCard>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <p>검색을 이용해 주세요</p>
+                )}
               </div>
             </div>
           </div>

@@ -64,9 +64,9 @@ const GuideDetailPage = () => {
               <div>
                 <h3>현재 진행중인 투어</h3>
                 <div style={{ display: 'flex', width: '100%' }}>
-                  {guideDetail.tourProductTitles?.slice(0, 3).map((tour, idx) => (
+                  {guideDetail.tourProductTitles?.slice(0, 3).map((tourlist, idx) => (
                     <div key={idx}>
-                      <Card title="gggg" price="20000" img="img"></Card>
+                      <Card tour={{ title: `${tourlist.title}`, price: `20000`, bestImage: `` }}></Card>
                     </div>
                   ))}
                 </div>

@@ -73,11 +73,11 @@ const AreaPage = () => {
           id="map"
           center={{
             // 지도의 중심좌표
-            lat: 33.450701,
-            lng: 126.570667
+            lat: 35.121059,
+            lng: 129.043993
           }}
           className={styles.map}
-          level={3} // 지도의 확대 레벨
+          level={7} // 지도의 확대 레벨
         >
           <MapTypeControl position={'TOPRIGHT'} />
           <ZoomControl position={'RIGHT'} />

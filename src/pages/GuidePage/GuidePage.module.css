@@ -21,6 +21,13 @@
   border: 1px solid black;
   flex: 3;
 }
+.searchguides {
+  display: flex;
+  justify-content: space-evenly;
+}
+.guidecard {
+  flex: 1;
+}
 
 .serachbutton {
   margin-top: 20px;

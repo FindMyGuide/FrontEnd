@@ -22,16 +22,15 @@ export async function GuideAll() {
 
 //가이드 필터링
 export async function GuideFilter(props) {
-  console.log(props);
-
   try {
-    const res = await baseAxios.post('find-my-guide/guide/search', {
+    const res = await baseAxios.get(`find-my-guide/guide/search`, {
       params: {
         gender: props.gender,
         age: `${props.age[0]}-${props.age[1]}`,
-        language: props.language
+        languages: props.languages
       }
     });
+    console.log(res.data);
     return res.data;
   } catch (e) {
     console.error(e);
