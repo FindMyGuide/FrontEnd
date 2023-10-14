@@ -41,7 +41,7 @@ function Navbar({ isMain }) {
           </div>
           <div className={styles.pageLink}>
             <Link to="/create">상품등록 </Link>
-            <Link to="/recommend/festival">추천 </Link>
+            <Link to="/recommend/location">추천 </Link>
             <Link to="/areaproduct">지역별상품 </Link>
             <Link to="/guide">가이드별상품 </Link>
             <Link to="/guidedetail">가이드 디테일 </Link>

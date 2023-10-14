@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { FestivalInfo } from 'api/recommend/Recommend';
 import { ReactComponent as Prev } from 'asset/icons/prev.svg';
 import NoImage from 'asset/images/NoImage2.png';
-import FormatDay from 'components/Recommend/FormatDay';
+import FormatDay from 'components/Format/FormatDay';
 import styles from './RecommendDetail.module.css';
 
 function FestivalDetail() {
@@ -17,17 +17,19 @@ function FestivalDetail() {
       console.log(festivalDetail);
 
       // 지도 초기화 및 표시
-      const container = document.getElementById('map');
-      const options = {
-        center: new window.kakao.maps.LatLng(info.mapY, info.mapX),
-        level: 3
-      };
-      const map = new window.kakao.maps.Map(container, options);
-      const markerPosition = new window.kakao.maps.LatLng(info.mapY, info.mapX);
-      const marker = new window.kakao.maps.Marker({
-        position: markerPosition
-      });
-      marker.setMap(map);
+      if (festivalDetail.mapX && festivalDetail.mapY) {
+        const container = document.getElementById('map');
+        const options = {
+          center: new window.kakao.maps.LatLng(info.mapY, info.mapX),
+          level: 3
+        };
+        const map = new window.kakao.maps.Map(container, options);
+        const markerPosition = new window.kakao.maps.LatLng(info.mapY, info.mapX);
+        const marker = new window.kakao.maps.Marker({
+          position: markerPosition
+        });
+        marker.setMap(map);
+      }
     }
 
     fetchFestivalDetail(id);
@@ -85,13 +87,17 @@ function FestivalDetail() {
                   <div dangerouslySetInnerHTML={{ __html: info.playtime }} className={styles.festivalContent} />
                 </div>
               ) : null}
-              <div className={styles.flex}>
-                {info.place ? <div className={styles.subtitle}>장소</div> : null}
-                <div className={styles.festivalContent}>
-                  <div dangerouslySetInnerHTML={{ __html: info.place }} style={{ marginBottom: '10px' }} />
-                  <div id="map" style={{ width: '100%', height: '400px', borderRadius: '5px' }}></div>
+              {info.mapX && info.mapY ? (
+                <div className={styles.flex}>
+                  <div className={styles.subtitle}>장소</div>
+                  <div className={styles.festivalContent}>
+                    {info.place ? (
+                      <div dangerouslySetInnerHTML={{ __html: info.place }} style={{ marginBottom: '10px' }} />
+                    ) : null}
+                    <div id="map" style={{ width: '100%', height: '400px', borderRadius: '5px' }}></div>
+                  </div>
                 </div>
-              </div>
+              ) : null}
             </div>
           </div>
         </div>

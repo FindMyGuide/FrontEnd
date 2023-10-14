@@ -35,7 +35,7 @@ function LocationList() {
           # 총 <span className="color">{list.length}</span>개의 관광지가 있습니다
         </div>
         <div className={styles.explain}>
-          &nbsp;부산광역시가 제공하는 관광지 중 {list.length}개를 랜덤으로 골라 보여드립니다
+          &nbsp;한국관광공사가 제공하는 관광지 중 {list.length}개를 랜덤으로 골라 보여드립니다
         </div>
         <div className={styles.cardContainer2}>
           {list?.map((location, index) => (

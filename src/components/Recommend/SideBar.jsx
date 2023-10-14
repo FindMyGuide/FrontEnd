@@ -4,9 +4,9 @@ import styles from './SideBar.module.css';
 
 function SideBar() {
   const category = [
-    { name: '🎉 축제 둘러보기', path: '/recommend/festival' },
+    { name: '🚢 관광지 둘러보기', path: '/recommend/location' },
     { name: '🥘 맛집 둘러보기', path: '/recommend/tasty' },
-    { name: '🚢 관광지 둘러보기', path: '/recommend/location' }
+    { name: '🎉 축제 둘러보기', path: '/recommend/festival' }
   ];
 
   return (
