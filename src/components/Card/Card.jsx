@@ -3,7 +3,6 @@ import styles from "./Card.module.css";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 
 function Card({ tour }) {
-  console.log(tour);
   return (
     <div className={styles.card}>
       <div style={{ padding: "10px" }}>

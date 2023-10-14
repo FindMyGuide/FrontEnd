@@ -20,6 +20,7 @@ import {
   CompletedTours,
   LikeGuide,
   LikeTour,
+  MemberWantTour,
 } from "../../api/Mypage/MyUser";
 
 // 오른쪽 - 회원전용
@@ -32,8 +33,18 @@ const MemberMenuContainer = styled.div`
   gap: 100px;
 `;
 
+const LastTourContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 30px;
+`;
+
 const CardContainer = styled.div`
   display: flex;
+
+  flex-wrap: wrap;
+  gap: 20px;
 `;
 
 // 오른쪽 - MemberBookedTour
@@ -52,20 +63,56 @@ const BookedTourBody = styled.div`
   align-items: center;
 `;
 
-const TourDetailButton = styled.button`
-  width: 50%;
-  height: 5vh;
-  color: grey;
-  background-color: white;
-  border: 1px solid #808080;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 14px;
-`;
-
 const SlideContainer = styled.div`
   display: flex;
-  /* width: 300px; */
+`;
+
+// 지난 투어
+const ShowButton = styled.button`
+  width: 100px;
+  height: 50px;
+  border-radius: 20px;
+  background-color: #4281ff;
+  color: white;
+  border: 1px solid white;
+  font-weight: bold;
+`;
+
+// 원해요 목록
+const MemberWantContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+  gap: 30px;
+`;
+
+const WantList = styled.div`
+  display: flex;
+  margin: 15px 0px;
+  font-weight: bold;
+  gap: 30px;
+`;
+
+const WantTitle = styled.div`
+  width: 300px;
+`;
+
+const WantBasicButton = styled.button`
+  border-radius: 20px;
+  width: 100px;
+  height: 30px;
+  border: 0px;
+  color: white;
+`;
+
+const ChatButton = styled(WantBasicButton)`
+  background-color: #48bcea;
+`;
+
+const StatusButton = styled(WantBasicButton)`
+  background-color: #e2e201;
+  width: 80px;
 `;
 
 // 회원 전용
@@ -97,7 +144,6 @@ function MemberBookedTour() {
   }, [dispatch]);
 
   const upComingTour = useSelector((state) => state.upComingTour);
-  console.log(upComingTour);
 
   const [value, onChange] = useState(new Date());
 
@@ -162,6 +208,9 @@ function LastTour() {
   // 완료된 여행 조회
   const dispatch = useDispatch();
 
+  // 3개씩 보여주기
+  const [showMore, setShowMore] = useState(false);
+
   useEffect(() => {
     const fetchLastTourtInformatioin = async () => {
       try {
@@ -177,15 +226,25 @@ function LastTour() {
 
   // redux를 이용한 완료된 여행 정보
   const lastTour = useSelector((state) => state.lastTour);
-  // console.log(lastTour);
+
+  const toursToShow = showMore ? lastTour : lastTour.slice(0, 3);
 
   return (
     <div>
       <h4>지난 투어</h4>
-      <CardContainer>
-        {/* <Card />
-        <Card /> */}
-      </CardContainer>
+
+      <LastTourContainer>
+        <CardContainer>
+          {toursToShow.map((tour) => (
+            <Card key={tour.id} tour={tour} />
+          ))}
+        </CardContainer>
+        {showMore ? (
+          <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
+        ) : (
+          <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
+        )}
+      </LastTourContainer>
     </div>
   );
 }
@@ -194,10 +253,13 @@ function LastTour() {
 function MemberLikeTour() {
   const [likeTours, setLikeTours] = useState([]);
 
+  // 3개씩 보여주기
+  const [showMore, setShowMore] = useState(false);
+
   useEffect(() => {
     const fetchLikeTours = async () => {
       try {
-        const res = await LikeGuide();
+        const res = await LikeTour();
         setLikeTours(res.data);
       } catch (e) {
         console.error(e);
@@ -206,15 +268,26 @@ function MemberLikeTour() {
     fetchLikeTours();
   }, []);
 
+  const toursToShow = showMore ? likeTours : likeTours.slice(0, 3);
+
   // console.log(likeTours);
 
   return (
     <div>
       <h4>좋아요한 투어</h4>
-      <CardContainer>
-        {/* <Card />
-        <Card /> */}
-      </CardContainer>
+
+      <LastTourContainer>
+        <CardContainer>
+          {toursToShow.map((tour) => (
+            <Card key={tour.id} tour={tour} />
+          ))}
+        </CardContainer>
+        {showMore ? (
+          <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
+        ) : (
+          <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
+        )}
+      </LastTourContainer>
     </div>
   );
 }
@@ -246,9 +319,48 @@ function MemberLikeGuide() {
 
 // 원해요 글 목록
 function MemberWantList() {
+  const [wantTour, setWantTour] = useState([]);
+
+  // 3개씩 보여주기
+  const [showMore, setShowMore] = useState(false);
+
+  useEffect(() => {
+    const fetchWantTour = async () => {
+      try {
+        const res = await MemberWantTour();
+        setWantTour(res.data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchWantTour();
+  }, []);
+
+  const toursToShow = showMore ? wantTour : wantTour.slice(0, 3);
+
+  // console.log(wantTour);
+
   return (
     <div>
       <h4>원해요 글 목록</h4>
+      <MemberWantContainer>
+        <div>
+          {toursToShow.length > 0 &&
+            toursToShow.map((tour) => (
+              <WantList key={tour.id}>
+                <WantTitle>{tour.title}</WantTitle>
+                <div>{moment(tour.createAt).format("YYYY.MM.DD")}</div>
+                <ChatButton>채팅하기 </ChatButton>
+                <StatusButton>상태</StatusButton>
+              </WantList>
+            ))}
+        </div>
+        {showMore ? (
+          <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
+        ) : (
+          <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
+        )}
+      </MemberWantContainer>
     </div>
   );
 }
