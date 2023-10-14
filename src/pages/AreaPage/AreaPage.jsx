@@ -4,6 +4,8 @@ import TourAll from 'api/tour/Tour';
 import { Map, MapMarker, MapTypeControl, ZoomControl } from 'react-kakao-maps-sdk';
 import { useEffect, useState } from 'react';
 import { cleanString } from '@mui/x-date-pickers/internals/hooks/useField/useField.utils';
+import { Input, InputAdornment, OutlinedInput, TextField } from '@mui/material';
+import { AccountCircle, SearchOff, SearchOutlined } from '@mui/icons-material';
 
 const AreaPage = () => {
   const [position, setPosition] = useState();
@@ -23,44 +25,19 @@ const AreaPage = () => {
       });
   }, []);
 
-  useEffect(() => {
-    if (!map) return;
-    const ps = new window.kakao.maps.services.Places();
-
-    ps.keywordSearch(`${info}`, (data, status, _pagination) => {
-      if (status === window.kakao.maps.services.Status.OK) {
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-        // LatLngBounds 객체에 좌표를 추가합니다
-        const bounds = new window.kakao.maps.LatLngBounds();
-        let markers = [];
-
-        for (var i = 0; i < data.length; i++) {
-          // @ts-ignore
-          markers.push({
-            position: {
-              lat: data[i].y,
-              lng: data[i].x
-            },
-            content: data[i].place_name
-          });
-          // @ts-ignore
-          bounds.extend(new window.kakao.maps.LatLng(data[i].y, data[i].x));
-        }
-        setMarkers(markers);
-
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
-        map.setBounds(bounds);
-      }
-    });
-  }, [map]);
   return (
     <>
       <div className={styles.areapage}>
         <div className={styles.mapsearch}>
-          <input
-            type="text"
-            name="search"
-            id=""
+          <OutlinedInput
+            placeholder="검색어를 입력해주세요"
+            id="outlined-with-icon-adornment"
+            size="small"
+            endAdornment={
+              <InputAdornment position="start">
+                <SearchOutlined />
+              </InputAdornment>
+            }
             className={styles.searcharea}
             onChange={(e) => {
               setInfo(e.target.value);

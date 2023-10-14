@@ -14,10 +14,16 @@ const GuideCard = ({ guideId, name, tour, imageLink }) => {
   return (
     <>
       <div className={styles.guideBox} onClick={goToDetailPage}>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', position: 'relative', width: '200px' }}>
           <h1>{name}</h1>
           <img
-            style={{ width: '60px', textAlign: 'center', position: 'relative' }}
+            style={{
+              width: '60px',
+              textAlign: 'center',
+              position: 'absolute',
+              right: '0',
+              top: '-30px'
+            }}
             src={profileImg}
             alt="얼굴 이미지"
           />

@@ -48,9 +48,10 @@ export async function GuideDetail(props) {
 }
 
 //가이드 투어후기
-export async function GuideTourReview(props) {
+export async function GuideTourReview(guideId) {
   try {
-    const res = await baseAxios.get(`find-my-guide/guides/all/${props}`, {}, {});
+    const res = await baseAxios.get(`find-my-guide/guides/all/${guideId}`, {}, {});
+    console.log(res.data);
     return res.data;
   } catch (e) {
     console.error(e);

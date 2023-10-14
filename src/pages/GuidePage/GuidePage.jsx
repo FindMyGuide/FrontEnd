@@ -56,8 +56,10 @@ const GuidePage = () => {
         </>
       ) : (
         <>
-          <div className="webGuide">
-            <p>인기가이드</p>
+          <div className={styles.webguide}>
+            <h5>
+              <b>인기가이드</b>
+            </h5>
             <div className={styles.famousGuide}>
               {popularGuide ? (
                 popularGuide
@@ -89,35 +91,56 @@ const GuidePage = () => {
                     onChange={handleGender}
                     sx={{
                       margin: 0,
-                      padding: 2,
-                      my: 1,
-                      justifyContent: 'space-between'
+                      paddingLeft: 1,
+                      paddingRight: 1,
+                      justifyContent: 'space-between',
+                      mb: 1
                     }}
                   >
                     <FormControlLabel
                       value=""
                       control={<Radio sx={{ margin: 0, padding: 0 }} />}
-                      sx={{ border: '1px solid black' }}
+                      sx={{
+                        color: 'white',
+                        margin: '0',
+                        padding: '5px',
+                        backgroundColor: 'rgb(80,171,242)',
+                        borderRadius: '6px'
+                      }}
                       label="전체"
                     />
                     <FormControlLabel
                       value="MALE"
                       control={<Radio sx={{ margin: 0, padding: 0 }} />}
-                      sx={{ border: '1px solid black' }}
+                      sx={{
+                        color: 'white',
+                        margin: '0',
+                        padding: '5px',
+                        backgroundColor: 'rgb(80,171,242)',
+                        borderRadius: '6px'
+                      }}
                       label="남성"
                     />
                     <FormControlLabel
                       value="FEMALE"
                       control={<Radio sx={{ margin: 0, padding: 0 }} />}
-                      sx={{ border: '1px solid black' }}
+                      sx={{
+                        color: 'white',
+                        margin: '0',
+                        padding: '5px',
+                        backgroundColor: 'rgb(80,171,242)',
+                        borderRadius: '6px'
+                      }}
                       label="여성"
                     />
                   </RadioGroup>
                 </FormControl>
-
                 <div>
                   <p>나이</p>
                   <Slider
+                    sx={{
+                      color: 'rgb(80,171,242)'
+                    }}
                     getAriaLabel={() => 'Age range'}
                     value={ageValue}
                     onChange={handleAge}
@@ -133,6 +156,12 @@ const GuidePage = () => {
                   <div>
                     <Stack spacing={3} sx={{ width: 1000 }}>
                       <Autocomplete
+                        sx={{
+                          '& .MuiChip-root': {
+                            backgroundColor: 'rgb(80,171,242)', // 선택된 항목의 배경색
+                            color: 'white'
+                          } // 선택된 항목의 글자색
+                        }}
                         multiple
                         id="tags-outlined"
                         size="small"

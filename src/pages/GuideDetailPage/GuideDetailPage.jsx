@@ -3,7 +3,7 @@ import { isMobile } from 'react-device-detect';
 
 import styles from './GuideDetailPage.module.css';
 import { useParams } from 'react-router-dom';
-import { GuideDetail } from '../../api/guide/Guide';
+import { GuideDetail, GuideTourReview } from '../../api/guide/Guide';
 import Card from 'components/Card/Card';
 
 import profileImg from 'asset/images/emptyprofile.png';
@@ -23,15 +23,15 @@ const GuideDetailPage = () => {
         console.error(error);
       });
 
-    // GuideTourReview(id)
-    //   .then((getGuideReview) => {
-    //     const GuideReview = getGuideReview;
-    //     setGuideReview(GuideReview);
-    //     console.log(GuideReview);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
+    GuideTourReview(id)
+      .then((getGuideReview) => {
+        const GuideReview = getGuideReview;
+        setGuideReview(GuideReview);
+        console.log(GuideReview);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
   console.log(guideDetail);
   //  gender
