@@ -31,3 +31,156 @@
   font-size: 1.6em;
   font-weight: 600;
 } */
+
+.container {
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #c0c0c0;
+  padding: 30px;
+}
+
+.title {
+  font-family: 'Happiness-Sans-Title';
+  font-size: 30px;
+  padding-bottom: 20px;
+}
+
+.explain {
+  color: #727272;
+  font-size: 15px;
+}
+
+.content {
+  display: flex;
+  padding: 12px 0;
+}
+
+.subtitle {
+  width: 20%;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.input {
+  border: 1px solid #c0c0c0;
+  background-color: #f9f9f9;
+  font-size: 17px;
+  padding: 3px 10px;
+  border-radius: 5px;
+  width: 90%;
+}
+
+.input:focus {
+  outline: 2px solid #50abf2;
+  border-color: #ffffff;
+}
+
+textarea {
+  border: 1px solid #c0c0c0;
+  background-color: #f9f9f9;
+  font-size: 17px;
+  padding: 3px 5px;
+  border-radius: 5px;
+  width: 90%;
+  height: 140px;
+  padding: 5px 10px;
+  outline-color: #50abf2;
+}
+
+textarea:focus {
+  border-color: 1px solid #50abf2;
+}
+
+.price {
+  width: 50px;
+  text-align: right;
+}
+
+.add {
+  background-color: #c1c1c1;
+  border-radius: 5px;
+  color: #ffffff;
+  border: none;
+  padding: 5px 10px;
+  margin-left: 13px;
+
+  &:hover {
+    background-color: #9a9a9a;
+  }
+}
+
+.language {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.location {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.submit {
+  margin-top: 60px;
+  background-color: #12aaff;
+  border-radius: 5px;
+  color: #ffffff;
+  border: none;
+  padding: 8px 15px;
+  font-size: 18px;
+
+  &:hover {
+    background-color: #129eed;
+  }
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+}
+
+ul {
+  list-style-type: none;
+  padding: 5px;
+  margin: 10px 0px 0px 10px;
+}
+
+li {
+  margin: 6px 0px 5px 3px;
+}
+
+.inputfile {
+  margin-top: 10px;
+  padding: 6px 15px;
+  background-color: #bcbcbc;
+  border-radius: 20px;
+  color: black;
+  cursor: pointer;
+  margin=bottom: 30px;
+}
+
+.previews {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+/* TourRegist.module.css */
+
+.imageRow {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -5px; /* 이미지 간격을 조절할 수 있습니다. */
+}
+
+.imageContainer {
+  width: 100px;
+  height: 100px;
+  overflow: hidden; /* 이미지를 컨테이너 크기로 자르기 */
+  margin: 5px; /* 이미지 간격을 조절할 수 있습니다. */
+}
+
+.image {
+  width: 100%; /* 이미지를 부모 컨테이너 크기에 맞게 확대/축소 */
+  height: 100%; /* 이미지를 부모 컨테이너 크기에 맞게 확대/축소 */
+}
