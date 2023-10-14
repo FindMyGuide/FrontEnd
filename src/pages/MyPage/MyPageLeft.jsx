@@ -244,6 +244,7 @@ function PasswordChangeModal({ setPasswordChangeModal }) {
       <PasswordBox>
         <BoldP>현재 비밀번호 </BoldP>
         <PasswordInput
+          type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -252,6 +253,7 @@ function PasswordChangeModal({ setPasswordChangeModal }) {
       <PasswordBox>
         <BoldP>새 비밀번호 </BoldP>
         <PasswordInput
+          type="password"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
         />
@@ -260,6 +262,7 @@ function PasswordChangeModal({ setPasswordChangeModal }) {
       <PasswordBox>
         <BoldP>새 비밀번호 확인 </BoldP>
         <PasswordInput
+          type="password"
           value={newPasswordAgain}
           onChange={(e) => setNewPasswordAgain(e.target.value)}
         />
