@@ -6,12 +6,21 @@ import moment from "moment";
 import Card from "../../components/Card/Card";
 // import { ReactComponent as heartIcon } from "../../asset/Icon/heart.svg";
 
+// 캐러셀
+import "./MyPageCarousel.css";
+import { Carousel } from "react-responsive-carousel";
+
 // Slice
 import { setLastTour } from "../../slices/LastTourSlice";
 import { setUpComingTour } from "slices/UpcomingTourSlice";
 
 // API
-import { UpcomingTours, CompletedTours } from "../../api/Mypage/MyUser";
+import {
+  UpcomingTours,
+  CompletedTours,
+  LikeGuide,
+  LikeTour,
+} from "../../api/Mypage/MyUser";
 
 // 오른쪽 - 회원전용
 const MemberMenuContainer = styled.div`
@@ -54,16 +63,31 @@ const TourDetailButton = styled.button`
   font-size: 14px;
 `;
 
+const SlideContainer = styled.div`
+  display: flex;
+  /* width: 300px; */
+`;
+
 // 회원 전용
+// 에정된 투어
 function MemberBookedTour() {
+  // 예정투어 정보 받기
   const dispatch = useDispatch();
+  const [marks, setMarks] = useState([]);
 
   useEffect(() => {
     const fetchUpcomingToursInformation = async () => {
       try {
         const res = await UpcomingTours();
-        console.log(res.data);
         dispatch(setUpComingTour(res.data));
+
+        let allReservedDates = [];
+        res.data.forEach((tour) => {
+          if (tour.reservedDates) {
+            allReservedDates.push(...tour.reservedDates);
+          }
+        });
+        setMarks(allReservedDates); // useState로 선언한 setMarks 사용
       } catch (e) {
         console.error(e);
       }
@@ -77,14 +101,7 @@ function MemberBookedTour() {
 
   const [value, onChange] = useState(new Date());
 
-  const marks = [
-    "2023-09-15",
-    "2023-09-03",
-    "2023-09-07",
-    "2023-09-12",
-    "2023-09-13",
-    "2023-09-15",
-  ];
+  // 캐러셀
 
   return (
     <div>
@@ -92,23 +109,51 @@ function MemberBookedTour() {
         {/* <heartIcon /> */}
         <h4>예정된 투어</h4>
       </MemberBookedTourTitle>
-      <MemberBookedTourContainer>
-        <Calendar
-          onChange={onChange}
-          value={value}
-          formatDay={(locale, date) => moment(date).format("DD")}
-          tileClassName={({ date, view }) => {
-            if (marks.find((x) => x === moment(date).format("YYYY-MM-DD"))) {
-              return "highlight";
-            }
-          }}
-        />
-        <BookedTourBody>
-          <h4> 5일 뒤 예정된 투어가 있습니다</h4>
-          <Card />
-          <TourDetailButton>투어 자세히 보기</TourDetailButton>
-        </BookedTourBody>
-      </MemberBookedTourContainer>
+
+      <Carousel
+        swipeable={true}
+        showThumbs={false}
+        showArrows={false}
+        showStatus={false}
+        emulateTouch={true}
+        width={"800px"}
+      >
+        {upComingTour.length > 0 &&
+          upComingTour.map((tour) => (
+            <SlideContainer>
+              <MemberBookedTourContainer key={tour.id}>
+                <Calendar
+                  onChange={onChange}
+                  value={value}
+                  formatDay={(locale, date) => moment(date).format("DD")}
+                  tileClassName={({ date, view }) => {
+                    if (
+                      tour.reservedDates.find(
+                        (x) => x === moment(date).format("YYYY-MM-DD")
+                      )
+                    ) {
+                      return "highlight";
+                    }
+                  }}
+                />
+                <BookedTourBody>
+                  {tour.reservedDates && tour.reservedDates[0] && (
+                    <h4 style={{ color: "blue" }}>
+                      {moment(tour.reservedDates[0]).diff(moment(), "days")}일
+                      뒤 예정된 투어가 있습니다
+                    </h4>
+                  )}
+
+                  {!tour.reservedDates ||
+                    (!tour.reservedDates[0] && (
+                      <h4>예정된 투어 정보가 없습니다.</h4>
+                    ))}
+                  <Card tour={tour} />
+                </BookedTourBody>
+              </MemberBookedTourContainer>
+            </SlideContainer>
+          ))}
+      </Carousel>
     </div>
   );
 }
@@ -132,32 +177,66 @@ function LastTour() {
 
   // redux를 이용한 완료된 여행 정보
   const lastTour = useSelector((state) => state.lastTour);
-  console.log(lastTour);
+  // console.log(lastTour);
 
   return (
     <div>
       <h4>지난 투어</h4>
       <CardContainer>
-        <Card />
-        <Card />
+        {/* <Card />
+        <Card /> */}
       </CardContainer>
     </div>
   );
 }
 
-function LikeTour() {
+// 좋아요한 투어
+function MemberLikeTour() {
+  const [likeTours, setLikeTours] = useState([]);
+
+  useEffect(() => {
+    const fetchLikeTours = async () => {
+      try {
+        const res = await LikeGuide();
+        setLikeTours(res.data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchLikeTours();
+  }, []);
+
+  // console.log(likeTours);
+
   return (
     <div>
       <h4>좋아요한 투어</h4>
       <CardContainer>
-        <Card />
-        <Card />
+        {/* <Card />
+        <Card /> */}
       </CardContainer>
     </div>
   );
 }
 
-function LikeGuide() {
+// 좋아요한 가이드
+function MemberLikeGuide() {
+  const [likeGuides, setLikeGuides] = useState([]);
+
+  useEffect(() => {
+    const fetchLikeGuides = async () => {
+      try {
+        const res = await LikeGuide();
+        setLikeGuides(res.data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    fetchLikeGuides();
+  }, []);
+
+  // console.log(likeGuides);
   return (
     <div>
       <h4>좋아요한 가이드</h4>
@@ -165,6 +244,7 @@ function LikeGuide() {
   );
 }
 
+// 원해요 글 목록
 function MemberWantList() {
   return (
     <div>
@@ -173,13 +253,14 @@ function MemberWantList() {
   );
 }
 
+// 회원메뉴
 function MemberMenu() {
   return (
     <MemberMenuContainer>
       <MemberBookedTour />
       <LastTour />
-      <LikeTour />
-      <LikeGuide />
+      <MemberLikeTour />
+      <MemberLikeGuide />
       <MemberWantList />
     </MemberMenuContainer>
   );

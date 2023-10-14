@@ -56,35 +56,12 @@ export async function ReviewResister(props) {
 //좋아요한 투어 조회
 export async function LikeTour(props) {
   try {
-    const res = await baseAxios.get(
-      `v1/mypage/like/tour`,
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("accessToken"),
-        },
-      }
-    );
-    return res;
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-//좋아요한 관광지 조회
-export async function LikeLocation(props) {
-  try {
-    const res = await baseAxios.get(
-      `v1/mypage/like/location`,
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("accessToken"),
-        },
-      }
-    );
+    const res = await baseAxios.get(`my-page/like/tour`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionStorage.getItem("accessToken"),
+      },
+    });
     return res;
   } catch (e) {
     console.error(e);
@@ -94,76 +71,12 @@ export async function LikeLocation(props) {
 //좋아요한 가이드 조회
 export async function LikeGuide(props) {
   try {
-    const res = await baseAxios.get(
-      `v1/mypage/like/guide`,
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("accessToken"),
-        },
-      }
-    );
-    return res;
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-//가이드 자격증 등록
-export async function CertificationResister(props) {
-  try {
-    const res = await baseAxios.post(
-      `v1/mypage/like/guide`,
-      {
-        certification: props.certification,
-        language: props.language,
+    const res = await baseAxios.get(`guide-like/guide-list`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionStorage.getItem("accessToken"),
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("accessToken"),
-        },
-      }
-    );
-    return res;
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-//가이드등록 여부 확인
-export async function CheckCertification(props) {
-  try {
-    const res = await baseAxios.get(
-      `v1/mypage/${props}`,
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("accessToken"),
-        },
-      }
-    );
-    return res;
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-//가이드 등록
-export async function GuideResister(props) {
-  try {
-    const res = await baseAxios.post(
-      `v1/mypage/${props}`,
-      { detail: props.detail },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("accessToken"),
-        },
-      }
-    );
+    });
     return res;
   } catch (e) {
     console.error(e);
