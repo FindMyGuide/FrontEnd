@@ -41,6 +41,7 @@
 }
 
 .color {
+  font-family: 'Happiness-Sans-Title';
   color: #50abf2;
 }
 
@@ -54,4 +55,17 @@
   &:hover {
     background-color: #129eed;
   }
+}
+
+.up {
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.center {
+  display: flex;
+  justify-content: center;
 }

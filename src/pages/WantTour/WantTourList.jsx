@@ -5,9 +5,8 @@ import styles from './WantTourList.module.css';
 
 function WantTour() {
   const navigate = useNavigate();
-  const isLoggedIn = sessionStorage.getItem('AccessToken');
+  const isLoggedIn = sessionStorage.getItem('accessToken');
 
-  const [isSelect, setIsSelect] = useState(false);
   const [list, setList] = useState(null);
   const [myArticle, setMyArticle] = useState(false);
 
@@ -49,12 +48,12 @@ function WantTour() {
     <div className={styles.background}>
       <div className="container" style={{ paddingBottom: '100px' }}>
         <div className={styles.header}>
-          <div>원하는 투어를 직접 작성해보세요</div>
+          <span className={styles.title}>원하는 투어를 직접 작성해보세요</span>
         </div>
         <div className={styles.listContainer}>
           <div className={styles.listTitle}>
-            <span>글 제목</span>
-            <span>원하는 여행 날짜</span>
+            <span>제목</span>
+            <span>여행 날짜</span>
             <span>가이드 매칭 여부</span>
           </div>
           <hr />

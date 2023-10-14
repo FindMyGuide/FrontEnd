@@ -11,9 +11,7 @@
   margin: 0;
 }
 
-/* SideBar.module.css */
-
-.activeLink {
+.active {
   background-color: #ffffff;
   opacity: 100%;
   border: none;
@@ -23,13 +21,18 @@
   border-radius: 50px;
   padding: 10px 30px;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   margin: 0 15px;
-  filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.3));
+  text-decoration: none;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
 }
 
-.nonActiveLink {
+.nonActive {
   background-color: #bcbcbc;
   opacity: 70%;
   border: none;
@@ -39,8 +42,14 @@
   border-radius: 50px;
   padding: 10px 20px;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
+  text-decoration: none;
   margin: 0 15px;
   filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.3));
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
 }

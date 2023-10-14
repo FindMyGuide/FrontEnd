@@ -244,6 +244,7 @@ function PasswordChangeModal({ setPasswordChangeModal }) {
       <PasswordBox>
         <BoldP>현재 비밀번호 </BoldP>
         <PasswordInput
+          type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -252,6 +253,7 @@ function PasswordChangeModal({ setPasswordChangeModal }) {
       <PasswordBox>
         <BoldP>새 비밀번호 </BoldP>
         <PasswordInput
+          type="password"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
         />
@@ -260,6 +262,7 @@ function PasswordChangeModal({ setPasswordChangeModal }) {
       <PasswordBox>
         <BoldP>새 비밀번호 확인 </BoldP>
         <PasswordInput
+          type="password"
           value={newPasswordAgain}
           onChange={(e) => setNewPasswordAgain(e.target.value)}
         />
@@ -342,7 +345,7 @@ function Privacy({
       <PrivacyBox>
         <b>자격증 </b>
         <Selector
-          value={certification}
+          value={certification ? "true" : "false"}
           onChange={(e) => setCertification(e.target.value)}
         >
           <option value="true">보유</option>
@@ -408,7 +411,7 @@ function EditModal({ setEditModal }) {
         nickname: nickname,
         languages: languages,
         guideExperience: guideExperience,
-        national_certification_of_quide_yn: certification,
+        national_certification_of_quide_yn: certification === "true",
         phoneNumber: phoneNumber,
         profilePicture: profilePicture,
         guideIntro: guideIntro,
