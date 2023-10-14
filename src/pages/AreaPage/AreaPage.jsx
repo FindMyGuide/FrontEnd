@@ -30,11 +30,12 @@ const AreaPage = () => {
       <div className={styles.areapage}>
         <div className={styles.mapsearch}>
           <OutlinedInput
+            sx={{ width: '100%' }}
             placeholder="검색어를 입력해주세요"
             id="outlined-with-icon-adornment"
             size="small"
             endAdornment={
-              <InputAdornment position="start">
+              <InputAdornment position="center">
                 <SearchOutlined />
               </InputAdornment>
             }
