@@ -99,3 +99,63 @@ textarea:focus {
   display: flex;
   justify-content: center;
 }
+
+.parentContainer {
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+}
+
+.postTitle {
+  font-family: 'Happiness-Sans-Title';
+  font-size: 30px;
+  margin-left: 20px;
+  /* margin: 0 auto; */
+}
+
+.postInfo {
+  padding: 7px 30px 0 37px;
+  color: #acacac;
+}
+
+.infoLayout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.infoContainer {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  width: 16px;
+  margin-right: 5px;
+}
+
+.postBtn:hover {
+  text-decoration: underline;
+}
+
+.chatBtn {
+  background-color: #12aaff;
+  padding: 10px 15px;
+  color: #ffffff;
+  font-size: 17px;
+  border: none;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: #0791df;
+  }
+}
+
+.completeBtn {
+  background-color: #c5c5c5;
+  padding: 10px 15px;
+  color: #ffffff;
+  font-size: 17px;
+  border: none;
+  border-radius: 5px;
+}

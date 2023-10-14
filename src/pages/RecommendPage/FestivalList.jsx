@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FestivalSearch } from 'api/recommend/Recommend';
-import FestivalCard from 'components/Card/FestivalCard';
+import FestivalCard from 'components/Card/Recommend/FestivalCard';
 import styles from './Recommend.module.css';
 import SideBar from 'components/Recommend/SideBar';
 
@@ -30,19 +30,16 @@ function FestivalList() {
           <span className={styles.title}>부산을 즐겨보세요</span>
           <SideBar />
         </header>
-        <div className={styles.container}>
-          <div className={styles.content}>
-            <div className={styles.length}>
-              # 총 <span className="color">{list.length}</span>개의 축제가 있습니다
+
+        <div className={styles.length} style={{ marginBottom: '35px' }}>
+          # 총 <span className="color">{list.length}</span>개의 축제가 있습니다
+        </div>
+        <div className={styles.cardContainer}>
+          {list?.map((festival, index) => (
+            <div key={index} onClick={() => onDetailHandler(festival.id)} className={styles.cardItem}>
+              <FestivalCard festival={festival} />
             </div>
-            <div className={styles.cardContainer}>
-              {list?.map((festival, index) => (
-                <div key={index} onClick={() => onDetailHandler(festival.id)} className={styles.cardItem}>
-                  <FestivalCard festival={festival} />
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>

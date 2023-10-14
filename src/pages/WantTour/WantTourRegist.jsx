@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CreateArticle } from 'api/want/Want';
-import styles from './WantTourRegist.module.css';
+import styles from './WantTour.module.css';
 
 // component, icon
 import Location from 'components/Location/Location';

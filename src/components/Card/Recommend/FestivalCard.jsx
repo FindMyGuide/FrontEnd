@@ -1,10 +1,16 @@
 import React from 'react';
+import NoImage from 'asset/images/NoImage.png';
 import styles from './Recommend.module.css';
 
 function FestivalCard({ festival }) {
   return (
     <div className={styles.festCard}>
-      <img src={festival.image} alt="festivalImg" className={styles.festImg} />
+      {festival.image ? (
+        <img src={festival.image} alt="festivalImg" className={styles.festImg} />
+      ) : (
+        <img src={NoImage} alt="festivalImg" className={styles.festImg} />
+      )}
+
       <div>{festival.title}</div>
       <div>
         {festival.progress ? (

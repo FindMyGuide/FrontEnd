@@ -1,0 +1,77 @@
+.container {
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #c0c0c0;
+  padding: 30px;
+}
+
+.title {
+  font-family: 'Happiness-Sans-Title';
+  font-size: 30px;
+  margin: 0 auto;
+}
+
+.festImg {
+  width: 85%;
+  height: auto;
+}
+
+.festPoster {
+  width: 60%;
+  height: auto;
+}
+
+.explain {
+  color: #727272;
+  font-size: 15px;
+}
+
+.content {
+  display: flex;
+  padding: 12px 0;
+}
+
+.subtitle {
+  font-family: 'Happiness-Sans-Title';
+  font-size: 17px;
+  color: #12aaff;
+  width: 20%;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.parentContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.festivalContent {
+  width: 80%;
+  font-size: 17px;
+}
+
+.tastySub {
+  font-family: 'Happiness-Sans-Title';
+  font-size: 17px;
+  color: #12aaff;
+  width: 25%;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.copy {
+  width: 17px;
+  margin-left: 5px;
+  /* fill: #acacac;
+  transition: fill 0.3s;
+
+  &:hover {
+    fill: #818181;
+  } */
+}

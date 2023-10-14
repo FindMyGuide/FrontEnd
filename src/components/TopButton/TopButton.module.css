@@ -1,0 +1,21 @@
+.topButton {
+  position: fixed;
+  bottom: 1.3rem;
+  right: 1.3rem;
+}
+
+.icon {
+  border-radius: 9999px;
+  display: flex;
+  justify-content: center;
+  border: none;
+  padding: 13px 10px;
+}
+
+.content {
+  height: 100%;
+  width: 100%;
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
