@@ -13,17 +13,30 @@ const GuideMenuContainer = styled.div`
 
 // 등록한 투어
 function RegisteredTour() {
-  return <></>;
+  return (
+    <div>
+      <h4> 등록한 투어 </h4>
+      <hr />
+    </div>
+  );
 }
 
 // 예약된 투어
 function GuideBookedTour() {
-  return <></>;
+  return (
+    <div>
+      <h4> 예약된 투어 </h4>
+    </div>
+  );
 }
 
 // 원해요 매칭
 function GuideWantList() {
-  return <></>;
+  return (
+    <div>
+      <h4> 원해요 매칭 </h4>
+    </div>
+  );
 }
 
 // 가이드 전체
