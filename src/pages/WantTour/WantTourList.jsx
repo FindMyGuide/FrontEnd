@@ -5,26 +5,25 @@ import styles from './WantTourList.module.css';
 
 function WantTour() {
   const navigate = useNavigate();
-  const isLoggedIn = sessionStorage.getItem('accessToken');
+  const isLoggedIn = sessionStorage.getItem('AccessToken');
 
   const [list, setList] = useState(null);
   const [myArticle, setMyArticle] = useState(false);
 
   useEffect(() => {
-    async function fetchTourList() {
+    async function fetchWantList() {
       const wantList = await WantAll();
-      // setList(wantList);
+      setList(wantList);
       console.log(wantList);
     }
 
-    fetchTourList();
+    fetchWantList();
   }, []);
 
   const handleArticle = () => {
     if ((myArticle === false) & (isLoggedIn === null)) {
       navigate('/login');
     } else {
-      // 로그인 되어있는 경우 내가 쓴 글 목록 조회
       const myArticleList = MyArticle();
       setList(myArticleList);
       setMyArticle(!myArticle);
@@ -44,6 +43,10 @@ function WantTour() {
     }
   };
 
+  const handlePage = (id) => {
+    navigate(`/wanttour/detail/${id}`);
+  };
+
   return (
     <div className={styles.background}>
       <div className="container" style={{ paddingBottom: '100px' }}>
@@ -57,8 +60,7 @@ function WantTour() {
             <span>가이드 매칭 여부</span>
           </div>
           <hr />
-          {list ? (
-            <div>
+          {/* <div>
               {myArticle ? (
                 <button onClick={handleArticle} className={styles.button}>
                   전체 보기
@@ -74,7 +76,15 @@ function WantTour() {
               <button onClick={handleRegist} className={styles.button}>
                 글 작성하기
               </button>
-            </div>
+            </div> */}
+          {list ? (
+            list.map((post, index) => (
+              <div key={index} onClick={() => handlePage(post.id)} className={styles.post}>
+                <span>{post.title}</span>
+                <span>{post.reservationDates[0]}</span>
+                <span>{post.title}</span>
+              </div>
+            ))
           ) : (
             <div className={styles.noContent}>
               <div className="pb-2">아직 등록된 글이 없습니다</div>

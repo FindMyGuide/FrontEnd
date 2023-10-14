@@ -20,8 +20,8 @@ function Carousel({ list }) {
         autoplaySpeed={3000}
         vertical={true}
       >
-        {reviewList?.map((review) => (
-          <div className={styles.carouselSlide}>
+        {reviewList?.map((review, index) => (
+          <div key={index} className={styles.carouselSlide}>
             <ReviewCard review={review} />
           </div>
         ))}

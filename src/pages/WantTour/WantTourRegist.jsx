@@ -6,8 +6,6 @@ import styles from './WantTour.module.css';
 // component, icon
 import Location from 'components/Location/Location';
 import Themes from 'components/Theme/Themes';
-// import Form from 'react-bootstrap/Form';
-// import Button from 'react-bootstrap/Button';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
 

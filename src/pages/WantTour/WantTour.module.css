@@ -159,3 +159,12 @@ textarea:focus {
   border: none;
   border-radius: 5px;
 }
+
+.status {
+  background-color: #c5c5c5;
+  padding: 2px 5px;
+  border: none;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 0.8rem;
+}

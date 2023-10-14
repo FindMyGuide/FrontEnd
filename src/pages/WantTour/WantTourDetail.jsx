@@ -41,7 +41,7 @@ function WantTourDetail() {
       <div className="container" style={{ padding: '70px 0' }}>
         <div className={styles.container}>
           <div className={styles.parentContainer}>
-            <Link to="/recommend/festival">
+            <Link to="/wanttour">
               <Prev />
             </Link>
             <div className={styles.postTitle}>{post.title}</div>
@@ -49,7 +49,8 @@ function WantTourDetail() {
           <div className={styles.postInfo}>
             <div className={styles.infoLayout}>
               <div className={styles.infoContainer}>
-                <Writer className={styles.icon} /> 아람 &nbsp;&nbsp;
+                <div className={styles.status}>매칭완료</div> &nbsp;&nbsp;
+                <Writer className={styles.icon} />아람 &nbsp;&nbsp;
                 <Watch className={styles.icon} />
                 <FormatTime dateTimeString={post.createAt} />
               </div>
