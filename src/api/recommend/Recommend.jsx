@@ -3,19 +3,21 @@ import { baseAxios } from '../Axios';
 //맛집목록 조회
 export async function TastySearch(props) {
   try {
-    const res = await baseAxios.get(`v1/recommend/restaurant`, {}, {});
-    return res;
+    const res = await baseAxios.get(`/restaurants`, {}, {});
+    return res.data;
   } catch (e) {
     console.error(e);
   }
 }
 
 //맛집상세 조회
-export async function TastyDetail(props) {
+export async function TastyInfo(id) {
   try {
-    const res = await baseAxios.get(`v1/recommend/restaurant/${props}`, {}, {});
-    return res;
+    const res = await baseAxios.get(`/restaurant/${id}`, {}, {});
+    console.log(res.data, '맛집');
+    return res.data;
   } catch (e) {
+    console.log(id, '맛집');
     console.error(e);
   }
 }
@@ -23,18 +25,18 @@ export async function TastyDetail(props) {
 //관광지목록 조회
 export async function TravelSearch(props) {
   try {
-    const res = await baseAxios.get(`v1/recommend/department`, {}, {});
-    return res;
+    const res = await baseAxios.get(`/tour-location`, {}, {});
+    return res.data;
   } catch (e) {
     console.error(e);
   }
 }
 
 //관광지상세 조회
-export async function TravelDetail(props) {
+export async function TravelInfo(id) {
   try {
-    const res = await baseAxios.get(`v1/recommend/department/${props}`, {}, {});
-    return res;
+    const res = await baseAxios.get(`/tourLocationDetail/${id}`, {}, {});
+    return res.data;
   } catch (e) {
     console.error(e);
   }
@@ -54,7 +56,7 @@ export async function FestivalSearch(props) {
 export async function FestivalInfo(id) {
   try {
     const res = await baseAxios.get(`/festivalDetail/${id}`, {}, {});
-    return res;
+    return res.data;
   } catch (e) {
     console.error(e);
   }

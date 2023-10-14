@@ -16,10 +16,10 @@ import WantTourUpdate from '../pages/WantTour/WantTourUpdate.jsx';
 // Recommend
 import FestivalList from '../pages/RecommendPage/FestivalList.jsx';
 import FestivalDetail from '../pages/RecommendPage/FestivalDetail.jsx';
-import RestaurantList from 'pages/RecommendPage/RestaurantList.jsx';
-import RestaurantDetail from 'pages/RecommendPage/RestaurantDetail.jsx';
 import LocationList from 'pages/RecommendPage/LocationList.jsx';
 import LocationDetail from 'pages/RecommendPage/LocationDetail.jsx';
+import TastyList from 'pages/RecommendPage/TastyList.jsx';
+import TastyDetail from 'pages/RecommendPage/TastyDetail.jsx';
 
 // Tour
 import TourList from '../pages/Tour/TourList.jsx';
@@ -46,8 +46,8 @@ function RouteLink() {
         <Route path="/wanttour/update/:id" element={<WantTourUpdate />} />
         <Route path="/recommend/festival" element={<FestivalList />} />
         <Route path="/recommend/festival/:id" element={<FestivalDetail />} />
-        <Route path="/recommend/restaurant" element={<RestaurantList />} />
-        <Route path="/recommend/restaurant/:id" element={<RestaurantDetail />} />
+        <Route path="/recommend/tasty" element={<TastyList />} />
+        <Route path="/recommend/tasty/:id" element={<TastyDetail />} />
         <Route path="/recommend/location" element={<LocationList />} />
         <Route path="/recommend/location/:id" element={<LocationDetail />} />
         <Route path="/tour/tourlist" element={<TourList />} />
