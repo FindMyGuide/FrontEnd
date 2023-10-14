@@ -1,5 +1,8 @@
-import { React } from "react";
+import { React, useEffect, useState } from "react";
 import styled from "styled-components";
+
+// API
+import { MyTour, MytourReservation } from "api/Mypage/MyGuide";
 
 // 오른쪽 - 가이드 전용
 const GuideMenuContainer = styled.div`
@@ -13,6 +16,27 @@ const GuideMenuContainer = styled.div`
 
 // 등록한 투어
 function RegisteredTour() {
+  const [Tour, setTour] = useState([]);
+
+  // 3개씩 보여주기
+  const [showMore, setShowMore] = useState(false);
+
+  useEffect(() => {
+    const fetchWantTour = async () => {
+      try {
+        const res = await MyTour();
+        setTour(res.data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchWantTour();
+  }, []);
+
+  console.log(Tour);
+
+  const toursToShow = showMore ? Tour : Tour.slice(0, 3);
+
   return (
     <div>
       <h4> 등록한 투어 </h4>

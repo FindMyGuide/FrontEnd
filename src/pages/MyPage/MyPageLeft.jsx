@@ -345,7 +345,7 @@ function Privacy({
       <PrivacyBox>
         <b>자격증 </b>
         <Selector
-          value={certification}
+          value={certification ? "true" : "false"}
           onChange={(e) => setCertification(e.target.value)}
         >
           <option value="true">보유</option>
@@ -411,7 +411,7 @@ function EditModal({ setEditModal }) {
         nickname: nickname,
         languages: languages,
         guideExperience: guideExperience,
-        national_certification_of_quide_yn: certification,
+        national_certification_of_quide_yn: certification === "true",
         phoneNumber: phoneNumber,
         profilePicture: profilePicture,
         guideIntro: guideIntro,

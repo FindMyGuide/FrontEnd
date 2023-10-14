@@ -1,23 +1,19 @@
-import { baseAxios } from '../Axios';
+import { baseAxios } from "../Axios";
 
 //등록한 투어 조회
-// export async function MytourAll() {
-//   try {
-//     const res = await baseAxios.get(
-//       `v1/mypage/tour/${member_id}`,
-//       {},
-//       {
-//         headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: sessionStorage.getItem('token')
-//         }
-//       }
-//     );
-//     return res;
-//   } catch (e) {
-//     console.error(e);
-//   }
-// }
+export async function MyTour() {
+  try {
+    const res = await baseAxios.get("mypage/tour", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionStorage.getItem("accessToken"),
+      },
+    });
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
 
 //투어 예약 조회
 export async function MytourReservation(props) {
@@ -27,9 +23,9 @@ export async function MytourReservation(props) {
       {},
       {
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: sessionStorage.getItem('token')
-        }
+          "Content-Type": "application/json",
+          Authorization: sessionStorage.getItem("token"),
+        },
       }
     );
     return res;
@@ -52,25 +48,25 @@ export async function MytourResister(props) {
         howmanydays: props.howmanydays,
         location: props.location,
         themeIds: props.themeIds,
-        availableDates: props.availableDates
+        availableDates: props.availableDates,
       },
       {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           // Authorization: sessionStorage.getItem('token')
           Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkdWRudGpnbWxAbmF2ZXIuY29tIiwiZXhwIjoxNjk4NjQ2ODYzLCJpc3MiOiJmaW5kbXlndWlkZS5jb20ifQ.dvRusHh97mkiJ5VqdsQ1gnd-yviBuz6xZLREvbM9_UM'
-        }
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkdWRudGpnbWxAbmF2ZXIuY29tIiwiZXhwIjoxNjk4NjQ2ODYzLCJpc3MiOiJmaW5kbXlndWlkZS5jb20ifQ.dvRusHh97mkiJ5VqdsQ1gnd-yviBuz6xZLREvbM9_UM",
+        },
       }
     );
     if (res.status === 200) {
-      console.log('ok');
+      console.log("ok");
     } else {
-      console.log('no');
+      console.log("no");
     }
     return res;
   } catch (e) {
-    console.error('오류', e);
+    console.error("오류", e);
   }
 }
 
@@ -86,13 +82,13 @@ export async function MytourUpdate(props) {
         tour_place: props.tour_place,
         tour_detail: props.tour_detail,
         availdate: props.availdate,
-        tour_price: props.tour_price
+        tour_price: props.tour_price,
       },
       {
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: sessionStorage.getItem('token')
-        }
+          "Content-Type": "application/json",
+          Authorization: sessionStorage.getItem("token"),
+        },
       }
     );
     return res;
@@ -109,9 +105,9 @@ export async function MytourDelete(props) {
       {},
       {
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: sessionStorage.getItem('token')
-        }
+          "Content-Type": "application/json",
+          Authorization: sessionStorage.getItem("token"),
+        },
       }
     );
     return res;
@@ -128,9 +124,9 @@ export async function MytourExtend(props) {
       { tour_date: props.tour_date },
       {
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: sessionStorage.getItem('token')
-        }
+          "Content-Type": "application/json",
+          Authorization: sessionStorage.getItem("token"),
+        },
       }
     );
     return res;
