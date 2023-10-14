@@ -19,8 +19,8 @@ export async function MyArticle() {
       {},
       {
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: sessionStorage.getItem('token')
+          // 'Content-Type': 'application/json',
+          Authorization: sessionStorage.getItem('accessToken')
         }
       }
     );
@@ -114,19 +114,10 @@ export async function DeleteArticle(props) {
 
 //글 상세 조회
 
-export async function DetailArticle(props) {
+export async function DetailArticle(id) {
   try {
-    const res = await baseAxios.get(
-      `v1/wanttour/update/${props}`,
-      {}
-      // {
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     Authorization: sessionStorage.getItem('token')
-      //   }
-      // }
-    );
-    return res;
+    const res = await baseAxios.get(`/want-tourProduct/${id}`, {}, {});
+    return res.data;
   } catch (e) {
     console.error(e);
   }
