@@ -5,7 +5,7 @@ import styles from './WantTourList.module.css';
 
 function WantTour() {
   const navigate = useNavigate();
-  const isLoggedIn = sessionStorage.getItem('AccessToken');
+  const isLoggedIn = sessionStorage.getItem('accessToken');
 
   const [list, setList] = useState(null);
   const [myArticle, setMyArticle] = useState(false);
@@ -52,6 +52,7 @@ function WantTour() {
       <div className="container" style={{ paddingBottom: '100px' }}>
         <div className={styles.header}>
           <span className={styles.title}>원하는 투어를 직접 작성해보세요</span>
+          <button onClick={handleRegist}>글 작성하기</button>
         </div>
         <div className={styles.listContainer}>
           <div className={styles.listTitle}>
@@ -81,8 +82,14 @@ function WantTour() {
             list.map((post, index) => (
               <div key={index} onClick={() => handlePage(post.id)} className={styles.post}>
                 <span>{post.title}</span>
-                <span>{post.reservationDates[0]}</span>
-                <span>{post.title}</span>
+                {post.reservationDates.length === 1 ? (
+                  <span>{post.reservationDates[0]}</span>
+                ) : (
+                  <span>
+                    {post.reservationDates[0]}(+{post.reservationDates.length - 1})
+                  </span>
+                )}
+                {post.isReserved ? <span>매칭완료</span> : <span>매칭대기</span>}
               </div>
             ))
           ) : (

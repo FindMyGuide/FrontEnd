@@ -20,11 +20,11 @@ function LocationDetail() {
       if (locationDetail.mapX && locationDetail.mapY) {
         const container = document.getElementById('map');
         const options = {
-          center: new window.kakao.maps.LatLng(info.mapY, info.mapX),
+          center: new window.kakao.maps.LatLng(locationDetail.mapY, locationDetail.mapX),
           level: 3
         };
         const map = new window.kakao.maps.Map(container, options);
-        const markerPosition = new window.kakao.maps.LatLng(info.mapY, info.mapX);
+        const markerPosition = new window.kakao.maps.LatLng(locationDetail.mapY, locationDetail.mapX);
         const marker = new window.kakao.maps.Marker({
           position: markerPosition
         });
@@ -33,7 +33,7 @@ function LocationDetail() {
     }
 
     fetchTravelDetail(id);
-  }, [id, info.mapX, info.mapY]);
+  }, [id]);
 
   const handleCopyClipBoard = async (text) => {
     if (text !== null) {
