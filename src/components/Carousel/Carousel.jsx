@@ -24,7 +24,6 @@ import Card from '../Card/Card';
 
 function Carousel({ list }) {
   const tourlist = list;
-  console.log(tourlist, '캐러셀');
 
   return (
     <div style={{ width: '1000px' }}>
@@ -36,19 +35,19 @@ function Carousel({ list }) {
         arrows
         autoplay
         autoplaySpeed={3000}
-        prevArrow={
-          <button type="button" className="slick-prev">
-            Previous
-          </button>
-        }
-        nextArrow={
-          <button type="button" className="slick-next">
-            Next
-          </button>
-        }
+        // prevArrow={
+        //   <button type="button" className="slick-prev">
+        //     Previous
+        //   </button>
+        // }
+        // nextArrow={
+        //   <button type="button" className="slick-next">
+        //     Next
+        //   </button>
+        // }
       >
-        {tourlist?.map((tour) => (
-          <div>
+        {tourlist?.map((tour, index) => (
+          <div key={index}>
             <Card tour={tour} />
           </div>
         ))}

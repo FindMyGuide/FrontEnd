@@ -9,11 +9,13 @@ import styles from './WantTour.module.css';
 
 function WantTourDetail() {
   const { id } = useParams();
+  const email = sessionStorage.getItem('userEmail');
   const navigate = useNavigate();
   const [post, setPost] = useState('');
 
   useEffect(() => {
     async function fetchPostDetail(id) {
+      console.log(1);
       const postDetail = await DetailArticle(id);
       setPost(postDetail);
       console.log(postDetail);
@@ -22,9 +24,9 @@ function WantTourDetail() {
     fetchPostDetail(id);
   }, [id]);
 
-  const onDeleteHandler = () => {
+  const onDeleteHandler = (id) => {
     if (window.confirm('글을 삭제하시겠습니까?')) {
-      DeleteArticle();
+      DeleteArticle(id);
       alert('삭제완료');
       navigate('/wanttour');
     } else {
@@ -33,7 +35,7 @@ function WantTourDetail() {
   };
 
   const onUpdateHandler = () => {
-    navigate(`/update/${post.id}`, { state: post });
+    navigate(`/wanttour/update/${post.id}`, { state: post });
   };
 
   return (
@@ -41,34 +43,46 @@ function WantTourDetail() {
       <div className="container" style={{ padding: '70px 0' }}>
         <div className={styles.container}>
           <div className={styles.parentContainer}>
-            <Link to="/recommend/festival">
+            <Link to="/wanttour">
               <Prev />
             </Link>
             <div className={styles.postTitle}>{post.title}</div>
           </div>
-          <div className={styles.postInfo}>
-            <div className={styles.infoLayout}>
-              <div className={styles.infoContainer}>
-                <Writer className={styles.icon} /> 아람 &nbsp;&nbsp;
-                <Watch className={styles.icon} />
-                <FormatTime dateTimeString={post.createAt} />
-              </div>
-              {/* 작성자인 경우 */}
-              <div className={styles.infoContainer}>
-                <Link to="" style={{ textDecoration: 'none', color: '#acacac' }}>
-                  <div className={styles.postBtn} onClick={onUpdateHandler}>
-                    수정
-                  </div>
-                </Link>
-                &nbsp;&nbsp;|&nbsp;&nbsp;
-                <div className={styles.postBtn} onClick={onDeleteHandler}>
-                  삭제
+          {post ? (
+            <div className={styles.postInfo}>
+              <div className={styles.infoLayout}>
+                <div className={styles.parentContainer}>
+                  {post.isReserved ? (
+                    <div className={styles.status} style={{ backgroundColor: '#C5C5C5' }}>
+                      매칭완료
+                    </div>
+                  ) : (
+                    <div className={styles.status} style={{ backgroundColor: '#93D8FF' }}>
+                      매칭대기
+                    </div>
+                  )}
+                  &nbsp;&nbsp;
+                  <Writer className={styles.icon} />
+                  {post.memberInfoResponse && post.memberInfoResponse.nickname} &nbsp;&nbsp;
+                  <Watch className={styles.icon} />
+                  <FormatTime dateTimeString={post.createAt} />
                 </div>
+                {post.memberInfoResponse && post.memberInfoResponse.email === email && !post.isReserved ? (
+                  <div className={styles.parentContainer}>
+                    <div className={styles.postBtn} onClick={onUpdateHandler}>
+                      수정
+                    </div>
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <div className={styles.postBtn} onClick={() => onDeleteHandler(post.id)}>
+                      삭제
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </div>
-          </div>
-          <hr style={{ margin: '5px' }} />
-          <div style={{ padding: '50px' }}>
+          ) : null}
+          <hr style={{ margin: '10px' }} />
+          <div style={{ padding: '20px 50px' }}>
             <div>{post.content}</div>
             <div>{post.reservationDates}</div>
             <div>{post.price}</div>
@@ -76,16 +90,13 @@ function WantTourDetail() {
             <div>{post.vehicle}</div>
             <div>{post.locationsResponses}</div>
 
-            {/* chatting button */}
-            {/* {post.status ? (
-              <button className={styles.chatBtn}>📩 작성자와 채팅하기</button>
-            ) : (
-              <button className={styles.completeBtn}>매칭완료</button>
-            )} */}
-            <button className={styles.chatBtn} disabled>
-              📩 작성자와 채팅하기
-            </button>
-            <button className={styles.completeBtn}>매칭완료</button>
+            <div className={styles.flex}>
+              {post && !post.isReseved ? (
+                <button className={styles.chatBtn}>📩 작성자와 채팅하기</button>
+              ) : (
+                <button className={styles.completeBtn}>매칭완료</button>
+              )}
+            </div>
           </div>
         </div>
       </div>
