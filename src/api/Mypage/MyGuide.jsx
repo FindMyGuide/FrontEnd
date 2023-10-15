@@ -1,23 +1,19 @@
 import { baseAxios } from '../Axios';
 
 //등록한 투어 조회
-// export async function MytourAll() {
-//   try {
-//     const res = await baseAxios.get(
-//       `v1/mypage/tour/${member_id}`,
-//       {},
-//       {
-//         headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: sessionStorage.getItem('token')
-//         }
-//       }
-//     );
-//     return res;
-//   } catch (e) {
-//     console.error(e);
-//   }
-// }
+export async function MyTour() {
+  try {
+    const res = await baseAxios.get('mypage/tour', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: sessionStorage.getItem('accessToken')
+      }
+    });
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
 
 //투어 예약 조회
 export async function MytourReservation(props) {

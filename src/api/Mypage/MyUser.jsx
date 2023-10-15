@@ -30,29 +30,6 @@ export async function CompletedTours() {
   }
 }
 
-//투어 리뷰 등록
-export async function ReviewResister(props) {
-  try {
-    const res = await baseAxios.post(
-      `tour-product-review/register/${props.tour_id}`,
-      {
-        content: props.content,
-        rating: props.rating,
-        image: props.image,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("accessToken"),
-        },
-      }
-    );
-    return res;
-  } catch (e) {
-    console.error(e);
-  }
-}
-
 //좋아요한 투어 조회
 export async function LikeTour(props) {
   try {
@@ -72,6 +49,21 @@ export async function LikeTour(props) {
 export async function LikeGuide(props) {
   try {
     const res = await baseAxios.get(`guide-like/guide-list`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionStorage.getItem("accessToken"),
+      },
+    });
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+//회원이 쓴 원해요 글 목록
+export async function MemberWantTour(props) {
+  try {
+    const res = await baseAxios.get(`want-tourProduct/login-user`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: sessionStorage.getItem("accessToken"),
