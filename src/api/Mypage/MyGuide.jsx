@@ -37,7 +37,6 @@ export async function MytourReservation(props) {
     console.error(e);
   }
 }
-
 //투어 등록
 export async function MytourResister(props) {
   console.log(props);
@@ -50,16 +49,15 @@ export async function MytourResister(props) {
         price: props.price,
         languages: props.languages,
         howmanydays: props.howmanydays,
-        location: props.location,
+        locations: props.location,
         themeIds: props.themeIds,
         availableDates: props.availableDates
+        // images: props.images
       },
       {
         headers: {
           'Content-Type': 'application/json',
-          // Authorization: sessionStorage.getItem('token')
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkdWRudGpnbWxAbmF2ZXIuY29tIiwiZXhwIjoxNjk4NjQ2ODYzLCJpc3MiOiJmaW5kbXlndWlkZS5jb20ifQ.dvRusHh97mkiJ5VqdsQ1gnd-yviBuz6xZLREvbM9_UM'
+          Authorization: sessionStorage.getItem('accessToken')
         }
       }
     );
