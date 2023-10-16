@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { isMobile } from 'react-device-detect';
+
 import styles from './GuidePage.module.css';
 
 import { Autocomplete, FormControl, FormControlLabel, Radio, RadioGroup, Slider, TextField } from '@mui/material';
@@ -50,185 +50,177 @@ const GuidePage = () => {
 
   return (
     <>
-      {isMobile ? (
-        <>
-          <div className="appGuide"></div>
-        </>
-      ) : (
-        <>
-          <div className={styles.webguide}>
-            <h5>
-              <b>인기가이드</b>
-            </h5>
-            <div className={styles.famousGuide}>
-              {popularGuide ? (
-                popularGuide
-                  .slice(0, 4)
-                  .map((guide) => (
+      <div className={styles.webguide}>
+        <h5>
+          <b>인기가이드</b>
+        </h5>
+        <div className={styles.famousGuide}>
+          {popularGuide ? (
+            popularGuide
+              .slice(0, 4)
+              .map((guide) => (
+                <GuideCard
+                  key={parseInt(guide.guideId)}
+                  guideId={guide?.guideId}
+                  name={guide?.guideName}
+                  tour={guide?.tourProductTitles[0]?.title}
+                ></GuideCard>
+              ))
+          ) : (
+            <></>
+          )}
+        </div>
+
+        <div className={styles.guideSearchBox}>
+          <div className={styles.SearchConditionBox}>
+            <p>가이드검색</p>
+
+            <FormControl sx={{ width: '100%' }}>
+              <FormLabel>성별</FormLabel>
+              <RadioGroup
+                row
+                defaultValue="all"
+                name="controlled-radio-buttons-group"
+                value={gender}
+                onChange={handleGender}
+                sx={{
+                  margin: 0,
+                  paddingLeft: 1,
+                  paddingRight: 1,
+                  justifyContent: 'space-between',
+                  mb: 1
+                }}
+              >
+                <FormControlLabel
+                  value=""
+                  control={<Radio sx={{ margin: 0, padding: 0 }} />}
+                  sx={{
+                    color: 'white',
+                    margin: '0',
+                    padding: '5px',
+                    backgroundColor: 'rgb(80,171,242)',
+                    borderRadius: '6px'
+                  }}
+                  label="전체"
+                />
+                <FormControlLabel
+                  value="MALE"
+                  control={<Radio sx={{ margin: 0, padding: 0 }} />}
+                  sx={{
+                    color: 'white',
+                    margin: '0',
+                    padding: '5px',
+                    backgroundColor: 'rgb(80,171,242)',
+                    borderRadius: '6px'
+                  }}
+                  label="남성"
+                />
+                <FormControlLabel
+                  value="FEMALE"
+                  control={<Radio sx={{ margin: 0, padding: 0 }} />}
+                  sx={{
+                    color: 'white',
+                    margin: '0',
+                    padding: '5px',
+                    backgroundColor: 'rgb(80,171,242)',
+                    borderRadius: '6px'
+                  }}
+                  label="여성"
+                />
+              </RadioGroup>
+            </FormControl>
+            <div>
+              <p>나이</p>
+              <Slider
+                sx={{
+                  color: 'rgb(80,171,242)'
+                }}
+                getAriaLabel={() => 'Age range'}
+                value={ageValue}
+                onChange={handleAge}
+                min={20}
+                max={60}
+                valueLabelDisplay="auto"
+                // getAriaValueText={valuetext}
+              />
+            </div>
+            <div>
+              <p>언어</p>
+
+              <div>
+                <Stack spacing={3} sx={{ width: 1000 }}>
+                  <Autocomplete
+                    sx={{
+                      '& .MuiChip-root': {
+                        backgroundColor: 'rgb(80,171,242)', // 선택된 항목의 배경색
+                        color: 'white'
+                      } // 선택된 항목의 글자색
+                    }}
+                    multiple
+                    id="tags-outlined"
+                    size="small"
+                    options={languageList}
+                    getOptionLabel={(option) => option.title}
+                    defaultValue={[languageList[1]]}
+                    filterSelectedOptions
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        InputProps={{
+                          ...params.InputProps,
+                          placeholder: selectedLanguage.length > 0 ? '' : '언어 검색'
+                        }}
+                        size="small"
+                      />
+                    )}
+                    isOptionEqualToValue={(option, value) => option.title === value.title}
+                    onChange={(event, value) => {
+                      const selectedLanguageTitles = value.map((language) => language.value);
+                      setSelectedLanguage(selectedLanguageTitles);
+                    }}
+                  />
+                </Stack>
+              </div>
+            </div>
+            <button
+              className={styles.serachbutton}
+              type="button"
+              onClick={() => {
+                GuideFilter({ gender: gender, age: ageValue, language: selectedLanguage })
+                  .then((getSearchList) => {
+                    const searchGuideList = getSearchList;
+                    serSearchResult(searchGuideList);
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                  });
+              }}
+            >
+              검색
+            </button>
+          </div>
+          <div className={styles.resultSearchBox}>
+            {searchResult?.length !== 0 ? (
+              <>
+                <p>검색결과</p>
+                <div className={styles.searchguides}>
+                  {searchResult?.slice(0, 3).map((guide) => (
                     <GuideCard
+                      className={styles.guidecard}
                       key={parseInt(guide.guideId)}
                       guideId={guide?.guideId}
                       name={guide?.guideName}
                       tour={guide?.tourProductTitles[0]?.title}
                     ></GuideCard>
-                  ))
-              ) : (
-                <></>
-              )}
-            </div>
-
-            <div className={styles.guideSearchBox}>
-              <div className={styles.SearchConditionBox}>
-                <p>가이드검색</p>
-
-                <FormControl sx={{ width: '100%' }}>
-                  <FormLabel>성별</FormLabel>
-                  <RadioGroup
-                    row
-                    defaultValue="all"
-                    name="controlled-radio-buttons-group"
-                    value={gender}
-                    onChange={handleGender}
-                    sx={{
-                      margin: 0,
-                      paddingLeft: 1,
-                      paddingRight: 1,
-                      justifyContent: 'space-between',
-                      mb: 1
-                    }}
-                  >
-                    <FormControlLabel
-                      value=""
-                      control={<Radio sx={{ margin: 0, padding: 0 }} />}
-                      sx={{
-                        color: 'white',
-                        margin: '0',
-                        padding: '5px',
-                        backgroundColor: 'rgb(80,171,242)',
-                        borderRadius: '6px'
-                      }}
-                      label="전체"
-                    />
-                    <FormControlLabel
-                      value="MALE"
-                      control={<Radio sx={{ margin: 0, padding: 0 }} />}
-                      sx={{
-                        color: 'white',
-                        margin: '0',
-                        padding: '5px',
-                        backgroundColor: 'rgb(80,171,242)',
-                        borderRadius: '6px'
-                      }}
-                      label="남성"
-                    />
-                    <FormControlLabel
-                      value="FEMALE"
-                      control={<Radio sx={{ margin: 0, padding: 0 }} />}
-                      sx={{
-                        color: 'white',
-                        margin: '0',
-                        padding: '5px',
-                        backgroundColor: 'rgb(80,171,242)',
-                        borderRadius: '6px'
-                      }}
-                      label="여성"
-                    />
-                  </RadioGroup>
-                </FormControl>
-                <div>
-                  <p>나이</p>
-                  <Slider
-                    sx={{
-                      color: 'rgb(80,171,242)'
-                    }}
-                    getAriaLabel={() => 'Age range'}
-                    value={ageValue}
-                    onChange={handleAge}
-                    min={20}
-                    max={60}
-                    valueLabelDisplay="auto"
-                    // getAriaValueText={valuetext}
-                  />
+                  ))}
                 </div>
-                <div>
-                  <p>언어</p>
-
-                  <div>
-                    <Stack spacing={3} sx={{ width: 1000 }}>
-                      <Autocomplete
-                        sx={{
-                          '& .MuiChip-root': {
-                            backgroundColor: 'rgb(80,171,242)', // 선택된 항목의 배경색
-                            color: 'white'
-                          } // 선택된 항목의 글자색
-                        }}
-                        multiple
-                        id="tags-outlined"
-                        size="small"
-                        options={languageList}
-                        getOptionLabel={(option) => option.title}
-                        defaultValue={[languageList[1]]}
-                        filterSelectedOptions
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            InputProps={{
-                              ...params.InputProps,
-                              placeholder: selectedLanguage.length > 0 ? '' : '언어 검색'
-                            }}
-                            size="small"
-                          />
-                        )}
-                        isOptionEqualToValue={(option, value) => option.title === value.title}
-                        onChange={(event, value) => {
-                          const selectedLanguageTitles = value.map((language) => language.value);
-                          setSelectedLanguage(selectedLanguageTitles);
-                        }}
-                      />
-                    </Stack>
-                  </div>
-                </div>
-                <button
-                  className={styles.serachbutton}
-                  type="button"
-                  onClick={() => {
-                    GuideFilter({ gender: gender, age: ageValue, language: selectedLanguage })
-                      .then((getSearchList) => {
-                        const searchGuideList = getSearchList;
-                        serSearchResult(searchGuideList);
-                      })
-                      .catch((error) => {
-                        console.error(error);
-                      });
-                  }}
-                >
-                  검색
-                </button>
-              </div>
-              <div className={styles.resultSearchBox}>
-                {searchResult?.length !== 0 ? (
-                  <>
-                    <p>검색결과</p>
-                    <div className={styles.searchguides}>
-                      {searchResult?.slice(0, 3).map((guide) => (
-                        <GuideCard
-                          className={styles.guidecard}
-                          key={parseInt(guide.guideId)}
-                          guideId={guide?.guideId}
-                          name={guide?.guideName}
-                          tour={guide?.tourProductTitles[0]?.title}
-                        ></GuideCard>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <p>검색을 이용해 주세요</p>
-                )}
-              </div>
-            </div>
+              </>
+            ) : (
+              <p>검색을 이용해 주세요</p>
+            )}
           </div>
-        </>
-      )}
+        </div>
+      </div>
     </>
   );
 };

@@ -3,9 +3,9 @@ import TourAll from 'api/tour/Tour';
 
 import { Map, MapMarker, MapTypeControl, ZoomControl } from 'react-kakao-maps-sdk';
 import { useEffect, useState } from 'react';
-import { cleanString } from '@mui/x-date-pickers/internals/hooks/useField/useField.utils';
-import { Input, InputAdornment, OutlinedInput, TextField } from '@mui/material';
-import { AccountCircle, SearchOff, SearchOutlined } from '@mui/icons-material';
+
+import { InputAdornment, OutlinedInput } from '@mui/material';
+import { SearchOutlined } from '@mui/icons-material';
 
 const AreaPage = () => {
   const [position, setPosition] = useState();
