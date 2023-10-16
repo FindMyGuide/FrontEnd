@@ -48,7 +48,9 @@ function Navbar({ isMain }) {
             <Link to="/area">지도검색 </Link>
             <Link to="/guide">가이드별 </Link>
           </div>
-          {accessToken === null ? <Link to="/login">로그인 </Link> : <Link to="/mypage/:id">마이페이지</Link>}
+          <div className={styles.navRight}>
+            {accessToken === null ? <Link to="/login">로그인 </Link> : <Link to="/mypage/:id">마이페이지</Link>}
+          </div>
         </div>
       )}
     </>
