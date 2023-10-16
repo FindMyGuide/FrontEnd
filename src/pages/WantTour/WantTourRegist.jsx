@@ -48,7 +48,7 @@ function WantTourRegist() {
         themeIds: themes,
         location: locations.map((location) => ({ title: location }))
       });
-      navigate('/wanttour');
+      // navigate('/wanttour');
     } catch (error) {
       alert('다시 작성해주세요');
       console.error(error);
