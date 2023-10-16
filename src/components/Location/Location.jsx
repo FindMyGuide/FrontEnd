@@ -10,15 +10,16 @@ const Background = styled.span`
 
 function Location(props) {
   const location = props.location;
+  const index = props.index;
   const removeLocation = props.removeLocation;
 
-  const onLocationHandler = (location) => {
-    removeLocation(location);
+  const onLocationHandler = (index) => {
+    removeLocation(index);
   };
   return (
     <span style={{ marginRight: '15px' }}>
       <Background>{location}</Background>
-      <IndeterminateCheckBoxIcon style={{ fill: '#979797' }} onClick={() => onLocationHandler(location)} />
+      <IndeterminateCheckBoxIcon style={{ fill: '#979797' }} onClick={() => onLocationHandler(index)} />
     </span>
   );
 }

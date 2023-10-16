@@ -53,4 +53,4 @@ Message.propTypes = {
   photoURL: PropTypes.string
 };
 
-export default Message;
+// export default Message;

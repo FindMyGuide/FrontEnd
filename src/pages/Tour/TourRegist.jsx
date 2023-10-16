@@ -1,41 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CreateArticle } from 'api/want/Want';
 import styles from './TourRegist.module.css';
+import { MytourResister } from 'api/Mypage/MyGuide';
 
 // component, icon
 import Language from 'components/Language/Language';
 import Location from 'components/Location/Location';
-import Themes from 'components/Theme/Themes';
-// import Form from 'react-bootstrap/Form';
-// import Button from 'react-bootstrap/Button';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
-// import { Language } from '@mui/icons-material';
 
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import { Calendar } from 'react-modern-calendar-datepicker';
 import { utils } from 'react-modern-calendar-datepicker';
 
-import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import Stack from '@mui/material/Stack';
+import WallpaperIcon from '@mui/icons-material/Wallpaper';
+import CustomLocale from 'components/Calendar/CustomLocale';
+import WantThemes from 'components/Theme/WantThemes';
 
 function TourRegist() {
   const navigate = useNavigate();
-
-  //   const [title, setTitle] = useState('');
-  //   const [content, setContent] = useState('');
-  //   const [price, setPrice] = useState();
-  //   const [language, setLanguage] = useState([]);
-  //   const [howmanydays, setHowmanydays] = useState(['0', '1']);
-  //   const [location, setLocation] = useState([]);
-  //   const [themeIds, setThemeIds] = useState([]);
-  //   // const themeCheck = ['off', 'off', 'off', 'off', 'off'];
-  //   const [availableDates, setAvailableDates] = useState([]);
-  //   const [images, setImages] = useState([]);
 
   const [title, setTitle] = useState(''); //투어명
   const [content, setContent] = useState(''); //투어설명
@@ -48,15 +29,27 @@ function TourRegist() {
   const [images, setImages] = useState([]); //투어 이미지
   const [selectedImages, setSelectedImages] = useState([]);
 
-  const [date, setDate] = useState(''); //투어테마
-  const [location, setLocation] = useState('');
+  // const [date, setDate] = useState('');
+  const [location, setLocation] = useState([]);
   const [language, setLanguage] = useState('');
+  const [howmanyday, setHowmanyday] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    CreateArticle({ title, content, date, themes, locations });
+    // MytourResister({ title, content, price, languages, howmanydays, locations, themeIds, availableDates, images });
+    MytourResister({
+      title: 'check',
+      content: 'check',
+      price: 100,
+      languages: ['한국어'],
+      howmanydays: ['2', '3'],
+      locations: [{ title: '광안리', coordinates: [16.234, 122.0485] }],
+      themeIds: [1],
+      availableDates: ['2023-10-15']
+      // images: null
+    });
     console.log(themes);
-    navigate('/wanttour');
+    navigate('/tour/tourlist');
   };
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -93,159 +86,87 @@ function TourRegist() {
   const removeLanguage = (language) => {
     setLanguages(languages.filter((selectedLanguage) => selectedLanguage !== language));
   };
-
   const onHowmanydaysHandler = (event) => {
-    setHowmanydays(event.target.value);
-  };
-  const onLocationHandler = (event) => {
-    setLocation(event.target.value);
-  };
-  const onLocationsHandler = (event) => {
-    event.preventDefault();
-    const cleanedInput = location.trim();
-    if (cleanedInput) {
-      if (!locations.includes(cleanedInput)) {
-        setLocations([...locations, cleanedInput]);
-        console.log(cleanedInput);
-      } else {
-        alert('이미 추가된 태그입니다');
-      }
-    } else {
-      alert('내용을 입력하세요');
+    const inputText = event.target.value;
+    const numberOfDays = parseInt(inputText);
+
+    // 투어 소요기간이 변경될 때, locations 배열을 초기화
+    const newLocations = [];
+    for (let i = 0; i < numberOfDays; i++) {
+      newLocations.push('');
     }
-    setLocation('');
+
+    // 새로운 howmanydays 배열 생성
+    const newHowmanydays = [toString(numberOfDays - 1), inputText];
+    setHowmanyday(inputText);
+    setHowmanydays(newHowmanydays);
+    setLocations(newLocations);
+    setLocation(newLocations);
   };
-  const removeLocation = (location) => {
-    setLocations(locations.filter((selectedLocation) => selectedLocation !== location));
+
+  const onChangeLocation = (event, index) => {
+    const changeLocation = [...location];
+    changeLocation[index] = event.target.value;
+    setLocation(changeLocation);
   };
-  const onAvailableDatesHandler = (event) => {
-    console.log('date', event);
-    // setAvailableDates(event.target);
+
+  const onLocationsHandler = (event, index) => {
+    const inputValue = event ? event.target.value : location[index]; // button을 클릭했을 때는 location 값을 사용
+    // 현재 location 배열을 복사합니다.
+    const newLocation = [...locations];
+    const changeLocation = [...location];
+
+    // 특정 인덱스의 값에 새 값을 추가합니다.
+    if (newLocation[index]) {
+      newLocation[index] += `, ${inputValue}`;
+    } else {
+      newLocation[index] = inputValue;
+    }
+    changeLocation[index] = '';
+    // location 상태를 업데이트합니다.
+    setLocations(newLocation);
+    setLocation(changeLocation);
+  };
+  const removeLocation = (index) => {
+    const deleteLocation = [...locations];
+    deleteLocation[index] = '';
+    setLocations(deleteLocation);
   };
 
   const gregorianToday = utils().getToday();
-  const today = gregorianToday;
   const minimumDate = gregorianToday;
   const maximumDate = utils().getToday();
   maximumDate.month = gregorianToday.month + 3;
-  const myCustomLocale = {
-    // months list by order
-    months: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
 
-    // week days by order
-    weekDays: [
-      {
-        name: 'Sunday', // used for accessibility
-        short: '일', // displayed at the top of days' rows
-        isWeekend: true // is it a formal weekend or not?
-      },
-      {
-        name: 'Monday',
-        short: '월'
-      },
-      {
-        name: 'Tuesday',
-        short: '화'
-      },
-      {
-        name: 'Wednesday',
-        short: '수'
-      },
-      {
-        name: 'Thursday',
-        short: '목'
-      },
-      {
-        name: 'Friday',
-        short: '금'
-      },
-      {
-        name: 'Saturday',
-        short: '토',
-        isWeekend: true
-      }
-    ],
+  const myCustomLocale = CustomLocale;
 
-    // just play around with this number between 0 and 6
-    weekStartingIndex: 0,
-
-    // return a { year: number, month: number, day: number } object
-    getToday(gregorainTodayObject) {
-      return gregorainTodayObject;
-    },
-
-    // return a native JavaScript date here
-    toNativeDate(date) {
-      return new Date(date.year, date.month - 1, date.day);
-    },
-
-    // return a number for date's month length
-    getMonthLength(date) {
-      return new Date(date.year, date.month, 0).getDate();
-    },
-
-    // return a transformed digit to your locale
-    transformDigit(digit) {
-      return digit;
-    },
-
-    // texts in the date picker
-    nextMonth: 'Next Month',
-    previousMonth: 'Previous Month',
-    openMonthSelector: 'Open Month Selector',
-    openYearSelector: 'Open Year Selector',
-    closeMonthSelector: 'Close Month Selector',
-    closeYearSelector: 'Close Year Selector',
-    defaultPlaceholder: 'Select...',
-
-    // for input range value
-    from: 'from',
-    to: 'to',
-
-    // used for input value when multi dates are selected
-    digitSeparator: ',',
-
-    // if your provide -2 for example, year will be 2 digited
-    yearLetterSkip: 0,
-
-    // is your language rtl or ltr?
-    isRtl: false
-  };
-
-  const onImagesHandler = (event) => {
-    setImages(event.target.value);
-  };
-
-  // const onShowImagesHandler = (event) => {
-  //   const showImagesList = event.target.files;
-  //   const list = [...showImages];
-  //   // showImages 상태 변수를 직접 업데이트하는 대신, setShwoImages 함수를 호출하여 업데이트합니다.
-  //   for (let i = 0; i < showImagesList.length; i++) {
-  //     const showImageURL = URL.createObjectURL(showImagesList[i]);
-  //     list.push(showImageURL);
-  //   }
-  //   setShowImages(list); // 상태 변수를 업데이트하기 위해 setShowImages 함수를 호출합니다.
-  // };
   const onShowImagesHandler = (event) => {
-    console.log('hi', event);
     const imagesList = event.target.files;
     const list = [...images];
+
+    if (imagesList.length + list.length > 10) {
+      alert('이미지는 10개까지 등록 가능합니다.');
+      return;
+    }
 
     for (let i = 0; i < imagesList.length; i++) {
       const reader = new FileReader();
 
       reader.onload = (e) => {
         const imageURL = e.target.result;
-        list.push(imageURL);
-        setImages(list);
+        if (list.includes(imageURL)) {
+          alert('이미 선택된 이미지입니다');
+        } else {
+          list.push(imageURL);
+          setImages(list);
 
-        setSelectedImages([...selectedImages], { imgPath: imageURL });
+          setSelectedImages([...selectedImages], { imgPath: imageURL });
+        }
       };
 
       reader.readAsDataURL(imagesList[i]);
     }
   };
-
   return (
     <div style={{ backgroundColor: '#F9FAFB' }}>
       <div className="container" style={{ padding: '70px 0' }}>
@@ -256,7 +177,7 @@ function TourRegist() {
             <div>누구나 사람들에게 잊지 못할 추억을 선물할 수 있습니다!</div>
           </div>
           <hr />
-          <form onSubmit={handleSubmit}>
+          {/* <form onSubmit={handleSubmit}>
             <div className={styles.content}>
               <div className={styles.subtitle}>투어명</div>
               <input
@@ -280,7 +201,7 @@ function TourRegist() {
             </div>
             <div className={styles.content}>
               <div className={styles.subtitle}>투어가격(원)</div>
-              {/* <div> */}
+              {/* <div> 
               <input
                 type="text"
                 placeholder="투어가격을 입력하세요"
@@ -290,7 +211,7 @@ function TourRegist() {
                 className={styles.input}
                 onKeyPress={handleKeyPress}
               />
-              {/* </div> */}
+              {/* </div> 
             </div>
             <div className={styles.content}>
               <div className={styles.subtitle}>가능언어</div>
@@ -324,19 +245,19 @@ function TourRegist() {
                 ))}
               </div>
             )}
-
             <div className={styles.content}>
               <div className={styles.subtitle}>투어소요기간(일)</div>
               <input
                 type="text"
                 placeholder="투어소요기간을 입력하세요"
-                value={howmanydays}
+                value={howmanyday}
                 onChange={onHowmanydaysHandler}
                 maxLength="20"
                 className={styles.input}
                 onKeyPress={handleKeyPress}
               />
             </div>
+
             <div style={{ display: 'flex', padding: '0px 30px 10px 0px' }}>
               <div className={styles.subtitle} style={{ color: '#ffffff' }}>
                 투어소요기간(일)
@@ -346,23 +267,28 @@ function TourRegist() {
 
             <div className={styles.content}>
               <div className={styles.subtitle}>투어일정</div>
-              <div className={styles.location}>
-                <input
-                  type="text"
-                  placeholder="장소 입력"
-                  value={location}
-                  onChange={onLocationHandler}
-                  style={{ width: '88%' }}
-                  className={styles.input}
-                  onKeyPress={(event) => {
-                    if (event.key === 'Enter') {
-                      onLocationsHandler(event);
-                    }
-                  }}
-                />
-                <button type="submit" onClick={onLocationsHandler} className={styles.add}>
-                  추가하기
-                </button>
+              <div style={{ width: '90%' }}>
+                {locations.map((_, index) => (
+                  <div key={index} className={styles.location}>
+                    <input
+                      type="text"
+                      placeholder={`장소 입력 - ${index + 1}일차 `}
+                      value={location[index]}
+                      onChange={(event) => onChangeLocation(event, index)}
+                      style={{ width: '88%' }}
+                      className={styles.input}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                          event.preventDefault();
+                          onLocationsHandler(event, index);
+                        }
+                      }}
+                    />
+                    <button type="button" onClick={(event) => onLocationsHandler(event, index)} className={styles.add}>
+                      추가하기
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
             {locations.length > 0 && (
@@ -372,19 +298,21 @@ function TourRegist() {
                 </div>
 
                 {locations.map((location, index) => (
-                  <Location key={index} location={location} removeLocation={removeLocation} />
+                  <div key={index}>
+                    <span>{index + 1}일차</span>
+                    <Location key={index} index={index} location={location} removeLocation={removeLocation} />
+                  </div>
                 ))}
               </div>
             )}
 
             <div className={styles.content}>
               <div className={styles.subtitle}>투어 테마</div>
-              <Themes selectedThemes={themes} setSelectedThemes={setThemes} />
+              <WantThemes selectedThemes={themes} setSelectedThemes={setThemes} />
             </div>
-
             <div className={styles.content}>
               <div className={styles.subtitle}>가이드 가능 날짜</div>
-              {/* 달력 */}
+              {/* 달력 
               <Calendar
                 value={availableDates}
                 onChange={setAvailableDates}
@@ -395,15 +323,15 @@ function TourRegist() {
                 formatMonthYear={(locale, date) => `${date.year}.${String(date.month).padStart(2, '0')}`}
               />
             </div>
-
             <div className={styles.content}>
               <div className={styles.subtitle}>투어 대표 이미지</div>
-              {/* 이미지 */}
+              {/* 이미지 
               <label htmlFor="input-file" className="inputfile">
-                업로드 이미지 선택
+                <WallpaperIcon />
+                <span style={{ margin: '5px' }}>업로드 이미지 선택</span>
                 <input
                   type="file"
-                  multiple="multiple"
+                  multiple
                   id="input-file"
                   style={{ display: 'none' }}
                   accept=".jpg,.jpeg,.png"
@@ -411,7 +339,7 @@ function TourRegist() {
                 />
               </label>
             </div>
-            {/* 미리보기 이미지 렌더링 */}
+            {/* 미리보기 이미지 렌더링 
             <div className={styles.imageRow}>
               {images.map((image, index) => (
                 <div key={index} className={styles.imageContainer}>
@@ -419,13 +347,12 @@ function TourRegist() {
                 </div>
               ))}
             </div>
-
             <div className={styles.flex}>
               <button type="submit" className={styles.submit}>
                 글 작성하기
               </button>
             </div>
-          </form>
+          </form> */}
         </div>
       </div>
     </div>
