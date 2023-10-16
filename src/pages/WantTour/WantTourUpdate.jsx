@@ -11,7 +11,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import CustomLocale from 'components/Calendar/CustomLocale';
-import { Calendar } from 'react-modern-calendar-datepicker';
+// import { Calendar } from 'react-modern-calendar-datepicker';
 import { utils } from 'react-modern-calendar-datepicker';
 
 function WantTourRegist() {
@@ -195,7 +195,7 @@ function WantTourRegist() {
                 </span>
               ))}
             </div>
-            <div className={styles.content}>
+            {/* <div className={styles.content}>
               <div className={styles.subtitle}>투어 날짜</div>
               <Calendar
                 value={date}
@@ -204,7 +204,7 @@ function WantTourRegist() {
                 minimumDate={minimumDate}
                 shouldHighlightWeekends
               />
-            </div>
+            </div> */}
             <div className={styles.content}>
               <div className={styles.subtitle}>투어 인원</div>
               <div className={styles.parentContainer}>
