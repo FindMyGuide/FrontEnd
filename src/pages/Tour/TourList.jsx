@@ -6,6 +6,7 @@ import TourListCard from 'components/Card/TourListCard';
 import SearchBar from 'components/SearchBar/SearchBar';
 import tourListStyle from './TourList.module.css';
 import BamtolImg from 'asset/images/bamtol.png';
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 
 function TourList() {
   const navigate = useNavigate();
@@ -88,7 +89,7 @@ function TourList() {
         </div>
         <div style={{ position: 'relative' }}>
           <div className={tourListStyle.topdiv}>TOP</div>
-          <div className={tourListStyle.topcard}>
+          {/* <div className={tourListStyle.topcard}>
             <div style={{ position: 'relative' }} onClick={() => navigate(`/tour/tourdetail/${randomItems[0].id}`)}>
               <TourListCard
                 title={randomItems.length > 0 ? randomItems[0].title : ''}
@@ -110,6 +111,28 @@ function TourList() {
               ></TourListCard>
               <div className={tourListStyle.cardovertext}>3</div>
             </div>
+          </div> */}
+          <div className={tourListStyle.topcard}>
+            {randomItems[0] && (
+              <div style={{ position: 'relative' }} onClick={() => navigate(`/tour/tourdetail/${randomItems[0].id}`)}>
+                <TourListCard title={randomItems[0].title || ''} likes={randomItems[0].likes || ''}></TourListCard>
+                <div className={tourListStyle.cardovertext}>1</div>
+              </div>
+            )}
+
+            {randomItems[1] && (
+              <div style={{ position: 'relative' }} onClick={() => navigate(`/tour/tourdetail/${randomItems[1].id}`)}>
+                <TourListCard title={randomItems[1].title || ''} likes={randomItems[1].likes || ''}></TourListCard>
+                <div className={tourListStyle.cardovertext}>2</div>
+              </div>
+            )}
+
+            {randomItems[2] && (
+              <div style={{ position: 'relative' }} onClick={() => navigate(`/tour/tourdetail/${randomItems[2].id}`)}>
+                <TourListCard title={randomItems[2].title || ''} likes={randomItems[2].likes || ''}></TourListCard>
+                <div className={tourListStyle.cardovertext}>3</div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -141,22 +164,32 @@ function TourList() {
           </p>
           <div className={tourListStyle.listItems}>
             {selectedDatas.map((tour) => (
-              <div>
+              <div key={tour.id}>
                 <div key={tour.id} className={tourListStyle.item}>
                   <img src={BamtolImg} alt="" className={tourListStyle.itemImg} />
                   <div className={tourListStyle.itemDetail}>
                     <p
                       onClick={() => navigate(`/tour/tourdetail/${tour.id}`)}
-                      style={{ display: 'flex', alignItems: 'center', margin: '5px 0px' }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        margin: '5px 0px',
+                        fontSize: '25px',
+                        fontWeight: '900'
+                      }}
                     >
                       {tour.title}
                     </p>
-                    {tour.locations.map((location) => (
+                    {/* {tour.locations.map((location) => (
                       <p key={location.title} style={{ display: 'flex', alignItems: 'center', margin: '5px 0px' }}>
                         {location.title}
                       </p>
-                    ))}
-                    <p style={{ display: 'flex', alignItems: 'center', margin: '5px 0px' }}>좋아요 : {tour.likes}</p>
+                    ))} */}
+                    <div style={{ display: 'flex', alignItems: 'center', margin: '5px 0px' }}>
+                      <FavoriteRoundedIcon className={styles.like} style={{ fill: '#FF6073' }} />
+
+                      {tour.likes}
+                    </div>
                   </div>
                 </div>
                 <hr style={{ width: '90%' }} />
