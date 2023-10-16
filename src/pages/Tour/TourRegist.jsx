@@ -6,13 +6,14 @@ import { MytourResister } from 'api/Mypage/MyGuide';
 // component, icon
 import Language from 'components/Language/Language';
 import Location from 'components/Location/Location';
-import Themes from 'components/Theme/Themes';
 
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import { Calendar } from 'react-modern-calendar-datepicker';
 import { utils } from 'react-modern-calendar-datepicker';
 
 import WallpaperIcon from '@mui/icons-material/Wallpaper';
+import CustomLocale from 'components/Calendar/CustomLocale';
+import WantThemes from 'components/Theme/WantThemes';
 
 function TourRegist() {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ function TourRegist() {
       locations: [{ title: '광안리', coordinates: [16.234, 122.0485] }],
       themeIds: [1],
       availableDates: ['2023-10-15']
-      // images: ['bamtol.png']
+      // images: null
     });
     console.log(themes);
     navigate('/tour/tourlist');
@@ -136,70 +137,8 @@ function TourRegist() {
   const minimumDate = gregorianToday;
   const maximumDate = utils().getToday();
   maximumDate.month = gregorianToday.month + 3;
-  const myCustomLocale = {
-    // months list by order
-    months: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
 
-    // week days by order
-    weekDays: [
-      {
-        name: 'Sunday', // used for accessibility
-        short: '일', // displayed at the top of days' rows
-        isWeekend: true // is it a formal weekend or not?
-      },
-      { name: 'Monday', short: '월' },
-      { name: 'Tuesday', short: '화' },
-      { name: 'Wednesday', short: '수' },
-      { name: 'Thursday', short: '목' },
-      { name: 'Friday', short: '금' },
-      { name: 'Saturday', short: '토', isWeekend: true }
-    ],
-
-    // just play around with this number between 0 and 6
-    weekStartingIndex: 0,
-
-    // return a { year: number, month: number, day: number } object
-    getToday(gregorainTodayObject) {
-      return gregorainTodayObject;
-    },
-
-    // return a native JavaScript date here
-    toNativeDate(date) {
-      return new Date(date.year, date.month - 1, date.day);
-    },
-
-    // return a number for date's month length
-    getMonthLength(date) {
-      return new Date(date.year, date.month, 0).getDate();
-    },
-
-    // return a transformed digit to your locale
-    transformDigit(digit) {
-      return digit;
-    },
-
-    // texts in the date picker
-    nextMonth: 'Next Month',
-    previousMonth: 'Previous Month',
-    openMonthSelector: 'Open Month Selector',
-    openYearSelector: 'Open Year Selector',
-    closeMonthSelector: 'Close Month Selector',
-    closeYearSelector: 'Close Year Selector',
-    defaultPlaceholder: 'Select...',
-
-    // for input range value
-    from: 'from',
-    to: 'to',
-
-    // used for input value when multi dates are selected
-    digitSeparator: ',',
-
-    // if your provide -2 for example, year will be 2 digited
-    yearLetterSkip: 0,
-
-    // is your language rtl or ltr?
-    isRtl: false
-  };
+  const myCustomLocale = CustomLocale;
 
   const onShowImagesHandler = (event) => {
     const imagesList = event.target.files;
@@ -238,7 +177,7 @@ function TourRegist() {
             <div>누구나 사람들에게 잊지 못할 추억을 선물할 수 있습니다!</div>
           </div>
           <hr />
-          <form onSubmit={handleSubmit}>
+          {/* <form onSubmit={handleSubmit}>
             <div className={styles.content}>
               <div className={styles.subtitle}>투어명</div>
               <input
@@ -262,7 +201,7 @@ function TourRegist() {
             </div>
             <div className={styles.content}>
               <div className={styles.subtitle}>투어가격(원)</div>
-              {/* <div> */}
+              {/* <div> 
               <input
                 type="text"
                 placeholder="투어가격을 입력하세요"
@@ -272,7 +211,7 @@ function TourRegist() {
                 className={styles.input}
                 onKeyPress={handleKeyPress}
               />
-              {/* </div> */}
+              {/* </div> 
             </div>
             <div className={styles.content}>
               <div className={styles.subtitle}>가능언어</div>
@@ -369,11 +308,11 @@ function TourRegist() {
 
             <div className={styles.content}>
               <div className={styles.subtitle}>투어 테마</div>
-              <Themes selectedThemes={themes} setSelectedThemes={setThemes} />
+              <WantThemes selectedThemes={themes} setSelectedThemes={setThemes} />
             </div>
             <div className={styles.content}>
               <div className={styles.subtitle}>가이드 가능 날짜</div>
-              {/* 달력 */}
+              {/* 달력 
               <Calendar
                 value={availableDates}
                 onChange={setAvailableDates}
@@ -386,7 +325,7 @@ function TourRegist() {
             </div>
             <div className={styles.content}>
               <div className={styles.subtitle}>투어 대표 이미지</div>
-              {/* 이미지 */}
+              {/* 이미지 
               <label htmlFor="input-file" className="inputfile">
                 <WallpaperIcon />
                 <span style={{ margin: '5px' }}>업로드 이미지 선택</span>
@@ -400,7 +339,7 @@ function TourRegist() {
                 />
               </label>
             </div>
-            {/* 미리보기 이미지 렌더링 */}
+            {/* 미리보기 이미지 렌더링 
             <div className={styles.imageRow}>
               {images.map((image, index) => (
                 <div key={index} className={styles.imageContainer}>
@@ -413,7 +352,7 @@ function TourRegist() {
                 글 작성하기
               </button>
             </div>
-          </form>
+          </form> */}
         </div>
       </div>
     </div>

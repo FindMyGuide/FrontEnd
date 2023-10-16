@@ -44,8 +44,8 @@ export async function MytourResister(props) {
         content: props.content,
         price: props.price,
         languages: props.languages,
-        howmanydays: props.howmanydays,
-        locations: props.location,
+        howManyDay: props.howmanydays,
+        location: props.location,
         themeIds: props.themeIds,
         availableDates: props.availableDates
         // images: props.images
