@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import LogoImage from 'asset/FindLogo.png';
 import LogoWhiteImage from 'asset/FindLogo_white.png';
 import styles from './Navbar.module.css';
-import { isMobile } from 'react-device-detect';
 
 function Navbar({ isMain }) {
   const logoImage = isMain ? LogoWhiteImage : LogoImage;
