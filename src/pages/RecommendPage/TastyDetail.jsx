@@ -16,23 +16,23 @@ function TastyDetail() {
       setInfo(tastyDetail);
 
       // 지도 초기화 및 표시
-      if (tastyDetail.mapx && tastyDetail.mapy) {
-        const container = document.getElementById('map');
-        const options = {
-          center: new window.kakao.maps.LatLng(info.mapx, info.mapy),
-          level: 3
-        };
-        const map = new window.kakao.maps.Map(container, options);
-        const markerPosition = new window.kakao.maps.LatLng(info.mapx, info.mapy);
-        const marker = new window.kakao.maps.Marker({
-          position: markerPosition
-        });
-        marker.setMap(map);
-      }
+      // if (tastyDetail.mapx && tastyDetail.mapy) {
+      //   const container = document.getElementById('map');
+      //   const options = {
+      //     center: new window.kakao.maps.LatLng(info.mapx, info.mapy),
+      //     level: 3
+      //   };
+      //   const map = new window.kakao.maps.Map(container, options);
+      //   const markerPosition = new window.kakao.maps.LatLng(info.mapx, info.mapy);
+      //   const marker = new window.kakao.maps.Marker({
+      //     position: markerPosition
+      //   });
+      //   marker.setMap(map);
+      // }
     }
 
     fetchTastyDetail(id);
-  }, [id, info.mapx, info.mapy]);
+  }, [id]);
 
   const handleCopyClipBoard = async (text) => {
     if (text !== null) {
@@ -57,13 +57,13 @@ function TastyDetail() {
           </div>
           <hr />
           <div style={{ padding: '50px', display: 'flex' }}>
-            {info.mapx && info.mapy ? (
+            {/* {info.mapx && info.mapy ? (
               <div
                 id="map"
                 style={{ width: '55%', height: '400px', borderRadius: '5px', marginRight: '20px' }}
                 className="center"
               ></div>
-            ) : null}
+            ) : null} */}
             <div style={{ width: '45%' }}>
               {info.restaurantLcnc || info.restaurantCode ? (
                 <div className={styles.flex}>

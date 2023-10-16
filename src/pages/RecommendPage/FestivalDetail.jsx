@@ -17,19 +17,19 @@ function FestivalDetail() {
       console.log(festivalDetail);
 
       // 지도 초기화 및 표시
-      if (festivalDetail.mapX && festivalDetail.mapY) {
-        const container = document.getElementById('map');
-        const options = {
-          center: new window.kakao.maps.LatLng(info.mapY, info.mapX),
-          level: 3
-        };
-        const map = new window.kakao.maps.Map(container, options);
-        const markerPosition = new window.kakao.maps.LatLng(info.mapY, info.mapX);
-        const marker = new window.kakao.maps.Marker({
-          position: markerPosition
-        });
-        marker.setMap(map);
-      }
+      // if (festivalDetail.mapX && festivalDetail.mapY) {
+      //   const container = document.getElementById('map');
+      //   const options = {
+      //     center: new window.kakao.maps.LatLng(info.mapY, info.mapX),
+      //     level: 3
+      //   };
+      //   const map = new window.kakao.maps.Map(container, options);
+      //   const markerPosition = new window.kakao.maps.LatLng(info.mapY, info.mapX);
+      //   const marker = new window.kakao.maps.Marker({
+      //     position: markerPosition
+      //   });
+      //   marker.setMap(map);
+      // }
     }
 
     fetchFestivalDetail(id);
@@ -94,7 +94,7 @@ function FestivalDetail() {
                     {info.place ? (
                       <div dangerouslySetInnerHTML={{ __html: info.place }} style={{ marginBottom: '10px' }} />
                     ) : null}
-                    <div id="map" style={{ width: '100%', height: '400px', borderRadius: '5px' }}></div>
+                    {/* <div id="map" style={{ width: '100%', height: '400px', borderRadius: '5px' }}></div> */}
                   </div>
                 </div>
               ) : null}
