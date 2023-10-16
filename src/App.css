@@ -2,7 +2,6 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  padding-top: 60px;
 }
 
 * {
@@ -28,7 +27,7 @@
   display: flex;
   justify-content: center;
   flex-direction: column; */
-  padding-top: 50px;
+
   width: 1000px;
   margin: 0 auto;
   font-family: 'Pretendard-Regular';
