@@ -23,16 +23,14 @@ export async function GuideAll() {
 //가이드 필터링
 export async function GuideFilter(props) {
   try {
-    console.log(props.gender);
-    const res = await baseAxios.post(
-      'find-my-guide/guide/search',
-      {
+    const res = await baseAxios.get(`find-my-guide/guide/search`, {
+      params: {
         gender: props.gender,
-        age: props.age,
-        language: props.language
-      },
-      {}
-    );
+        age: `${props.age[0]}-${props.age[1]}`,
+        languages: props.languages
+      }
+    });
+    console.log(res.data);
     return res.data;
   } catch (e) {
     console.error(e);
@@ -50,9 +48,10 @@ export async function GuideDetail(props) {
 }
 
 //가이드 투어후기
-export async function GuideTourReview(props) {
+export async function GuideTourReview(guideId) {
   try {
-    const res = await baseAxios.get(`find-my-guide/guides/all/${props}`, {}, {});
+    const res = await baseAxios.get(`find-my-guide/guides/all/${guideId}`, {}, {});
+    console.log(res.data);
     return res.data;
   } catch (e) {
     console.error(e);
