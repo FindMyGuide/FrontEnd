@@ -12,7 +12,7 @@ import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import CustomLocale from 'components/Calendar/CustomLocale';
 import { ReactComponent as Prev } from 'asset/icons/prev.svg';
-import { Calendar } from 'react-modern-calendar-datepicker';
+// import { Calendar } from 'react-modern-calendar-datepicker';
 import { utils } from 'react-modern-calendar-datepicker';
 
 function WantTourRegist() {

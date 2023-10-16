@@ -30,7 +30,7 @@ import styles from './TourDetail.module.css';
 import { TourDetail } from '../../api/tour/Tour';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import BamtolImg from 'asset/images/bamtol.png';
-import { Calendar } from 'react-modern-calendar-datepicker';
+// import { Calendar } from 'react-modern-calendar-datepicker';
 
 function TourDetailPage() {
   const tourId = useParams().id;
@@ -170,9 +170,9 @@ function TourDetailPage() {
                   <div>{tourDetail.themeResponses && tourDetail.themeResponses[0].title}</div>
                 </div>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
+              {/* <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Calendar value={formattedDates} shouldHighlightWeekends />
-              </div>
+              </div> */}
             </div>
             {/* <div className={styles.flex}>
               {tourDetail && !tourDetail.isReseved ? (
