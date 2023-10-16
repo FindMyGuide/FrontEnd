@@ -36,8 +36,7 @@ function RouteLink() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         {/* <Route path="/products" element={<Themeproduct />} /> */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+
         {/* <Route path="/create" element={<Createproduct />} /> */}
         <Route path="/area" element={<AreaPage />} />
         <Route path="/guide" element={<GuidePage />} />
@@ -57,13 +56,18 @@ function RouteLink() {
         <Route path="/tour/tourdetail/:id" element={<TourDetailPage />} />
         {/* <Route path="/resetpassword" element={<ResetPassword />} /> */}
         {/* <Route path="/tour/:id" element={<ProductDetail />} /> */}
-        {/* <PrivateRouter> */}
+        <Route Component={PublicRouter}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Route>
+
+        <Route Component={PrivateRouter}>
           <Route path="/mypage/:id" element={<Mypage />} />
           <Route path="/tour/tourregist" element={<TourRegist />} />
           <Route path="/wanttour/regist" element={<WantTourRegist />} />
           <Route path="/wanttour/detail/:id" element={<WantTourDetail />} />
-         <Route path="/wanttour/update/:id" element={<WantTourUpdate />} />
-        {/* </PrivateRouter> */}
+          <Route path="/wanttour/update/:id" element={<WantTourUpdate />} />
+        </Route>
       </Routes>
     </>
   );

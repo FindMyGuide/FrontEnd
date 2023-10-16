@@ -1,10 +1,9 @@
-import Login from 'pages/LoginPage/Login';
-import MainPage from 'pages/MainPage/MainPage';
-import React from 'react';
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom";
 
 function PublicRouter() {
-  const token = sessionStorage.getItem('accessToken');
-  return token ? <MainPage /> : <Login />;
+  const token = sessionStorage.getItem("accessToken");
+  return token ? <Navigate to="/" /> : <Outlet />;
 }
 
 export default PublicRouter;

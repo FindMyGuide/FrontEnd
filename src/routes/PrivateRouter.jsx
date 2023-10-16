@@ -1,9 +1,11 @@
-import Login from 'pages/LoginPage/Login';
-import MainPage from 'pages/MainPage/MainPage';
-import React from 'react';
+import React from "react";
+import { Outlet, Navigate } from "react-router-dom";
 
 function PrivateRouter() {
-  const token = sessionStorage.getItem('accessToken');
-  return token ? <Login /> : <MainPage />;
+  const token = sessionStorage.getItem("accessToken");
+  // if (token === null) {
+  //   window.alert("로그인이 필요합니다.");
+  // }
+  return token ? <Outlet /> : <Navigate to="/login" />;
 }
 export default PrivateRouter;
