@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { WantAll, MyArticle, WaitAll } from 'api/want/Want';
+import { useNavigate } from 'react-router-dom';
+import { WantAll } from 'api/want/Want';
 import styles from './WantTourList.module.css';
 
 function WantTour() {
