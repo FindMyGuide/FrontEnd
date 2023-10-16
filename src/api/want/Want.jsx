@@ -71,21 +71,22 @@ export async function CreateArticle(props) {
 //글 수정
 export async function UpdateArticle(props) {
   try {
-    const res = await baseAxios.patch(
-      `v1/wanttour/update/${props.want_id}`,
+    const res = await baseAxios.put(
+      `/want-tourProduct/${props.id}`,
       {
+        vehicle: props.vehicle,
         title: props.title,
-        tour_date: props.tour_date,
-        theme: props.theme,
-        wish: props.wish,
-        detail: props.detail,
-        persons: props.persons,
-        price: props.price
+        wantDates: props.wantDates,
+        themeId: props.themeId,
+        location: props.location,
+        content: props.content,
+        price: props.price,
+        totalPeople: props.totalPeople
       },
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: sessionStorage.getItem('token')
+          Authorization: sessionStorage.getItem('accessToken')
         }
       }
     );
@@ -97,8 +98,6 @@ export async function UpdateArticle(props) {
 
 //글 삭제
 export async function DeleteArticle(id) {
-  console.log(id);
-  // const obj = { wantTourProductId: id };
   try {
     const res = await baseAxios.delete(`/want-tourProduct/delete`, {
       data: { wantTourProductId: id },
@@ -106,10 +105,8 @@ export async function DeleteArticle(id) {
         Authorization: sessionStorage.getItem('accessToken')
       }
     });
-    console.log(id);
     return res;
   } catch (e) {
-    console.log(id);
     console.error(e);
   }
 }

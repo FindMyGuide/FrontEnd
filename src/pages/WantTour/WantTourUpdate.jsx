@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CreateArticle } from 'api/want/Want';
 import styles from './WantTour.module.css';
 import { DetailArticle, UpdateArticle } from 'api/want/Want';
 
@@ -66,6 +65,7 @@ function WantTourRegist() {
 
     try {
       await UpdateArticle({
+        id,
         title,
         content,
         wantDates: formattedDates,
