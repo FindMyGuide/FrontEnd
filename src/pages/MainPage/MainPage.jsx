@@ -20,7 +20,9 @@ function MainPage() {
       const guidePopular = await GuidePopular();
       const reviewRecent = await ReviewRecent();
       setTourList(tourPopular);
-      setGuideList(guidePopular.slice(0, 6));
+      if (guidePopular && guidePopular.length >= 6) {
+        setGuideList(guidePopular.slice(0, 6));
+      }
       setReviewList(reviewRecent);
     }
 
@@ -37,18 +39,18 @@ function MainPage() {
           </header>
           <div className={styles.content}>
             <div className={styles.subtitle}>인기 투어를 구경해보세요</div>
-            <Carousel list={tourList} />
+            {tourList && <Carousel list={tourList} />}
           </div>
           <div className={styles.content}>
             <div className={styles.subtitle}>인기 가이드를 구경해보세요</div>
-            <GuideCards list={guideList} />
+            {guideList && <GuideCards list={guideList} />}
           </div>
           <div className={styles.content}>
             <div className={styles.subtitle}>여러가지 축제가 진행중입니다</div>
           </div>
           <div className={styles.content}>
             <div className={styles.subtitle}>실제 이용자들의 후기를 둘러보세요</div>
-            <VerticalCarousel list={reviewList} />
+            {reviewList && <VerticalCarousel list={reviewList} />}
           </div>
         </Fade>
       </div>
