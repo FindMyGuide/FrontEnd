@@ -43,20 +43,22 @@ export async function WaitAll() {
 //글 작성
 export async function CreateArticle(props) {
   try {
-    const res = await baseAxios.get(
-      'wantTourProduct/register',
+    const res = await baseAxios.post(
+      '/want-tourProduct/register',
       {
+        vehicle: props.vehicle,
         title: props.title,
-        date: props.date,
-        themes: props.themes,
-        locations: props.locations,
+        wantDates: props.wantDates,
+        themeId: props.themeId,
+        location: props.location,
         content: props.content,
-        persons: props.persons
+        price: props.price,
+        totalPeople: props.totalPeople
       },
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: sessionStorage.getItem('token')
+          Authorization: sessionStorage.getItem('accessToken')
         }
       }
     );
@@ -69,21 +71,22 @@ export async function CreateArticle(props) {
 //글 수정
 export async function UpdateArticle(props) {
   try {
-    const res = await baseAxios.patch(
-      `v1/wanttour/update/${props.want_id}`,
+    const res = await baseAxios.put(
+      `/want-tourProduct/${props.id}`,
       {
+        vehicle: props.vehicle,
         title: props.title,
-        tour_date: props.tour_date,
-        theme: props.theme,
-        wish: props.wish,
-        detail: props.detail,
-        persons: props.persons,
-        price: props.price
+        wantDates: props.wantDates,
+        themeId: props.themeId,
+        location: props.location,
+        content: props.content,
+        price: props.price,
+        totalPeople: props.totalPeople
       },
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: sessionStorage.getItem('token')
+          Authorization: sessionStorage.getItem('accessToken')
         }
       }
     );
@@ -94,18 +97,14 @@ export async function UpdateArticle(props) {
 }
 
 //글 삭제
-export async function DeleteArticle(props) {
+export async function DeleteArticle(id) {
   try {
-    const res = await baseAxios.delete(
-      `v1/wanttour/update/${props}`,
-      {},
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: sessionStorage.getItem('token')
-        }
+    const res = await baseAxios.delete(`/want-tourProduct/delete`, {
+      data: { wantTourProductId: id },
+      headers: {
+        Authorization: sessionStorage.getItem('accessToken')
       }
-    );
+    });
     return res;
   } catch (e) {
     console.error(e);
@@ -117,6 +116,7 @@ export async function DeleteArticle(props) {
 export async function DetailArticle(id) {
   try {
     const res = await baseAxios.get(`/want-tourProduct/${id}`, {}, {});
+    console.log(res.data);
     return res.data;
   } catch (e) {
     console.error(e);

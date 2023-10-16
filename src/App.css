@@ -2,8 +2,8 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  padding-top: 60px;
 }
+
 * {
   font-family: 'Pretendard-Regular';
 }
@@ -16,17 +16,14 @@
 }
 
 @font-face {
-  font-family: 'LINESeedKR-Bd';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-}
-
-@font-face {
   font-family: 'Happiness-Sans-Title';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/Happiness-Sans-Title.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
+}
+
+.navbar {
+  margin-top: 50px;
 }
 
 .container {
@@ -34,10 +31,14 @@
   display: flex;
   justify-content: center;
   flex-direction: column; */
-  padding-top: 50px;
+
   width: 1000px;
   margin: 0 auto;
   font-family: 'Pretendard-Regular';
+}
+
+.font-Happiness {
+  font-family: 'Happiness-Sans-Title';
 }
 
 .color {

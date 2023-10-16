@@ -11,11 +11,14 @@ function Login() {
   const navigate = useNavigate();
   const { register, watch, handleSubmit } = useForm();
   const [mode, setMode] = useState(1);
+  const [email, setEmail] = useState("");
 
   const loginHandler = async (e) => {
+    const userEmail = e.email;
     const res = await UserLogin(e);
     console.log(res);
     if (res != null) {
+      sessionStorage.setItem("userEmail", userEmail);
       sessionStorage.setItem("accessToken", res.data.accessToken);
       localStorage.setItem("refreshToken", res.data.refreshToken);
       window.alert("로그인 성공! 메인페이지로 이동합니다.");
@@ -30,8 +33,13 @@ function Login() {
       name: watch("name"),
       phoneNumber: watch("phoneNumber"),
     };
+
     const res = await UserFindId(data);
-    console.log(res);
+    if (res !== undefined) {
+      setEmail(res.data.email);
+    } else {
+      window.alert("일치하는 이메일이 없습니다.");
+    }
   };
   return (
     <div className="container">
@@ -88,6 +96,7 @@ function Login() {
 
             <div className={styles.inputBox}>
               <p>이메일을 찾기위해 정보를 입력해주세요.</p>
+              <p>나의 이메일 : {email}</p>
               <TextField
                 required
                 fullWidth

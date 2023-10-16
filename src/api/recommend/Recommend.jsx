@@ -14,10 +14,8 @@ export async function TastySearch(props) {
 export async function TastyInfo(id) {
   try {
     const res = await baseAxios.get(`/restaurant/${id}`, {}, {});
-    console.log(res.data, '맛집');
     return res.data;
   } catch (e) {
-    console.log(id, '맛집');
     console.error(e);
   }
 }

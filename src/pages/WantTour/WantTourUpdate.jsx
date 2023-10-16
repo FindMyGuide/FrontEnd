@@ -1,70 +1,130 @@
-import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { UpdateArticle } from '../../api/want/Want';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import styles from './WantTour.module.css';
+import { DetailArticle, UpdateArticle } from 'api/want/Want';
 
-// component
-import Location from '../../components/Location/Location';
-import Themes from '../../components/Theme/Themes';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+// component, icon
+import WantLocation from 'components/Location/WantLocation';
+import WantThemes from 'components/Theme/WantThemes';
+import Vehicle from 'components/Vehicle/Vehicle';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
+import 'react-modern-calendar-datepicker/lib/DatePicker.css';
+import CustomLocale from 'components/Calendar/CustomLocale';
+import { Calendar } from 'react-modern-calendar-datepicker';
+import { utils } from 'react-modern-calendar-datepicker';
 
 function WantTourRegist() {
-  // const isLoggedIn = sessionStorage.getItem('token');
+  const { id } = useParams();
   const navigate = useNavigate();
-  const current = useLocation();
-  const { post } = current.state;
 
-  const [title, setTitle] = useState(post.title);
-  const [content, setContent] = useState(post.content);
-  const [date, setDate] = useState(post.date);
-  const [persons, setPersons] = useState(post.persons);
-  const [price, setPrice] = useState(post.price);
-  const [themes, setThemes] = useState(post.themes);
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [date, setDate] = useState([]);
+  const [totalPeople, setTotalPeople] = useState(1);
+  const [vehicle, setVehicle] = useState('');
+  const [price, setPrice] = useState(0);
+  const [themes, setThemes] = useState([]);
   const [location, setLocaiton] = useState('');
-  const [locations, setLocations] = useState(post.locations);
+  const [locations, setLocations] = useState([]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // 글 등록 axios
-    // 등록이 잘 되었으면 list 페이지로 이동
-    UpdateArticle({ title, content, date, persons, price, themes, locations });
-    navigate(`/wanttour/detail/${post.id}`);
-  };
+  useEffect(() => {
+    async function fetchPostUpdate(id) {
+      const post = await DetailArticle(id);
 
-  const onTitleHandler = (e) => {
-    setTitle(e.target.value);
-  };
+      setTitle(post.title);
+      setContent(post.content);
+      setPrice(post.price);
+      setTotalPeople(post.totalPeople);
+      setVehicle(post.vehicle);
+      // setThemes(post.Theme);
 
-  const onContentHandler = (e) => {
-    setContent(e.target.value);
-  };
+      const locations = post.locationResponses.map((item) => item.title);
+      setLocations(locations);
 
-  const increment = (e) => {
-    e.preventDefault();
-    setPersons(persons + 1);
-  };
+      const formattedDates = post.reservationDates.map((dateString) => {
+        const [year, month, day] = dateString.split('-').map(Number);
+        return { year, month, day };
+      });
+      setDate(formattedDates);
 
-  const decrement = (e) => {
-    e.preventDefault();
-    if (persons > 1) {
-      setPersons(persons - 1);
+      console.log(post);
+    }
+
+    fetchPostUpdate(id);
+  }, [id]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formattedDates = date.map((selectedDate) => {
+      const formattedDate = `${selectedDate.year}-${String(selectedDate.month).padStart(2, '0')}-${String(
+        selectedDate.day
+      ).padStart(2, '0')}`;
+      return formattedDate;
+    });
+
+    try {
+      await UpdateArticle({
+        id,
+        title,
+        content,
+        wantDates: formattedDates,
+        totalPeople,
+        vehicle,
+        price,
+        themeIds: themes,
+        location: locations.map((location) => ({ title: location }))
+      });
+      navigate('/wanttour');
+    } catch (error) {
+      alert('다시 작성해주세요');
+      console.error(error);
     }
   };
 
-  const onPriceHandler = (e) => {
-    setPrice(e.target.value);
+  const onTitleHandler = (event) => {
+    setTitle(event.target.value);
   };
 
-  const onLocationHandler = (e) => {
-    setLocaiton(e.target.value);
+  const onContentHandler = (event) => {
+    setContent(event.target.value);
   };
 
-  const onLocationsHandler = (e) => {
-    e.preventDefault();
+  const handlePrice = (e) => {
+    const input = e.target.value;
+    const sanitizedInput = input.replace(/\D/g, '');
+    setPrice(Math.max(0, sanitizedInput));
+  };
+
+  // 인원 조정
+  const handlePerson = (e) => {
+    const input = e.target.value;
+    const sanitizedInput = input.replace(/\D/g, '');
+    setTotalPeople(Math.max(1, sanitizedInput));
+  };
+
+  const decrement = () => {
+    setTotalPeople((prev) => Math.max(prev - 1, 1));
+  };
+
+  const increment = () => {
+    setTotalPeople((prev) => prev + 1);
+  };
+
+  const onLocationHandler = (event) => {
+    setLocaiton(event.target.value);
+  };
+
+  const onLocationsHandler = (event) => {
+    event.preventDefault();
     const cleanedInput = location.trim();
     if (cleanedInput) {
-      setLocations([...locations, location]);
-      console.log(locations);
+      if (!locations.includes(cleanedInput)) {
+        setLocations([...locations, cleanedInput]);
+        console.log(cleanedInput);
+      } else {
+        alert('이미 추가된 태그입니다');
+      }
     } else {
       alert('내용을 입력하세요');
     }
@@ -75,52 +135,120 @@ function WantTourRegist() {
     setLocations(locations.filter((selectedLocation) => selectedLocation !== location));
   };
 
+  // 캘린더
+  const minimumDate = utils().getToday();
+  const myCustomLocale = CustomLocale;
+
   return (
-    <div>
-      <h3>원하는 투어를 등록해보세요</h3>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="formPlaintextEmail">
-          <Form.Label>제목</Form.Label>
-          <Form.Control type="text" placeholder="제목을 입력하세요" value={title} onChange={onTitleHandler} />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formTextarea">
-          <Form.Label>내용</Form.Label>
-          <Form.Control
-            as="textarea"
-            placeholder="원하는 투어에 대해 남겨주세요"
-            value={content}
-            onChange={onContentHandler}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formDate">
-          <Form.Label>원하는 투어 날짜를 선택하세요</Form.Label>
-          {/* 달력 컴포넌트 */}
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formPersons">
-          <Form.Label>원하는 투어 인원을 선택하세요</Form.Label>
-          <button onClick={decrement}>-</button>
-          <input type="number" readOnly value={persons} />
-          <button onClick={increment}>+</button>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formPrice">
-          <Form.Label>원하는 투어 가격을 입력하세요</Form.Label>
-          <input type="number" value={price} onChange={onPriceHandler} min="0" step="100" />
-          <span>원</span>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formTheme">
-          <Form.Label>원하는 투어 테마를 선택하세요</Form.Label>
-          <Themes selectedThemes={themes} setSelectedThemes={setThemes} />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formLocation">
-          <Form.Label>꼭 가고싶은 장소를 입력하세요</Form.Label>
-          <Form.Control type="text" placeholder="장소 입력" value={location} onChange={onLocationHandler} />
-          <button onClick={onLocationsHandler}>추가하기</button>
-          {locations.map((location, index) => (
-            <Location key={index} location={location} removeLocation={removeLocation} />
-          ))}
-        </Form.Group>
-        <Button type="submit">글 수정하기</Button>
-      </Form>
+    <div style={{ backgroundColor: '#F9FAFB' }}>
+      <div className="container" style={{ padding: '70px 0' }}>
+        <div className={styles.container}>
+          <div className={styles.title}>
+            원하는 투어를 <span className="color">직접</span> 등록해보세요
+          </div>
+          <div className={styles.explain}>
+            <div>본인이 원하는 투어를 찾지 못하였다면 원하는 투어의 내용을 작성하여 등록해보세요</div>
+            <div>등록한 후, 가이드를 연락을 기다리시면 됩니다 !</div>
+          </div>
+          <hr />
+          <form onSubmit={handleSubmit}>
+            <div className={styles.content}>
+              <div className={styles.subtitle}>제목</div>
+              <input
+                type="text"
+                placeholder="제목을 입력하세요"
+                value={title}
+                onChange={onTitleHandler}
+                maxLength="40"
+                className={styles.input}
+              />
+            </div>
+            <div className={styles.content}>
+              <div className={styles.subtitle}>내용</div>
+              <textarea
+                placeholder="원하는 투어에 대한 상세 설명을 남겨주세요"
+                value={content}
+                className={styles.textarea}
+                onChange={onContentHandler}
+              />
+            </div>
+            <div className={styles.content}>
+              <div className={styles.subtitle}>꼭 가고싶은 장소</div>
+              <div className={styles.location}>
+                <input
+                  type="text"
+                  placeholder="장소 입력"
+                  value={location}
+                  onChange={onLocationHandler}
+                  style={{ width: '87%' }}
+                  className={styles.input}
+                />
+                <button onClick={onLocationsHandler} className={styles.add}>
+                  추가하기
+                </button>
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', marginLeft: '20%' }}>
+              {locations.map((location, index) => (
+                <span key={index} style={{ margin: '0 8px 15px 0' }}>
+                  <WantLocation key={index} location={location} removeLocation={removeLocation} />
+                </span>
+              ))}
+            </div>
+            <div className={styles.content}>
+              <div className={styles.subtitle}>투어 날짜</div>
+              <Calendar
+                value={date}
+                onChange={setDate}
+                locale={myCustomLocale}
+                minimumDate={minimumDate}
+                shouldHighlightWeekends
+              />
+            </div>
+            <div className={styles.content}>
+              <div className={styles.subtitle}>투어 인원</div>
+              <div className={styles.parentContainer}>
+                <AddBoxIcon onClick={increment} style={{ fill: '#c1c1c1' }}></AddBoxIcon>
+                <input
+                  type="text"
+                  value={totalPeople}
+                  className={styles.price}
+                  onChange={handlePerson}
+                  style={{ width: '70px' }}
+                />
+                <IndeterminateCheckBoxIcon onClick={decrement} style={{ fill: '#c1c1c1' }}></IndeterminateCheckBoxIcon>
+                <span style={{ fontSize: '17px', marginLeft: '5px' }}>명</span>
+              </div>
+            </div>
+            <div className={styles.content}>
+              <div className={styles.subtitle}>원하는 가격</div>
+              <div className={styles.parentContainer}>
+                <input
+                  type="text"
+                  value={price}
+                  className={styles.price}
+                  onChange={handlePrice}
+                  style={{ width: '117px' }}
+                />
+                <span style={{ fontSize: '17px', marginLeft: '6px' }}>원</span>
+              </div>
+            </div>
+            <div className={styles.content}>
+              <div className={styles.subtitle}>선호 교통수단</div>
+              <Vehicle selectedVehicle={vehicle} setSelectedVehicle={setVehicle} />
+            </div>
+            <div className={styles.content}>
+              <div className={styles.subtitle}>투어 테마</div>
+              <WantThemes selectedThemes={themes} setSelectedThemes={setThemes} />
+            </div>
+            <div className={styles.flex}>
+              <button type="submit" className={styles.submit}>
+                글 수정하기
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

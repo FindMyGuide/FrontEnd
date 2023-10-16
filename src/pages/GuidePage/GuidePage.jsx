@@ -44,6 +44,7 @@ const GuidePage = () => {
   const handleAge = (event, newValue) => {
     setAgeValue(newValue);
   };
+
   const handleGender = (event) => {
     setGender(event.target.value);
   };
@@ -71,7 +72,7 @@ const GuidePage = () => {
           )}
         </div>
 
-        <div className={styles.guideSearchBox}>
+        <div className={styles.guideSearchBox} style={{ paddingTop: '50px' }}>
           <div className={styles.SearchConditionBox}>
             <p>가이드검색</p>
 
