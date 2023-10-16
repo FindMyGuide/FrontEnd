@@ -9,16 +9,17 @@ import { FormLabel, Stack } from 'react-bootstrap';
 
 const GuidePage = () => {
   const languageList = [
-    { title: '', value: '--' },
+    { title: '전체', value: '' },
     { title: '한국어', value: 'KOREAN' },
     { title: '영어', value: 'ENGLISH' },
     { title: '스페인어', value: 'SPANISH' },
     { title: '일본어', value: 'JAPANESE' },
     { title: '중국어', value: 'CHINESE' },
-    { title: '베트남어', value: 'KKK' },
+    { title: '포루투갈어', value: 'PORTUGUESE' },
     { title: '프랑스어', value: 'FRENCH' },
     { title: '러시아어', value: 'RUSSIAN' },
-    { title: '이탈리아어', value: 'ITALIAN' }
+    { title: '이탈리아어', value: 'ITALIAN' },
+    { title: '독일어', value: 'GERMAN' }
   ];
   //가이드 검색
   const [ageValue, setAgeValue] = useState([30, 37]);
@@ -55,18 +56,22 @@ const GuidePage = () => {
         </>
       ) : (
         <>
-          <div className="webGuide">
-            <p>인기가이드</p>
+          <div className={styles.webguide}>
+            <h5>
+              <b>인기가이드</b>
+            </h5>
             <div className={styles.famousGuide}>
               {popularGuide ? (
-                popularGuide.map((guide) => (
-                  <GuideCard
-                    key={parseInt(guide.guideId)}
-                    guideId={guide?.guideId}
-                    name={guide?.guideName}
-                    tour={guide?.tourProductTitles[0]?.title}
-                  ></GuideCard>
-                ))
+                popularGuide
+                  .slice(0, 4)
+                  .map((guide) => (
+                    <GuideCard
+                      key={parseInt(guide.guideId)}
+                      guideId={guide?.guideId}
+                      name={guide?.guideName}
+                      tour={guide?.tourProductTitles[0]?.title}
+                    ></GuideCard>
+                  ))
               ) : (
                 <></>
               )}
@@ -75,28 +80,67 @@ const GuidePage = () => {
             <div className={styles.guideSearchBox}>
               <div className={styles.SearchConditionBox}>
                 <p>가이드검색</p>
-                <div>
-                  <FormControl>
-                    <FormLabel>성별</FormLabel>
-                    <RadioGroup
-                      row
-                      defaultValue="all"
-                      name="controlled-radio-buttons-group"
-                      value={gender}
-                      onChange={handleGender}
+
+                <FormControl sx={{ width: '100%' }}>
+                  <FormLabel>성별</FormLabel>
+                  <RadioGroup
+                    row
+                    defaultValue="all"
+                    name="controlled-radio-buttons-group"
+                    value={gender}
+                    onChange={handleGender}
+                    sx={{
+                      margin: 0,
+                      paddingLeft: 1,
+                      paddingRight: 1,
+                      justifyContent: 'space-between',
+                      mb: 1
+                    }}
+                  >
+                    <FormControlLabel
+                      value=""
+                      control={<Radio sx={{ margin: 0, padding: 0 }} />}
                       sx={{
-                        my: 1
+                        color: 'white',
+                        margin: '0',
+                        padding: '5px',
+                        backgroundColor: 'rgb(80,171,242)',
+                        borderRadius: '6px'
                       }}
-                    >
-                      <FormControlLabel value="" control={<Radio />} label="전체" />
-                      <FormControlLabel value="male" control={<Radio />} label="남성" />
-                      <FormControlLabel value="female" control={<Radio />} label="여성" />
-                    </RadioGroup>
-                  </FormControl>
-                </div>
+                      label="전체"
+                    />
+                    <FormControlLabel
+                      value="MALE"
+                      control={<Radio sx={{ margin: 0, padding: 0 }} />}
+                      sx={{
+                        color: 'white',
+                        margin: '0',
+                        padding: '5px',
+                        backgroundColor: 'rgb(80,171,242)',
+                        borderRadius: '6px'
+                      }}
+                      label="남성"
+                    />
+                    <FormControlLabel
+                      value="FEMALE"
+                      control={<Radio sx={{ margin: 0, padding: 0 }} />}
+                      sx={{
+                        color: 'white',
+                        margin: '0',
+                        padding: '5px',
+                        backgroundColor: 'rgb(80,171,242)',
+                        borderRadius: '6px'
+                      }}
+                      label="여성"
+                    />
+                  </RadioGroup>
+                </FormControl>
                 <div>
                   <p>나이</p>
                   <Slider
+                    sx={{
+                      color: 'rgb(80,171,242)'
+                    }}
                     getAriaLabel={() => 'Age range'}
                     value={ageValue}
                     onChange={handleAge}
@@ -112,6 +156,12 @@ const GuidePage = () => {
                   <div>
                     <Stack spacing={3} sx={{ width: 1000 }}>
                       <Autocomplete
+                        sx={{
+                          '& .MuiChip-root': {
+                            backgroundColor: 'rgb(80,171,242)', // 선택된 항목의 배경색
+                            color: 'white'
+                          } // 선택된 항목의 글자색
+                        }}
                         multiple
                         id="tags-outlined"
                         size="small"
@@ -139,12 +189,13 @@ const GuidePage = () => {
                   </div>
                 </div>
                 <button
+                  className={styles.serachbutton}
                   type="button"
                   onClick={() => {
                     GuideFilter({ gender: gender, age: ageValue, language: selectedLanguage })
                       .then((getSearchList) => {
                         const searchGuideList = getSearchList;
-                        console.log(searchGuideList);
+                        serSearchResult(searchGuideList);
                       })
                       .catch((error) => {
                         console.error(error);
@@ -155,7 +206,24 @@ const GuidePage = () => {
                 </button>
               </div>
               <div className={styles.resultSearchBox}>
-                <p>검색결과</p>
+                {searchResult?.length !== 0 ? (
+                  <>
+                    <p>검색결과</p>
+                    <div className={styles.searchguides}>
+                      {searchResult?.slice(0, 3).map((guide) => (
+                        <GuideCard
+                          className={styles.guidecard}
+                          key={parseInt(guide.guideId)}
+                          guideId={guide?.guideId}
+                          name={guide?.guideName}
+                          tour={guide?.tourProductTitles[0]?.title}
+                        ></GuideCard>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <p>검색을 이용해 주세요</p>
+                )}
               </div>
             </div>
           </div>

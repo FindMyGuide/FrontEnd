@@ -5,7 +5,7 @@ import './App.css';
 
 import TopButton from 'components/TopButton/TopButton';
 import ScrollToTop from 'routes/ScrollToTop';
-import Navbar from './components/atoms/Navbar/Navbar';
+import Navbar from './components/Navbar/Navbar';
 import RouteLink from './routes/route';
 // import Footer from 'components/Footer/Footer';
 
