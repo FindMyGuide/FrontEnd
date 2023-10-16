@@ -11,10 +11,20 @@ import RouteLink from './routes/route';
 
 function App() {
   const location = useLocation();
-  const isMain = location.pathname === '/';
+  const isMain =
+    location.pathname === '/' ||
+    location.pathname === '/recommend/festival' ||
+    location.pathname === '/recommend/location' ||
+    location.pathname === '/recommend/tasty' ||
+    location.pathname === '/tour/tourlist' ||
+    location.pathname === '/wanttour';
+
+  const appStyle = {
+    marginTop: isMain ? 0 : '50px'
+  };
 
   return (
-    <div className="App">
+    <div className="App" style={appStyle}>
       <ScrollToTop />
       <Navbar isMain={isMain}></Navbar>
       <RouteLink></RouteLink>
