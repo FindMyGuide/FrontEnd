@@ -48,7 +48,7 @@ function WantTourRegist() {
         themeIds: themes,
         location: locations.map((location) => ({ title: location }))
       });
-      navigate('/wanttour');
+      // navigate('/wanttour');
     } catch (error) {
       alert('다시 작성해주세요');
       console.error(error);
@@ -124,7 +124,7 @@ function WantTourRegist() {
               원하는 투어를 <span className="color">직접</span> 등록해보세요
             </div>
           </div>
-          <div className={styles.explain}>
+          {/* <div className={styles.explain}>
             <div>본인이 원하는 투어를 찾지 못하였다면 원하는 투어의 내용을 작성하여 등록해보세요</div>
             <div>등록한 후, 가이드를 연락을 기다리시면 됩니다 !</div>
           </div>
@@ -225,7 +225,7 @@ function WantTourRegist() {
                 글 작성하기
               </button>
             </div>
-          </form>
+          </form> */}
         </div>
       </div>
     </div>

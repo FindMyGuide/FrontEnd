@@ -22,12 +22,16 @@
   font-style: normal;
 }
 
+.navbar {
+  margin-top: 50px;
+}
+
 .container {
   /* width: 1000px;
   display: flex;
   justify-content: center;
   flex-direction: column; */
-  padding-top: 50px;
+
   width: 1000px;
   margin: 0 auto;
   font-family: 'Pretendard-Regular';

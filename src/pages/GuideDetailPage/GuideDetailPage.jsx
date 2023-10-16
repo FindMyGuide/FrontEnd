@@ -4,7 +4,9 @@ import { isMobile } from 'react-device-detect';
 import styles from './GuideDetailPage.module.css';
 import { useParams } from 'react-router-dom';
 import { GuideDetail, GuideTourReview } from '../../api/guide/Guide';
-import { cleanString } from '@mui/x-date-pickers/internals/hooks/useField/useField.utils';
+import Card from 'components/Card/Card';
+
+import profileImg from 'asset/images/emptyprofile.png';
 
 const GuideDetailPage = () => {
   const { id } = useParams();
@@ -21,15 +23,15 @@ const GuideDetailPage = () => {
         console.error(error);
       });
 
-    // GuideTourReview(id)
-    //   .then((getGuideReview) => {
-    //     const GuideReview = getGuideReview;
-    //     setGuideReview(GuideReview);
-    //     console.log(GuideReview);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
+    GuideTourReview(id)
+      .then((getGuideReview) => {
+        const GuideReview = getGuideReview;
+        setGuideReview(GuideReview);
+        console.log(GuideReview);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
   console.log(guideDetail);
   //  gender
@@ -48,7 +50,7 @@ const GuideDetailPage = () => {
         <>
           <div className={styles.webGuideDetail}>
             <div className={styles.guideprofile}>
-              <img src="" alt="얼굴 이미지" />
+              <img style={{ width: '180px', textAlign: 'center' }} src={profileImg} alt="얼굴 이미지" />
               <h5>{guideDetail.guideName}</h5>
               <p>{guideDetail.gender}성</p>
               <p>가이드 경력 {guideDetail.gender}</p>
@@ -61,13 +63,15 @@ const GuideDetailPage = () => {
             <div className={styles.tourofguide}>
               <div>
                 <h3>현재 진행중인 투어</h3>
-                <div style={{ display: 'flex' }}>
-                  {guideDetail.tourProductTitles?.map((tour) => (
-                    <div key={tour.title}>
-                      <img src="" alt="투어 이미지" />
-                      <p>tour</p>
+                <div style={{ display: 'flex', width: '100%' }}>
+                  {guideDetail.tourProductTitles?.slice(0, 3).map((tourlist, idx) => (
+                    <div key={idx}>
+                      <Card tour={{ title: `${tourlist.title}`, price: `20000`, bestImage: `` }}></Card>
                     </div>
                   ))}
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <button>더보기</button>
                 </div>
               </div>
               <div>
