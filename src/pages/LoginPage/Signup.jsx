@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import SignupImage from "./Signup.png";
 import styles from "./Signup.module.css";
 import {
@@ -41,7 +41,6 @@ const languageList = [
 
 function Signup() {
   const navigate = useNavigate();
-  const inputRef = (useRef < HTMLInputElement) | (null > null);
 
   const nameRex = /^[가-힣]{2,6}$/;
   const emailRex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
@@ -396,16 +395,6 @@ function Signup() {
                         />
                       </Stack>
                     </div>
-
-                    <TextField
-                      fullWidth
-                      type="file"
-                      focused
-                      ref={inputRef}
-                      accept="image/jpg, image/jpeg, image/png"
-                      label="(추가사항)프로필사진"
-                      {...register("guideProfilePicture")}
-                    ></TextField>
                   </>
                 )}
 
