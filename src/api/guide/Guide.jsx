@@ -22,6 +22,7 @@ export async function GuideAll() {
 
 //가이드 필터링
 export async function GuideFilter(props) {
+  console.log(props);
   try {
     const res = await baseAxios.get(`find-my-guide/guide/search`, {
       params: {
@@ -50,7 +51,7 @@ export async function GuideDetail(props) {
 //가이드 투어후기
 export async function GuideTourReview(guideId) {
   try {
-    const res = await baseAxios.get(`find-my-guide/guides/all/${guideId}`, {}, {});
+    const res = await baseAxios.get(`find-my-guide/guide/reviews/${guideId}`, {}, {});
     console.log(res.data);
     return res.data;
   } catch (e) {

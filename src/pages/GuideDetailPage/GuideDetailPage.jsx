@@ -55,7 +55,9 @@ const GuideDetailPage = () => {
         </div>
         <div className={styles.tourofguide}>
           <div>
-            <h3>현재 진행중인 투어</h3>
+            <h5>
+              <b>현재 진행중인 투어</b>
+            </h5>
             <div style={{ display: 'flex', width: '100%' }}>
               {guideDetail.tourProductTitles?.slice(0, 3).map((tourlist, idx) => (
                 <div key={idx}>
@@ -68,7 +70,17 @@ const GuideDetailPage = () => {
             </div>
           </div>
           <div>
-            <h3>가이드 투어 후기</h3>
+            <h5>
+              <b>가이드 투어 후기</b>
+              <div style={{ display: 'flex', width: '100%' }}>
+                {guideReview.slice(0, 3).map((reviewList, idx) => (
+                  <div key={idx}>{reviewList.content}</div>
+                ))}
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <button>더보기</button>
+              </div>
+            </h5>
           </div>
         </div>
       </div>

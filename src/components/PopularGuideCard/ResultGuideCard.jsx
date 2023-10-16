@@ -1,10 +1,10 @@
 import React from 'react';
-import styles from './GuideCard.module.css';
+import styles from './ResultGuideCard.module.css';
 import { useNavigate } from 'react-router-dom';
 
 import profileImg from 'asset/images/emptyprofile.png';
 
-const GuideCard = ({ guideId, name, tour, imageLink }) => {
+const ResultGuideCard = ({ guideId, name, tour, imageLink }) => {
   const movePage = useNavigate();
 
   const id = guideId;
@@ -18,16 +18,16 @@ const GuideCard = ({ guideId, name, tour, imageLink }) => {
           <h4 style={{ marginTop: '10px', marginLeft: '10px' }}>{name}</h4>
           <img
             style={{
-              width: '60px',
+              width: '120px',
               position: 'absolute',
               right: '0',
-              top: '-30px'
+              top: '-60px'
             }}
             src={profileImg}
             alt="얼굴 이미지"
           />
         </div>
-        <p style={{ marginBottom: '0', marginTop: '10px', marginLeft: '10px' }}>인기투어</p>
+        <p style={{ marginBottom: '0', marginTop: '10px', marginLeft: '10px' }}>가능언어</p>
         <p style={{ marginLeft: '10px' }}>{tour}</p>
         <img src={{ imageLink } ? { imageLink } : ''} alt="" />
       </div>
@@ -35,4 +35,4 @@ const GuideCard = ({ guideId, name, tour, imageLink }) => {
   );
 };
 
-export default GuideCard;
+export default ResultGuideCard;
