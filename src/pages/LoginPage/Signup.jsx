@@ -27,6 +27,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../../firebase";
+import { doc, setDoc } from "firebase/firestore";
+
 const languageList = [
   { title: "한국어", value: "KOREAN" },
   { title: "영어", value: "ENGLISH" },
@@ -71,7 +75,6 @@ function Signup() {
     setLoading(true);
     const data = { ...e, nationality: nationality, languages: languages };
     const res = await UserSignup(data);
-    console.log(res);
     if (res !== undefined) {
       setLoading(false);
       setMode(3);
@@ -118,6 +121,19 @@ function Signup() {
     };
     const res = await UserSignupEmail(data);
     if (res.data != null) {
+      const res = await createUserWithEmailAndPassword(
+        auth,
+        watch("email"),
+        watch("password")
+      );
+      const displayName = watch("nickname");
+      const email = watch("email");
+      await setDoc(doc(db, "users", res.user.uid), {
+        uid: res.user.uid,
+        displayName,
+        email,
+      });
+      await setDoc(doc(db, "userChats", res.user.uid), {});
       window.alert("인증이 완료되었습니다.로그인 페이지로 이동합니다.");
       navigate("/login");
     } else {
