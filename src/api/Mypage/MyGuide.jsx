@@ -45,10 +45,10 @@ export async function MytourResister(props) {
         price: props.price,
         languages: props.languages,
         howManyDay: props.howmanydays,
-        location: props.location,
+        location: props.locations,
         themeIds: props.themeIds,
-        availableDates: props.availableDates
-        // images: props.images
+        availableDates: props.availableDates,
+        images: props.images
       },
       {
         headers: {
@@ -57,6 +57,8 @@ export async function MytourResister(props) {
         }
       }
     );
+    console.log('테마', props.themeIds);
+    console.log('이미지', props.images);
     if (res.status === 200) {
       console.log('ok');
     } else {

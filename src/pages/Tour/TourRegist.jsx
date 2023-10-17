@@ -15,6 +15,8 @@ import WallpaperIcon from '@mui/icons-material/Wallpaper';
 import CustomLocale from 'components/Calendar/CustomLocale';
 import WantThemes from 'components/Theme/WantThemes';
 
+import TourRegistLocation from 'components/Location/TourRegistLocation';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 function TourRegist() {
   const navigate = useNavigate();
 
@@ -24,7 +26,7 @@ function TourRegist() {
   const [languages, setLanguages] = useState([]); //가능 언어
   const [howmanydays, setHowmanydays] = useState([]); // 투어소요기간
   const [locations, setLocations] = useState([]); //투어일정
-  const [themes, setThemes] = useState([]); //투어테마
+  const [themeIds, setThemes] = useState([]); //투어테마
   const [availableDates, setAvailableDates] = useState([]); //가이드 가능시간
   const [images, setImages] = useState([]); //투어 이미지
   const [selectedImages, setSelectedImages] = useState([]);
@@ -33,22 +35,34 @@ function TourRegist() {
   const [location, setLocation] = useState([]);
   const [language, setLanguage] = useState('');
   const [howmanyday, setHowmanyday] = useState('');
+  const [showMap, setShowMap] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // MytourResister({ title, content, price, languages, howmanydays, locations, themeIds, availableDates, images });
     MytourResister({
-      title: 'check',
-      content: 'check',
-      price: 100,
-      languages: ['한국어'],
+      title,
+      content,
+      price,
+      languages,
       howmanydays: ['2', '3'],
       locations: [{ title: '광안리', coordinates: [16.234, 122.0485] }],
-      themeIds: [1],
-      availableDates: ['2023-10-15']
-      // images: null
+      themeIds,
+      availableDates: ['2023-10-15'],
+      images
     });
-    console.log(themes);
+    // MytourResister({
+    //   title: 'check',
+    //   content: 'check',
+    //   price: 100,
+    //   languages: ['한국어'],
+    //   howmanydays: ['2', '3'],
+    //   locations: [{ title: '광안리', coordinates: [16.234, 122.0485] }],
+    //   themeIds: [1],
+    //   availableDates: ['2023-10-15']
+    //   // images: null
+    // });
+    console.log(themeIds);
     navigate('/tour/tourlist');
   };
   const handleKeyPress = (event) => {
@@ -140,6 +154,25 @@ function TourRegist() {
 
   const myCustomLocale = CustomLocale;
 
+  // const onMapHandler = (event, index) => {
+  //   event.preventDefault();
+  //   // TourRegistLocation을 통해 지도를 표시하고, 사용자가 위치를 선택하면 호출될 콜백 설정
+  //   // 이 예시에서는 간단히 alert으로 선택된 위치 정보를 표시합니다.
+  //   // 실제로는 state 등을 통해 선택된 위치 정보를 저장하면 됩니다.
+  //   alert('지도를 표시하고, 사용자가 위치를 선택하면 이 콜백이 호출됩니다.');
+  //   setShowMap(true);
+  // };
+  // const onLocationSelect = (event, location) => {
+  //   event.preventDefault();
+  //   setSelectedLocation(location);
+  //   setShowMap(false);
+  //   alert(`선택된 위치: ${location.title}, 좌표: ${location.coordinates}`);
+  // };
+  // 위치 선택 완료 시 호출되는 콜백
+  const handleLocationSelect = (location) => {
+    setLocations((prevLocations) => [...prevLocations, location]);
+    setShowMap(false); // 지도 숨기기
+  };
   const onShowImagesHandler = (event) => {
     const imagesList = event.target.files;
     const list = [...images];
@@ -167,6 +200,12 @@ function TourRegist() {
       reader.readAsDataURL(imagesList[i]);
     }
   };
+  const onRemoveImage = (index) => {
+    const deleteImage = [...images];
+    deleteImage.splice(index, 1);
+    setImages(deleteImage);
+  };
+
   return (
     <div style={{ backgroundColor: '#F9FAFB' }}>
       <div className="container" style={{ padding: '70px 0' }}>
@@ -177,7 +216,7 @@ function TourRegist() {
             <div>누구나 사람들에게 잊지 못할 추억을 선물할 수 있습니다!</div>
           </div>
           <hr />
-          {/* <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <div className={styles.content}>
               <div className={styles.subtitle}>투어명</div>
               <input
@@ -201,17 +240,17 @@ function TourRegist() {
             </div>
             <div className={styles.content}>
               <div className={styles.subtitle}>투어가격(원)</div>
-              {/* <div> 
-              <input
-                type="text"
-                placeholder="투어가격을 입력하세요"
-                value={price}
-                onChange={onPriceHandler}
-                maxLength="20"
-                className={styles.input}
-                onKeyPress={handleKeyPress}
-              />
-              {/* </div> 
+              <div>
+                <input
+                  type="text"
+                  placeholder="투어가격을 입력하세요"
+                  value={price}
+                  onChange={onPriceHandler}
+                  maxLength="20"
+                  className={styles.input}
+                  onKeyPress={handleKeyPress}
+                />
+              </div>
             </div>
             <div className={styles.content}>
               <div className={styles.subtitle}>가능언어</div>
@@ -240,7 +279,7 @@ function TourRegist() {
                   가능언어
                 </div>
 
-                {languages.map((language, index) => (
+                {languages?.map((language, index) => (
                   <Language key={index} language={language} removeLanguage={removeLanguage} />
                 ))}
               </div>
@@ -268,27 +307,38 @@ function TourRegist() {
             <div className={styles.content}>
               <div className={styles.subtitle}>투어일정</div>
               <div style={{ width: '90%' }}>
-                {locations.map((_, index) => (
-                  <div key={index} className={styles.location}>
-                    <input
-                      type="text"
-                      placeholder={`장소 입력 - ${index + 1}일차 `}
-                      value={location[index]}
-                      onChange={(event) => onChangeLocation(event, index)}
-                      style={{ width: '88%' }}
-                      className={styles.input}
-                      onKeyDown={(event) => {
-                        if (event.key === 'Enter') {
-                          event.preventDefault();
-                          onLocationsHandler(event, index);
-                        }
-                      }}
-                    />
-                    <button type="button" onClick={(event) => onLocationsHandler(event, index)} className={styles.add}>
+                {locations.length > 0 &&
+                  locations?.map((_, index) => (
+                    <div key={index} className={styles.location}>
+                      <input
+                        type="text"
+                        placeholder={`장소 입력 - ${index + 1}일차 `}
+                        value={location[index]}
+                        onChange={(event) => onChangeLocation(event, index)}
+                        style={{ width: '88%' }}
+                        className={styles.input}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter') {
+                            event.preventDefault();
+                            onLocationsHandler(event, index);
+                          }
+                        }}
+                      />
+                      {/* <button type="button" onClick={(event) => onMapHandler(event, index)} className={styles.add}>
                       추가하기
-                    </button>
-                  </div>
-                ))}
+                    </button> */}
+                      <button onClick={() => setShowMap(true)}>위치 추가하기</button>
+                      {showMap && <TourRegistLocation onLocationSelect={handleLocationSelect} />}
+                      <ul>
+                        {locations.length > 0 &&
+                          locations?.map((loc, index) => (
+                            <li key={index}>
+                              {loc.title} ({loc.coordinates[0]}, {loc.coordinates[1]})
+                            </li>
+                          ))}
+                      </ul>{' '}
+                    </div>
+                  ))}
               </div>
             </div>
             {locations.length > 0 && (
@@ -297,23 +347,24 @@ function TourRegist() {
                   투어일정
                 </div>
 
-                {locations.map((location, index) => (
-                  <div key={index}>
-                    <span>{index + 1}일차</span>
-                    <Location key={index} index={index} location={location} removeLocation={removeLocation} />
-                  </div>
-                ))}
+                {locations.length > 0 &&
+                  locations?.map((location, index) => (
+                    <div key={index}>
+                      <span>{index + 1}일차</span>
+                      <Location key={index} index={index} location={location} removeLocation={removeLocation} />
+                    </div>
+                  ))}
               </div>
             )}
 
             <div className={styles.content}>
               <div className={styles.subtitle}>투어 테마</div>
-              <WantThemes selectedThemes={themes} setSelectedThemes={setThemes} />
+              <WantThemes selectedThemes={themeIds} setSelectedThemes={setThemes} />
             </div>
             <div className={styles.content}>
               <div className={styles.subtitle}>가이드 가능 날짜</div>
-              {/* 달력 
-              <Calendar
+              {/* 달력  */}
+              {/* <Calendar
                 value={availableDates}
                 onChange={setAvailableDates}
                 locale={myCustomLocale} // custom locale object
@@ -321,11 +372,11 @@ function TourRegist() {
                 maximumDate={maximumDate}
                 shouldHighlightWeekends
                 formatMonthYear={(locale, date) => `${date.year}.${String(date.month).padStart(2, '0')}`}
-              />
+              /> */}
             </div>
             <div className={styles.content}>
               <div className={styles.subtitle}>투어 대표 이미지</div>
-              {/* 이미지 
+              {/* 이미지  */}
               <label htmlFor="input-file" className="inputfile">
                 <WallpaperIcon />
                 <span style={{ margin: '5px' }}>업로드 이미지 선택</span>
@@ -339,20 +390,25 @@ function TourRegist() {
                 />
               </label>
             </div>
-            {/* 미리보기 이미지 렌더링 
+            {/* 미리보기 이미지 렌더링 */}
             <div className={styles.imageRow}>
-              {images.map((image, index) => (
-                <div key={index} className={styles.imageContainer}>
-                  <img src={image} alt={`Preview ${index}`} className={styles.image} />
-                </div>
-              ))}
+              {images.length > 0 &&
+                images?.map((image, index) => (
+                  <div key={index} className={styles.imageContainer}>
+                    <RemoveCircleOutlineIcon
+                      style={{ paddingTop: '5px', paddingLeft: '5px', color: 'red' }}
+                      onClick={() => onRemoveImage(index)}
+                    />
+                    <img src={image} alt={`Preview ${index}`} className={styles.image} />
+                  </div>
+                ))}
             </div>
             <div className={styles.flex}>
               <button type="submit" className={styles.submit}>
                 글 작성하기
               </button>
             </div>
-          </form> */}
+          </form>
         </div>
       </div>
     </div>

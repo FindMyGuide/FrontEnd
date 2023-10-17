@@ -1,4 +1,4 @@
-function TourRegistLocation() {
+function TourRegistLocation({ onLocationSelect }) {
   const { kakao } = window;
 
   // 마커를 담을 배열입니다
@@ -89,12 +89,20 @@ function TourRegistLocation() {
           infowindow.close();
         });
 
+        kakao.maps.event.addListener(marker, 'click', function () {
+          onMarkerClick(places[i]);
+        });
+
         itemEl.onmouseover = function () {
           displayInfowindow(marker, title);
         };
 
         itemEl.onmouseout = function () {
           infowindow.close();
+        };
+
+        itemEl.onclick = function () {
+          onMarkerClick(places[i]);
         };
       })(marker, places[i].place_name);
 
@@ -215,6 +223,14 @@ function TourRegistLocation() {
     while (el.hasChildNodes()) {
       el.removeChild(el.lastChild);
     }
+  }
+
+  // 마커 클릭 시 해당 위치 정보를 부모 컴포넌트에 전달하는 로직 추가
+  function onMarkerClick(place) {
+    onLocationSelect({
+      title: place.place_name,
+      coordinates: [place.y, place.x]
+    });
   }
 }
 export default TourRegistLocation;
