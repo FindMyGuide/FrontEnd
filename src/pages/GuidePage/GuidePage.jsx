@@ -129,19 +129,20 @@ const GuidePage = () => {
               </FormControl>
               <div>
                 <p>나이</p>
-                <Slider
-                  sx={{
-                    marginX: '10px',
-                    color: 'rgb(80,171,242)'
-                  }}
-                  getAriaLabel={() => 'Age range'}
-                  value={ageValue}
-                  onChange={handleAge}
-                  min={20}
-                  max={60}
-                  valueLabelDisplay="auto"
-                  // getAriaValueText={valuetext}
-                />
+                <div style={{ paddingLeft: '20px', paddingRight: '20px' }}>
+                  <Slider
+                    sx={{
+                      color: 'rgb(80,171,242)'
+                    }}
+                    getAriaLabel={() => 'Age range'}
+                    value={ageValue}
+                    onChange={handleAge}
+                    min={20}
+                    max={60}
+                    valueLabelDisplay="auto"
+                    // getAriaValueText={valuetext}
+                  />
+                </div>
               </div>
               <div>
                 <p>언어</p>

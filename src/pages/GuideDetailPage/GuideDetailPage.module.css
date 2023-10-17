@@ -1,13 +1,69 @@
-.appGuideDetail {
-}
 .webGuideDetail {
-  border: 1px solid black;
   display: flex;
+  height: calc(100vh - 50px);
 }
+
+/* 가이드 좌측박스 */
 .guideprofile {
-  border: 1px solid black;
-  text-align: center;
+  padding: 20px;
+
+  width: 400px;
+  min-width: 400px;
 }
+
+.namebox {
+  padding-left: 20px;
+  display: flex;
+  align-items: baseline;
+}
+
+.namebox > p,
+.namebox > h5 {
+  margin-bottom: 10px;
+  margin-right: 20px;
+}
+
+/* 가이드디테일 우측 박스 */
 .tourofguide {
-  border: 1px solid black;
+  width: calc(100vw - 400px);
+  padding: 30px;
+  min-width: 1000px;
+}
+.touring {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3개씩 한 줄에 표시 */
+  gap: 20px; /* 카드 간격 조정 */
+  min-width: 1000px;
+  margin-bottom: 30px;
+}
+
+.gamebutton {
+  background-color: skyblue;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 18px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: bold;
+  box-shadow: 2px 2px 10px skyblue;
+  transition: all 0.2s ease-in-out;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
+}
+
+.playicon {
+  width: 24px;
+  height: 24px;
+  fill: #fff;
+  margin-right: 6px;
+}
+
+.gamebutton:hover {
+  background-color: #2f3640;
+  color: skyblue;
+  box-shadow: 2px 2px 20px #2f3640;
+  transform: translateY(-1px);
 }

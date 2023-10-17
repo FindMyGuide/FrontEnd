@@ -38,6 +38,7 @@ const GuideSearchResult = ({ list }) => {
         speed={400}
         arrows
         rows={2}
+        className={styles.lll}
 
         // prevArrow={() => slickarrowleft}
         // nextArrow={() => slickarrowright}
