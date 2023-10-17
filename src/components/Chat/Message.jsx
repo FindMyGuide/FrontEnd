@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { AuthContext } from "./context/AuthContext";
 import { ChatContext } from "./context/ChatContext";
+import styles from "../../pages/ChatPage/style.module.scss";
 
 const Message = ({ message }) => {
   const { currentUser } = useContext(AuthContext);
@@ -15,21 +16,12 @@ const Message = ({ message }) => {
   return (
     <div
       ref={ref}
-      className={`message ${message.senderId === currentUser.uid && "owner"}`}
+      className={`${styles.message} ${
+        message.senderId === currentUser.uid ? styles.owner : ""
+      }`}
     >
-      <div className="messageInfo">
-        <img
-          src={
-            message.senderId === currentUser.uid
-              ? currentUser.photoURL
-              : data.user.photoURL
-          }
-          alt=""
-        />
-      </div>
-      <div className="messageContent">
+      <div className={styles.messageContent}>
         <p>{message.text}</p>
-        {message.img && <img src={message.img} alt="" />}
       </div>
     </div>
   );

@@ -12,6 +12,8 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import { AuthContext } from "./context/AuthContext";
+
+import styles from "../../pages/ChatPage/style.module.scss";
 const Search = () => {
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
@@ -39,7 +41,6 @@ const Search = () => {
   };
 
   const handleSelect = async () => {
-    //check whether the group(chats in firestore) exists, if not create
     const combinedId =
       currentUser.uid > user.uid
         ? currentUser.uid + user.uid
@@ -48,15 +49,11 @@ const Search = () => {
       const res = await getDoc(doc(db, "chats", combinedId));
 
       if (!res.exists()) {
-        //create a chat in chats collection
         await setDoc(doc(db, "chats", combinedId), { messages: [] });
-
-        //create user chats
         await updateDoc(doc(db, "userChats", currentUser.uid), {
           [combinedId + ".userInfo"]: {
             uid: user.uid,
             displayName: user.displayName,
-            photoURL: user.photoURL,
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
@@ -65,7 +62,6 @@ const Search = () => {
           [combinedId + ".userInfo"]: {
             uid: currentUser.uid,
             displayName: currentUser.displayName,
-            photoURL: currentUser.photoURL,
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
@@ -76,8 +72,8 @@ const Search = () => {
     setUsername("");
   };
   return (
-    <div className="search">
-      <div className="searchForm">
+    <div className={styles.search}>
+      <div className={styles.searchForm}>
         <input
           type="text"
           placeholder="Find a user"
@@ -86,11 +82,10 @@ const Search = () => {
           value={username}
         />
       </div>
-      {err && <span>User not found!</span>}
+      {err && <span>일치하는 유저가 없습니다.</span>}
       {user && (
-        <div className="userChat" onClick={handleSelect}>
-          <img src={user.photoURL} alt="" />
-          <div className="userChatInfo">
+        <div className={styles.userChat} onClick={handleSelect}>
+          <div className={styles.userChatInfo}>
             <span>{user.displayName}</span>
           </div>
         </div>

@@ -30,13 +30,9 @@ import TourDetailPage from "pages/Tour/TourDetail.jsx";
 import PrivateRouter from "./PrivateRouter";
 import PublicRouter from "./PublicRouter";
 
-import Login1 from "../pages/ChatPage/Login";
-
-import "./style.scss";
 import { Navigate } from "react-router-dom";
 import { useContext } from "react";
 import Home from "pages/ChatPage/Home";
-import Register from "pages/ChatPage/Register";
 import { AuthContext } from "components/Chat/context/AuthContext";
 
 function RouteLink() {
@@ -44,7 +40,7 @@ function RouteLink() {
 
   const ProtectedRoute = ({ children }) => {
     if (!currentUser) {
-      return <Navigate to="/login1" />;
+      return <Navigate to="/login" />;
     }
 
     return children;
@@ -62,8 +58,6 @@ function RouteLink() {
             }
           />
         </Route>
-        <Route path="/login1" element={<Login1 />} />
-        <Route path="/register" element={<Register />} />
 
         <Route path="/" element={<MainPage />} />
         {/* <Route path="/products" element={<Themeproduct />} /> */}
