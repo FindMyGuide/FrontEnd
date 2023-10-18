@@ -1,13 +1,13 @@
-import { baseAxios } from '../Axios';
+import { baseAxios } from "../Axios";
 
 //등록한 투어 조회
 export async function MyTour() {
   try {
-    const res = await baseAxios.get('mypage/tour', {
+    const res = await baseAxios.get("my-page/tour", {
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: sessionStorage.getItem('accessToken')
-      }
+        "Content-Type": "application/json",
+        Authorization: sessionStorage.getItem("accessToken"),
+      },
     });
     return res;
   } catch (e) {
@@ -18,14 +18,29 @@ export async function MyTour() {
 //투어 예약 조회
 export async function MytourReservation(props) {
   try {
-    const res = await baseAxios.get(
-      `v1/mypage/tour/reservation/${props}`,
+    const res = await baseAxios.get(`tourProduct/all-reserved-tour/by-guide`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionStorage.getItem("accessToken"),
+      },
+    });
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+//투어 삭제
+export async function MytourDelete(props) {
+  try {
+    const res = await baseAxios.post(
+      `tourProduct/delete-reserved-tour/${props}`,
       {},
       {
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: sessionStorage.getItem('token')
-        }
+          "Content-Type": "application/json",
+          Authorization: sessionStorage.getItem("accessToken"),
+        },
       }
     );
     return res;
@@ -33,6 +48,25 @@ export async function MytourReservation(props) {
     console.error(e);
   }
 }
+
+// 원해요 매칭
+export async function WantTourGuide(props) {
+  try {
+    const res = await baseAxios.get(
+      `tourProduct/all-reserved-wantTour/by-guide`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: sessionStorage.getItem("accessToken"),
+        },
+      }
+    );
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 //투어 등록
 export async function MytourResister(props) {
   console.log(props);
@@ -47,24 +81,24 @@ export async function MytourResister(props) {
         howManyDay: props.howmanydays,
         location: props.location,
         themeIds: props.themeIds,
-        availableDates: props.availableDates
+        availableDates: props.availableDates,
         // images: props.images
       },
       {
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: sessionStorage.getItem('accessToken')
-        }
+          "Content-Type": "application/json",
+          Authorization: sessionStorage.getItem("accessToken"),
+        },
       }
     );
     if (res.status === 200) {
-      console.log('ok');
+      console.log("ok");
     } else {
-      console.log('no');
+      console.log("no");
     }
     return res;
   } catch (e) {
-    console.error('오류', e);
+    console.error("오류", e);
   }
 }
 
@@ -80,13 +114,13 @@ export async function MytourUpdate(props) {
         tour_place: props.tour_place,
         tour_detail: props.tour_detail,
         availdate: props.availdate,
-        tour_price: props.tour_price
+        tour_price: props.tour_price,
       },
       {
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: sessionStorage.getItem('token')
-        }
+          "Content-Type": "application/json",
+          Authorization: sessionStorage.getItem("token"),
+        },
       }
     );
     return res;
@@ -96,23 +130,23 @@ export async function MytourUpdate(props) {
 }
 
 //투어 삭제
-export async function MytourDelete(props) {
-  try {
-    const res = await baseAxios.delete(
-      `v1/mypage/tour/delete/${props}`,
-      {},
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: sessionStorage.getItem('token')
-        }
-      }
-    );
-    return res;
-  } catch (e) {
-    console.error(e);
-  }
-}
+// export async function MytourDelete(props) {
+//   try {
+//     const res = await baseAxios.delete(
+//       `v1/mypage/tour/delete/${props}`,
+//       {},
+//       {
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: sessionStorage.getItem("token"),
+//         },
+//       }
+//     );
+//     return res;
+//   } catch (e) {
+//     console.error(e);
+//   }
+// }
 
 //투어 기간 연장
 export async function MytourExtend(props) {
@@ -122,9 +156,9 @@ export async function MytourExtend(props) {
       { tour_date: props.tour_date },
       {
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: sessionStorage.getItem('token')
-        }
+          "Content-Type": "application/json",
+          Authorization: sessionStorage.getItem("token"),
+        },
       }
     );
     return res;
