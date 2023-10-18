@@ -49,7 +49,7 @@ const GuidePage = () => {
   return (
     <>
       <div className={styles.webguide}>
-        <h5>
+        <h5 style={{ paddingTop: '20px' }}>
           <b>인기가이드</b>
         </h5>
         <div className={styles.famousGuide}>

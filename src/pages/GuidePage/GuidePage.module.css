@@ -11,13 +11,13 @@
   border: 1px solid silver;
   border-radius: 6px;
   margin-bottom: 25px;
-  height: 180px;
+  height: 210px;
   min-width: 1000px;
 }
 
 .guideSearchBox {
   width: 100%;
-  border: 1px solid silver;
+  /* border: 1px solid silver; */
   display: flex;
   /* justify-content: space-around; */
   padding: 15px;

@@ -6,6 +6,7 @@ import { GuideDetail, GuideTourReview } from '../../api/guide/Guide';
 import Card from 'components/Card/Card';
 
 import profileImg from 'asset/images/emptyprofile.png';
+import ReviewCard from 'components/Card/ReviewCard';
 
 const GuideDetailPage = () => {
   const { id } = useParams();
@@ -14,6 +15,9 @@ const GuideDetailPage = () => {
 
   const [showingList, setShowingList] = useState([]);
   const [pageNum, setPageNum] = useState(1);
+
+  const [showingReview, setShowingReview] = useState([]);
+  const [reviewNum, setReviewNum] = useState(1);
 
   useEffect(() => {
     GuideDetail(id)
@@ -30,12 +34,26 @@ const GuideDetailPage = () => {
       .then((getGuideReview) => {
         const GuideReview = getGuideReview;
         setGuideReview(GuideReview);
+        setShowingReview(GuideReview?.slice(0, 2));
         console.log(GuideReview);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
+  const handlePushReview = () => {
+    const newPageNum = reviewNum + 1;
+    const startIndex = (newPageNum - 1) * 2;
+    const endIndex = startIndex + 2;
+
+    if (guideReview?.length + 2 > endIndex) {
+      console.log(guideReview?.length);
+      console.log(endIndex);
+      const newTourProducts = guideReview.slice(0, endIndex);
+      setShowingReview(newTourProducts);
+      setReviewNum(newPageNum);
+    }
+  };
 
   const handlePushTour = () => {
     const newPageNum = pageNum + 1;
@@ -51,6 +69,7 @@ const GuideDetailPage = () => {
     }
   };
   console.log(guideDetail);
+  console.log(`리뷰 ${guideReview}`);
   return (
     <>
       <div className={styles.webGuideDetail}>
@@ -104,13 +123,21 @@ const GuideDetailPage = () => {
             <h5 style={{ marginBottom: '20px' }}>
               <b>가이드 투어 후기</b>
             </h5>
-            <div style={{ display: 'flex', width: '100%' }}>
-              {guideReview.slice(0, 3).map((reviewList, idx) => (
-                <div key={idx}>{reviewList.content}</div>
+            <div className={styles.reviewbox}>
+              {showingReview?.map((review, index) => (
+                <div key={index} className={styles.carouselSlide}>
+                  <ReviewCard review={review} />
+                </div>
               ))}
             </div>
+
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-              <button className={styles.gamebutton} onClick={() => {}}>
+              <button
+                className={styles.gamebutton}
+                onClick={() => {
+                  handlePushReview(reviewNum);
+                }}
+              >
                 <svg className={styles.playicon} viewBox="0 0 40 40">
                   <path d="M 10,10 L 20,30 L 30,10 z"></path>
                 </svg>

@@ -52,7 +52,6 @@ export async function GuideDetail(props) {
 export async function GuideTourReview(guideId) {
   try {
     const res = await baseAxios.get(`find-my-guide/guide/reviews/${guideId}`, {}, {});
-    console.log(res.data);
     return res.data;
   } catch (e) {
     console.error(e);

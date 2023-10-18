@@ -36,7 +36,7 @@
   min-width: 1000px;
   margin-bottom: 30px;
 }
-
+/* 더보기 버튼 */
 .gamebutton {
   background-color: skyblue;
   color: #fff;
@@ -66,4 +66,11 @@
   color: skyblue;
   box-shadow: 2px 2px 20px #2f3640;
   transform: translateY(-1px);
+}
+
+/* 리뷰 박스 */
+
+.reviewbox {
+  padding-left: 160px;
+  padding-right: 160px;
 }
