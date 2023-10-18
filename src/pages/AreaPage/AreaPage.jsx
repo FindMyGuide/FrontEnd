@@ -4,22 +4,25 @@ import { useEffect, useState } from 'react';
 import { InputAdornment, OutlinedInput } from '@mui/material';
 import { SearchOutlined } from '@mui/icons-material';
 import { SearchArea } from 'api/searcharea/SearchArea';
+import AreaSearchList from './AreaSearchList';
 
 const AreaPage = () => {
   const [position, setPosition] = useState([35.121059, 129.043993]);
   // 지도의 중심좌표
 
   const [tourList, setTourList] = useState([]);
-  const [info, setInfo] = useState('');
+  const [info, setInfo] = useState([]);
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
   const [keyword, setKeyword] = useState('');
 
   const [isOpen, setIsOpen] = useState(false);
+  const alphabetlist = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
   const CustomContainer = ({ position, content }) => {
     const lat = position.lat;
     const lng = position.lng;
+    const information = content;
     return (
       <>
         <MapMarker
@@ -31,24 +34,20 @@ const AreaPage = () => {
         ></MapMarker>
 
         {isOpen && (
-          <CustomOverlayMap position={{ lat: parseFloat(lat), lng: parseFloat(lng) }} yAnchor={1.3}>
-            <div className={styles.wrap}>
-              <div className="info">
-                <div className="title">
-                  카카오 스페이스닷원
-                  <div className="close" onClick={() => setIsOpen(false)} title="닫기">
+          <CustomOverlayMap information={information} position={{ lat: lat, lng: lng }} yAnchor={1.3}>
+            <div className={styles.areawrap}>
+              <div className={styles.areainfo}>
+                <div className={styles.areatitlebox}>
+                  <b>{information.title}</b>
+                  <div className={styles.areaclose} onClick={() => setIsOpen(false)} title="닫기">
                     닫기
                   </div>
                 </div>
-                <div className="body">
+                <div className={styles.areabody}>
+                  {information.content}
                   <div className="desc">
                     <div className="ellipsis">제주특별자치도 제주시 첨단로 242</div>
                     <div className="jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>
-                    <div>
-                      <a href="https://www.kakaocorp.com/main" target="_blank" className="link" rel="noreferrer">
-                        홈페이지
-                      </a>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -58,7 +57,6 @@ const AreaPage = () => {
       </>
     );
   };
-
   return (
     <>
       <div className={styles.areapage}>
@@ -76,15 +74,23 @@ const AreaPage = () => {
                     if (keyword === '') {
                       alert('검색어를 입력해주세요');
                     } else {
-                      SearchArea(keyword)
+                      SearchArea(e.target.value)
                         .then((getSearch) => {
-                          const searchResultList = getSearch;
-                          console.log(searchResultList);
-                          setInfo(searchResultList);
-                          setPosition([
-                            searchResultList.tourProductResponses[0]?.locations?.mapX,
-                            searchResultList.tourProductResponses[0]?.locations?.mapY
-                          ]);
+                          if (getSearch?.tourProductResponses?.length !== 0) {
+                            console.log(getSearch);
+                            console.log('성공');
+                            setInfo([]);
+                            const searchResultList = getSearch;
+                            setInfo(searchResultList);
+                            setPosition([
+                              searchResultList.tourProductResponses[0]?.locations[0]?.mapX,
+                              searchResultList.tourProductResponses[0]?.locations[0]?.mapY
+                            ]);
+                          } else {
+                            console.log('실패');
+                            setInfo([]);
+                            setPosition([35.121059, 129.043993]);
+                          }
                         })
                         .catch((error) => {
                           console.error(error);
@@ -102,13 +108,21 @@ const AreaPage = () => {
                 } else {
                   SearchArea(e.target.value)
                     .then((getSearch) => {
-                      const searchResultList = getSearch;
-                      console.log(searchResultList);
-                      setInfo(searchResultList);
-                      setPosition([
-                        searchResultList.tourProductResponses[0]?.locations[0]?.mapX,
-                        searchResultList.tourProductResponses[0]?.locations[0]?.mapY
-                      ]);
+                      if (getSearch?.tourProductResponses?.length !== 0) {
+                        console.log(getSearch);
+                        console.log('성공');
+                        setInfo([]);
+                        const searchResultList = getSearch;
+                        setInfo(searchResultList);
+                        setPosition([
+                          searchResultList.tourProductResponses[0]?.locations[0]?.mapX,
+                          searchResultList.tourProductResponses[0]?.locations[0]?.mapY
+                        ]);
+                      } else {
+                        console.log('실패');
+                        setInfo([]);
+                        setPosition([35.121059, 129.043993]);
+                      }
                     })
                     .catch((error) => {
                       console.error(error);
@@ -120,9 +134,14 @@ const AreaPage = () => {
               setKeyword(e.target.value);
             }}
           />
-          <div>검색 리스트</div>
-          {info?.tourProductResponses?.map((tourList) => (
-            <div>{tourList.title}</div>
+          <div className={styles.tourlisttext}>
+            <span>투어 리스트 </span>
+            {info.length !== 0 ? (
+              <span style={{ fontSize: '12px' }}>{info?.tourProductResponses?.length}건</span>
+            ) : null}
+          </div>
+          {info?.tourProductResponses?.slice(0, 10).map((tourList, idx) => (
+            <AreaSearchList key={tourList.id} tourList={tourList} alpha={alphabetlist[idx]}></AreaSearchList>
           ))}
         </div>
 

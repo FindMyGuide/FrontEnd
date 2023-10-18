@@ -8,6 +8,7 @@ const GuideCard = ({ guideId, name, tour, imageLink }) => {
   const movePage = useNavigate();
 
   const id = guideId;
+  const image = imageLink;
   function goToDetailPage() {
     movePage(`/guide/detail/${id}`);
   }
@@ -23,13 +24,12 @@ const GuideCard = ({ guideId, name, tour, imageLink }) => {
               right: '0',
               top: '-30px'
             }}
-            src={profileImg}
-            alt="얼굴 이미지"
+            src={image}
+            alt={profileImg}
           />
         </div>
         <p style={{ marginBottom: '0', marginTop: '10px', marginLeft: '10px' }}>인기투어</p>
         <p style={{ marginLeft: '10px' }}>{tour}</p>
-        <img src={{ imageLink } ? { imageLink } : ''} alt="" />
       </div>
     </>
   );

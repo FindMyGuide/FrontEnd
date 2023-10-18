@@ -24,7 +24,7 @@ const GuideDetailPage = () => {
       .then((getGuideDetail) => {
         const GuideDetail = getGuideDetail;
         setGuideDetail(GuideDetail);
-        setShowingList(GuideDetail?.tourProductTitles?.slice(0, 3));
+        setShowingList(GuideDetail?.tourProductResponses?.slice(0, 3));
       })
       .catch((error) => {
         console.error(error);
@@ -60,10 +60,10 @@ const GuideDetailPage = () => {
     const startIndex = (newPageNum - 1) * 3;
     const endIndex = startIndex + 3;
 
-    if (guideDetail?.tourProductTitles?.length + 3 > endIndex) {
-      console.log(guideDetail?.tourProductTitles?.length);
+    if (guideDetail?.tourProductResponses?.length + 3 > endIndex) {
+      console.log(guideDetail?.tourProductResponses?.length);
       console.log(endIndex);
-      const newTourProducts = guideDetail.tourProductTitles.slice(0, endIndex);
+      const newTourProducts = guideDetail.tourProductResponses.slice(0, endIndex);
       setShowingList(newTourProducts);
       setPageNum(newPageNum);
     }

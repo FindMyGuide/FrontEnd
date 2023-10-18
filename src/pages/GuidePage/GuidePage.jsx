@@ -33,6 +33,7 @@ const GuidePage = () => {
       .then((getPopularGuideList) => {
         const popularGuideList = getPopularGuideList;
         setPopularGuide(popularGuideList);
+        console.log(popularGuideList);
       })
       .catch((error) => {
         console.error(error);
@@ -58,10 +59,11 @@ const GuidePage = () => {
               .slice(0, 4)
               .map((guide) => (
                 <GuideCard
-                  key={parseInt(guide.guideId)}
+                  key={parseInt(guide?.guideId)}
                   guideId={guide?.guideId}
                   name={guide?.guideName}
-                  tour={guide?.tourProductTitles[0]?.title}
+                  tour={guide?.tourProductResponses[0]?.title}
+                  img={guide?.profilePicture}
                 ></GuideCard>
               ))
           ) : (
