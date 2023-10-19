@@ -149,7 +149,7 @@ const AreaPage = () => {
               <span style={{ marginLeft: '5px', fontSize: '12px' }}>{info?.tourProductResponses?.length}건</span>
             ) : null}
           </div>
-          {info?.tourProductResponses?.slice(5, 15).map((tourList, idx) => (
+          {info?.tourProductResponses?.slice(7, 17).map((tourList, idx) => (
             <div
               key={tourList.id}
               style={{ position: 'relative' }}
@@ -158,18 +158,18 @@ const AreaPage = () => {
               }}
             >
               <hr style={{ marginBottom: '5px' }} />
-              <img
-                style={{ position: 'absolute', top: '10px', right: '5px', width: '60px' }}
-                src={tourList.guidePicture}
-                alt=""
-              />
               <div className={styles.toursearchlist}>
-                <div>
+                <div style={{ flex: 3 }}>
                   <b>
                     {alphabetlist[idx]}. {tourList.title}
                   </b>
                   <p style={{ margin: 0, paddingLeft: '3px' }}>{tourList.guideName}</p>
                   <p style={{ margin: 0, paddingLeft: '3px' }}>{tourList.content}</p>
+                </div>
+                <div style={{ flex: 1 }}>
+                  {tourList.guidePicture ? (
+                    <img style={{ width: '60px', height: '60px' }} src={tourList.guidePicture} alt="" />
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -199,10 +199,10 @@ const AreaPage = () => {
                   key={`${position.title}-${position.lat}`}
                   position={{ lat: position?.lat, lng: position?.lng }} // 마커를 표시할 위치
                   image={{
-                    src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png', // 마커이미지의 주소입니다
+                    src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커이미지의 주소입니다
                     size: {
-                      width: 24,
-                      height: 35
+                      width: 100,
+                      height: 700
                     } // 마커이미지의 크기입니다
                   }}
                   onMouseOver={() => setIsVisible(true)}
