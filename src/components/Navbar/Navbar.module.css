@@ -27,36 +27,38 @@
 .pageLink > a {
   font-weight: 700;
   font-size: 16px;
-  margin-left: 30px;
-  margin-right: 30px;
+  margin-left: 25px;
+  margin-right: 25px;
   text-decoration: none;
   color: black;
+}
+.pageLink > a:hover {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
 }
 
 .navRight > a {
-  font-weight: 700;
+  font-weight: 500;
   font-size: 16px;
-
-  margin-left: 20px;
-  margin-right: 20px;
-  padding: 5px 10px 5px 10px;
+  padding: 5px 7px 5px 7px;
   border-radius: 20px;
-
+  margin-left: 10px;
   text-decoration: none;
   color: black;
 }
+.navRight > a:hover {
+  text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.25);
+}
 .mainright > a {
-  font-weight: 700;
+  font-weight: 500;
   font-size: 16px;
-
   text-decoration: none;
-  margin-left: 20px;
-  margin-right: 20px;
-  padding: 5px 10px 5px 10px;
+  margin-left: 10px;
+  padding: 5px 7px 5px 7px;
   border-radius: 20px;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
-  color: black;
-  background-color: whitesmoke;
+  color: white;
+}
+.mainright > a:hover {
+  text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.25);
 }
 
 .appNav {

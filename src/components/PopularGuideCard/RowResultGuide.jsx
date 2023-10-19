@@ -1,10 +1,10 @@
 import React from 'react';
-import styles from './ResultGuideCard.module.css';
+import styles from './RowResultGuide.module.css';
 import { useNavigate } from 'react-router-dom';
 
 import profileImg from 'asset/images/emptyprofile.png';
 
-const ResultGuideCard = ({ guideId, name, tour, imageLink }) => {
+const RowResultGuideCard = ({ guideId, name, tour, imageLink }) => {
   const movePage = useNavigate();
 
   const id = guideId;
@@ -14,7 +14,7 @@ const ResultGuideCard = ({ guideId, name, tour, imageLink }) => {
   return (
     <>
       <div className={styles.guideBox} onClick={goToDetailPage}>
-        <div style={{ display: 'flex', position: 'relative' }}>
+        <div style={{ display: 'flex' }}>
           <h4 style={{ marginTop: '10px', marginLeft: '10px' }}>{name}</h4>
           <img
             style={{
@@ -34,4 +34,4 @@ const ResultGuideCard = ({ guideId, name, tour, imageLink }) => {
   );
 };
 
-export default ResultGuideCard;
+export default RowResultGuideCard;
