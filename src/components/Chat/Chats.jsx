@@ -28,11 +28,19 @@ const Chats = () => {
   const handleSelect = (u) => {
     dispatch({ type: "CHANGE_USER", payload: u });
   };
-  console.log(chats);
 
   return (
     <div className={styles.chats}>
-      <h3 style={{ color: "white", textAlign: "center" }}>채팅목록</h3>
+      <h4
+        style={{
+          color: "white",
+          textAlign: "left",
+          marginLeft: "10px",
+          marginTop: "30px",
+        }}
+      >
+        대화 상대 목록
+      </h4>
       {Object.entries(chats)
         ?.sort((a, b) => b[1].date - a[1].date)
         .map((chat) => (
@@ -41,7 +49,6 @@ const Chats = () => {
             key={chat[0]}
             onClick={() => handleSelect(chat[1].userInfo)}
           >
-            {/* <img src={chat[1].userInfo.photoURL} alt="" /> */}
             <div className={styles.userChatInfo}>
               <span>{chat[1].userInfo.displayName}</span>
             </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import LoginImage from "./Login.png";
 import styles from "./Login.module.css";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { TextField } from "@mui/material";
 import { UserFindId, UserLogin } from "../../api/user/User";
 import { useForm } from "react-hook-form";
@@ -14,8 +14,10 @@ function Login() {
   const { register, watch, handleSubmit } = useForm();
   const [mode, setMode] = useState(1);
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const loginHandler = async (e) => {
+    setLoading(true);
     const userEmail = e.email;
     const res = await UserLogin(e);
     if (res != null) {
@@ -23,20 +25,17 @@ function Login() {
       sessionStorage.setItem("userEmail", userEmail);
       sessionStorage.setItem("accessToken", res.data.accessToken);
       localStorage.setItem("refreshToken", res.data.refreshToken);
-      window.alert("로그인 성공! 메인페이지로 이동합니다.");
       navigate("/");
     } else {
       window.alert("아이디나 비밀번호가 틀립니다.");
+      setLoading(false);
     }
   };
 
   const findEmail = async (e) => {
-    const data = {
-      name: watch("name"),
-      phoneNumber: watch("phoneNumber"),
-    };
+    // e.preventDefault();
 
-    const res = await UserFindId(data);
+    const res = await UserFindId(e);
     if (res !== undefined) {
       setEmail(res.data.email);
     } else {
@@ -72,9 +71,27 @@ function Login() {
                 {...register("password")}
               ></TextField>
 
-              <Button type="submit" variant="contained" fullWidth>
+              <Button
+                disabled={loading}
+                type="submit"
+                variant="contained"
+                fullWidth
+              >
+                {loading && (
+                  <CircularProgress
+                    size={24}
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      marginTop: "-12px",
+                      marginLeft: "-12px",
+                    }}
+                  />
+                )}
                 Login
               </Button>
+
               <Button
                 onClick={() => {
                   setMode(2);
@@ -114,7 +131,7 @@ function Login() {
                 {...register("phoneNumber")}
               ></TextField>
 
-              <Button onClick={findEmail} variant="contained" fullWidth>
+              <Button type="submit" variant="contained" fullWidth>
                 이메일 확인
               </Button>
               <Button
