@@ -1,4 +1,4 @@
-import { baseAxios } from "../Axios";
+import { baseAxios } from '../Axios';
 
 //등록한 투어 조회
 export async function MyTour() {
@@ -81,16 +81,19 @@ export async function MytourResister(props) {
         howManyDay: props.howmanydays,
         location: props.location,
         themeIds: props.themeIds,
-        availableDates: props.availableDates,
+        availableDates: props.availableDates
         // images: props.images
       },
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("accessToken"),
-        },
+          'Content-Type': 'application/json',
+          Authorization: sessionStorage.getItem('accessToken')
+        }
       }
-    );
+    });
+
+    console.log(res.data);
+
     if (res.status === 200) {
       console.log("ok");
     } else {
