@@ -1,19 +1,19 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
-import LogoImage from "asset/FindLogo.png";
-import LogoWhiteImage from "asset/FindLogo_white.png";
-import styles from "./Navbar.module.css";
+import LogoImage from 'asset/FindLogo.png';
+import LogoWhiteImage from 'asset/FindLogo_white.png';
+import styles from './Navbar.module.css';
 
-import { signOut } from "firebase/auth";
-import { auth } from "../../firebase";
-import { AuthContext } from "../Chat/context/AuthContext";
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
+import { AuthContext } from '../Chat/context/AuthContext';
 
 function Navbar({ isMain }) {
   const { currentUser } = useContext(AuthContext);
   const logoImage = isMain ? LogoWhiteImage : LogoImage;
 
-  const accessToken = sessionStorage.getItem("accessToken");
+  const accessToken = sessionStorage.getItem('accessToken');
 
   const handleLogout = () => {
     localStorage.clear();
@@ -23,9 +23,7 @@ function Navbar({ isMain }) {
 
   return (
     <>
-      <div
-        className={`${styles.webNav} ${isMain ? styles.main : styles.notMain}`}
-      >
+      <div className={`${styles.webNav} ${isMain ? styles.main : styles.notMain}`}>
         <div>
           <Link to="/">
             <img className={styles.navLogoImage} src={logoImage} alt="" />
@@ -34,15 +32,12 @@ function Navbar({ isMain }) {
         <div className={styles.pageLink}>
           <Link to="/tour/tourlist">모든 투어 보기</Link>
           <Link to="/recommend/location">추천</Link>
-          <Link to="/area">지도검색 </Link>
-          <Link to="/guide">가이드별 </Link>
+          <Link to="/area">지도</Link>
+          <Link to="/guide">가이드</Link>
+          <Link to="/wanttour">투어매칭</Link>
         </div>
         <div className={`${isMain ? styles.mainright : styles.navRight}`}>
-          {accessToken === null ? (
-            <Link to="/login">로그인 </Link>
-          ) : (
-            <Link to="/mypage/:id">마이페이지</Link>
-          )}
+          {accessToken === null ? <Link to="/login">로그인 </Link> : <Link to="/mypage/:id">마이페이지</Link>}
           {accessToken && (
             <Link to="/login" onClick={handleLogout}>
               로그아웃
