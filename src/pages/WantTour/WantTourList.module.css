@@ -48,6 +48,7 @@
   padding: 0 15px 5px 15px;
   display: flex;
   justify-content: space-between;
+  color: #ffffff;
 }
 
 .listBtn:hover {
@@ -98,10 +99,11 @@
 
 .listContainer {
   background-color: #ffffff;
-  min-height: 500px;
+  min-height: 559.9px;
   border-radius: 10px;
   border: 1px solid #c0c0c0;
   padding: 10px 30px;
+  position: relative;
 }
 
 .post {
@@ -169,4 +171,11 @@
   border-radius: 5px;
   color: #ffffff;
   font-size: 0.8rem;
+}
+
+.pagination {
+  position: absolute;
+  bottom: 10px; /* 원하는 위치로 조정합니다. */
+  left: 50%;
+  transform: translateX(-50%);
 }

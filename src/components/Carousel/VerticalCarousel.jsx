@@ -3,7 +3,7 @@ import Slider from 'react-slick';
 import './slick-theme.css';
 import './slick.css';
 import styles from './VerticalCarousel.module.css';
-import ReviewCard from 'components/Card/ReviewCard';
+import ReviewCard from 'components/Card/ReviewMain';
 
 function Carousel({ list }) {
   const reviewList = list;
