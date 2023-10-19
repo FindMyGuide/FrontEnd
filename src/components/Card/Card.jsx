@@ -2,10 +2,22 @@ import React from 'react';
 import styles from './Card.module.css';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import test from 'asset/images/test.png';
+import { useNavigate } from 'react-router';
 
 function Card({ tour }) {
+  const movetour = useNavigate();
+
+  function gotour(id) {
+    movetour(`/tour/tourdetail/${id}`);
+  }
+
   return (
-    <div className={styles.card}>
+    <div
+      onClick={() => {
+        gotour(tour.id);
+      }}
+      className={styles.card}
+    >
       <div style={{ padding: '10px' }}>
         <div className={styles.content}>
           <div>
