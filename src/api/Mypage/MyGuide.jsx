@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { baseAxios } from '../Axios';
 
 //등록한 투어 조회
@@ -34,29 +35,25 @@ export async function MytourReservation(props) {
   }
 }
 //투어 등록
-export async function MytourResister(props) {
-  console.log(props);
+export async function MytourResister(formData) {
+  console.log('맞아');
+  console.log(formData.get('tourProductRequest'));
+  console.log(formData.get('files'));
+
+  for (let [key, value] of formData.entries()) {
+    console.log(key, value);
+  }
   try {
-    const res = await baseAxios.post(
-      `tourProduct/register`,
-      {
-        title: props.title,
-        content: props.content,
-        price: props.price,
-        languages: props.languages,
-        howManyDay: props.howmanydays,
-        location: props.location,
-        themeIds: props.themeIds,
-        availableDates: props.availableDates
-        // images: props.images
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: sessionStorage.getItem('accessToken')
-        }
+    const res = await axios.post(`http://localhost:9000/api/tourProduct/register`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        charset: 'utf-8',
+        Authorization: sessionStorage.getItem('accessToken')
       }
-    );
+    });
+
+    console.log(res.data);
+
     if (res.status === 200) {
       console.log('ok');
     } else {
