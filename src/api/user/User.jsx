@@ -2,7 +2,6 @@ import { baseAxios } from "../Axios";
 
 //회원가입
 export async function UserSignup(props) {
-  console.log(props);
   try {
     const res = await baseAxios.post(
       "find-my-guide/member/initiate-sign-up",
@@ -116,7 +115,6 @@ export async function UserLogout(props) {
 
 //아이디 찾기
 export async function UserFindId(props) {
-  console.log(props);
   try {
     const res = await baseAxios.post(
       "find-my-guide/member/find-email",
