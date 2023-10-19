@@ -4,36 +4,6 @@ import { baseAxios } from '../Axios';
 export async function WantAll() {
   try {
     const res = await baseAxios.get('want-tourProducts', {}, {});
-    console.log(res.data);
-    return res.data;
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-//내가 쓴 글 목록 조회
-export async function MyArticle() {
-  try {
-    const res = await baseAxios.get(
-      'v1/wanttour/me',
-      {},
-      {
-        headers: {
-          // 'Content-Type': 'application/json',
-          Authorization: sessionStorage.getItem('accessToken')
-        }
-      }
-    );
-    return res;
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-//대기 상태 글 목록 조회
-export async function WaitAll() {
-  try {
-    const res = await baseAxios.get('v1/wanttour/wait', {}, {});
     return res.data;
   } catch (e) {
     console.error(e);

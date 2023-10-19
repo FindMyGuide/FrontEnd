@@ -1,23 +1,18 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './Card.module.css';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import test from 'asset/images/test.png';
 import { useNavigate } from 'react-router';
 
 function Card({ tour }) {
-  const movetour = useNavigate();
-
-  function gotour(id) {
-    movetour(`/tour/tourdetail/${id}`);
-  }
+  const navigate = useNavigate();
+  const onClickHandler = (id) => {
+    navigate(`/tour/tourdetail/${id}`);
+  };
 
   return (
-    <div
-      onClick={() => {
-        gotour(tour.id);
-      }}
-      className={styles.card}
-    >
+    <div className={styles.card} onClick={() => onClickHandler(tour.id)}>
       <div style={{ padding: '10px' }}>
         <div className={styles.content}>
           <div>
