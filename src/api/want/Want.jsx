@@ -65,19 +65,21 @@ export async function CreateArticle(props) {
     return res;
   } catch (e) {
     console.error(e);
+    return null;
   }
 }
 
 //글 수정
 export async function UpdateArticle(props) {
   try {
-    const res = await baseAxios.put(
-      `/want-tourProduct/${props.id}`,
+    const res = await baseAxios.post(
+      `/want-tourProduct/update`,
       {
+        wantTourProductId: props.id,
         vehicle: props.vehicle,
         title: props.title,
         wantDates: props.wantDates,
-        themeId: props.themeId,
+        themeIds: props.themeIds,
         location: props.location,
         content: props.content,
         price: props.price,
@@ -92,7 +94,19 @@ export async function UpdateArticle(props) {
     );
     return res;
   } catch (e) {
+    console.log({
+      wantTourProductId: props.id,
+      vehicle: props.vehicle,
+      title: props.title,
+      wantDates: props.wantDates,
+      themeIds: props.themeIds,
+      location: props.location,
+      content: props.content,
+      price: props.price,
+      totalPeople: props.totalPeople
+    });
     console.error(e);
+    return null;
   }
 }
 
