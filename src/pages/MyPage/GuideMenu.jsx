@@ -47,6 +47,7 @@ const GuideTitle = styled.div`
   gap: 10px;
   margin-top: 30px;
   margin-bottom: 20px;
+  width: 1000px;
 `;
 
 // 등록한 투어
@@ -142,7 +143,7 @@ function RegisteredTour() {
 
   return (
     <div>
-      <GuideTitle>
+      <GuideTitle style={{ marginTop: "80px" }}>
         <AirplanemodeActiveIcon style={{ color: "#0073ff99" }} />
         <h4 style={{ fontWeight: "bold" }}> 등록한 투어 </h4>
       </GuideTitle>
@@ -274,9 +275,9 @@ function GuideWantList() {
       </GuideTitle>
 
       {wantList.length > 0 ? (
-        <WantListContainer>
+        <WantListContainer style={{ marginBottom: "60px" }}>
           {toursToShow.map((tour) => (
-            <WantListBox>
+            <WantListBox style={{ marginBottom: "30px" }}>
               <WantTitle> {tour.wantTourTitle} </WantTitle>
               <div>
                 {new Date(tour.tourStartDate).toLocaleDateString()} ~{" "}
@@ -299,7 +300,7 @@ function GuideWantList() {
             ))}
         </WantListContainer>
       ) : (
-        <p> 매칭된 원해요 리스트가 없습니다. </p>
+        <p style={{ marginBottom: "30px" }}>매칭된 원해요 리스트가 없습니다.</p>
       )}
     </div>
   );

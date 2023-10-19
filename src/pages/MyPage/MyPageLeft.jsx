@@ -53,6 +53,7 @@ const MyTour = styled.div`
   border: 1px solid gray;
   border-radius: 1rem;
   margin-top: 1rem;
+  gap: 10px;
 `;
 
 const ChatList = styled.button`
@@ -68,7 +69,7 @@ const ChatList = styled.button`
 
 // 왼쪽 개인정보 변경 모달창
 const ModalContainer = styled.div`
-  border: 2px solid #000;
+  border: 0.5px solid gray;
   border-radius: 10px;
   position: absolute;
   background: #fff;
@@ -403,8 +404,10 @@ function EditModal({ setEditModal }) {
   );
   const [phoneNumber, setPhoneNumber] = useState(userInformation.phoneNumber);
   const [certification, setCertification] = useState(
-    userInformation.nationalCertificationOfGuideYn
+    userInformation.nationalCerftificationOfGuideYn
   );
+
+  const dispatch = useDispatch();
 
   async function handleSubmit() {
     try {
@@ -417,6 +420,11 @@ function EditModal({ setEditModal }) {
         profilePicture: profilePicture,
         guideIntro: guideIntro,
       });
+
+      // 사용자 정보를 다시 가져옵니다.
+      const res = await UserInfo();
+      dispatch(setUserInformation(res.data));
+
       closeModal();
     } catch (error) {
       console.error(error);
@@ -532,10 +540,12 @@ function Left() {
       <BoldP>{userInformation.nickname}</BoldP>
       <EditProfile />
       <MyTour>
-        <BoldP>예정된 투어 : {upComingTour.length} </BoldP>
-        <BoldP>지난 투어 : {lastTour.length}</BoldP>
+        <div style={{ fontWeight: "bold" }}>
+          예정된 투어 : {upComingTour.length}{" "}
+        </div>
+        <div style={{ fontWeight: "bold" }}>지난 투어 : {lastTour.length}</div>
       </MyTour>
-      <ChatList>대화목록</ChatList>
+      {/* <ChatList>대화목록</ChatList> */}
     </MyPageLeft>
   );
 }

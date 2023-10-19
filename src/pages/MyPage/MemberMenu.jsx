@@ -27,12 +27,14 @@ import {
   LikeTour,
   MemberWantTour,
 } from "../../api/Mypage/MyUser";
+import GuideCard from "components/Card/GuideCard";
 
 // 오른쪽 - 회원전용
 const MemberMenuContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-color: grey;
   border-width: 1px 1px 1px 1px;
   border-style: solid;
   border-radius: 0px 10px 10px 10px;
@@ -53,18 +55,13 @@ const CardContainer = styled.div`
   gap: 20px;
 `;
 
-const SectionContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
-
 // 오른쪽 - MemberBookedTour
 const MemberTitle = styled.div`
   margin-top: 30px;
   margin-bottom: 20px;
   display: flex;
   gap: 10px;
+  width: 1000px;
 `;
 
 const MemberBookedTourContainer = styled.div`
@@ -162,12 +159,14 @@ function MemberBookedTour() {
 
   const [value, onChange] = useState(new Date());
 
+  // console.log(upComingTour);
+
   // Carousel의 현재 슬라이드 인덱스 상태
   const [currentSlide, setCurrentSlide] = useState(0);
 
   return (
     <div>
-      <MemberTitle>
+      <MemberTitle style={{ marginTop: "80px" }}>
         <AirplanemodeActiveIcon style={{ color: "#0073ff99" }} />
         <h4 style={{ fontWeight: "bold" }}>예정된 투어</h4>
       </MemberTitle>
@@ -264,7 +263,7 @@ function LastTour() {
   const toursToShow = showMore ? lastTour : lastTour.slice(0, 3);
 
   return (
-    <SectionContainer>
+    <div>
       <MemberTitle>
         <BusinessCenterIcon style={{ color: "#8e4000" }} />
         <h4 style={{ fontWeight: "bold" }}>지난 투어</h4>
@@ -287,7 +286,7 @@ function LastTour() {
       ) : (
         <p>지난 투어가 없습니다.</p>
       )}
-    </SectionContainer>
+    </div>
   );
 }
 
@@ -345,6 +344,9 @@ function MemberLikeTour() {
 function MemberLikeGuide() {
   const [likeGuides, setLikeGuides] = useState([]);
 
+  // 3개씩 보여주기
+  const [showMore, setShowMore] = useState(false);
+
   useEffect(() => {
     const fetchLikeGuides = async () => {
       try {
@@ -358,6 +360,8 @@ function MemberLikeGuide() {
     fetchLikeGuides();
   }, []);
 
+  const toursToShow = showMore ? likeGuides : likeGuides.slice(0, 3);
+
   // console.log(likeGuides);
   return (
     <div>
@@ -365,6 +369,23 @@ function MemberLikeGuide() {
         <FavoriteIcon style={{ color: "red" }} />
         <h4 style={{ fontWeight: "bold" }}>좋아요한 가이드</h4>
       </MemberTitle>
+      {likeGuides.length > 0 ? (
+        <LastTourContainer>
+          <CardContainer>
+            {toursToShow.map((guide) => (
+              <GuideCard key={guide.id} guide={guide} />
+            ))}
+          </CardContainer>
+          {likeGuides.length > 3 &&
+            (showMore ? (
+              <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
+            ) : (
+              <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
+            ))}
+        </LastTourContainer>
+      ) : (
+        <p>좋아요한 가이드가 없습니다.</p>
+      )}
     </div>
   );
 }
@@ -399,7 +420,7 @@ function MemberWantList() {
         <h4 style={{ fontWeight: "bold" }}>원해요 글 목록</h4>
       </MemberTitle>
       {wantTour.length > 0 ? (
-        <MemberWantContainer>
+        <MemberWantContainer style={{ marginBottom: "60px" }}>
           <div>
             {toursToShow.length > 0 &&
               toursToShow.map((tour) => (
