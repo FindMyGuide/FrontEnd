@@ -63,7 +63,7 @@ const GuidePage = () => {
                   guideId={guide?.guideId}
                   name={guide?.guideName}
                   tour={guide?.tourProductResponses[0]?.title}
-                  img={guide?.profilePicture}
+                  imageLink={guide?.profilePicture}
                 ></GuideCard>
               ))
           ) : (

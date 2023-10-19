@@ -23,13 +23,12 @@ const ResultGuideCard = ({ guideId, name, tour, imageLink }) => {
               right: '0',
               top: '-60px'
             }}
-            src={profileImg}
-            alt="얼굴 이미지"
+            src={imageLink !== '' ? imageLink : profileImg}
+            alt=""
           />
         </div>
         <p style={{ marginBottom: '0', marginTop: '10px', marginLeft: '10px' }}>가능언어</p>
         <p style={{ marginLeft: '10px' }}>{tour}</p>
-        <img src={{ imageLink } ? { imageLink } : ''} alt="" />
       </div>
     </>
   );

@@ -9,6 +9,8 @@ import profileImg from 'asset/images/emptyprofile.png';
 import ReviewCard from 'components/Card/ReviewCard';
 
 const GuideDetailPage = () => {
+  const [moreButton, setMoreButton] = useState(true);
+  const [moreReviewButton, setMoreReviewButton] = useState(true);
   const { id } = useParams();
   const [guideDetail, setGuideDetail] = useState([]);
   const [guideReview, setGuideReview] = useState([]);
@@ -52,6 +54,8 @@ const GuideDetailPage = () => {
       const newTourProducts = guideReview.slice(0, endIndex);
       setShowingReview(newTourProducts);
       setReviewNum(newPageNum);
+    } else {
+      setMoreReviewButton(false);
     }
   };
 
@@ -66,6 +70,8 @@ const GuideDetailPage = () => {
       const newTourProducts = guideDetail.tourProductResponses.slice(0, endIndex);
       setShowingList(newTourProducts);
       setPageNum(newPageNum);
+    } else {
+      setMoreButton(false);
     }
   };
   console.log(guideDetail);
@@ -75,7 +81,11 @@ const GuideDetailPage = () => {
       <div className={styles.webGuideDetail}>
         <div className={styles.guideprofile}>
           <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-            <img style={{ width: '240px' }} src={profileImg} alt="얼굴 이미지" />
+            <img
+              style={{ width: '240px' }}
+              src={guideDetail?.profilePicture !== '' ? guideDetail.profilePicture : profileImg}
+              alt="가이드 이미지"
+            />
           </div>
 
           <div className={styles.namebox}>
@@ -106,43 +116,47 @@ const GuideDetailPage = () => {
               ))}
             </div>
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-              <button
-                className={styles.gamebutton}
-                onClick={() => {
-                  handlePushTour(pageNum);
-                }}
-              >
-                <svg className={styles.playicon} viewBox="0 0 40 40">
-                  <path d="M 10,10 L 20,30 L 30,10 z"></path>
-                </svg>
-                더보기
-              </button>
+              {moreButton ? (
+                <button
+                  className={styles.gamebutton}
+                  onClick={() => {
+                    handlePushTour(pageNum);
+                  }}
+                >
+                  <svg className={styles.playicon} viewBox="0 0 40 40">
+                    <path d="M 10,10 L 20,30 L 30,10 z"></path>
+                  </svg>
+                  더보기
+                </button>
+              ) : null}
             </div>
           </div>
           <div>
             <h5 style={{ marginBottom: '20px' }}>
               <b>가이드 투어 후기</b>
             </h5>
-            <div className={styles.reviewbox}>
+            <div className={styles.reviewbox} style={{ display: 'flex', flexWrap: 'wrap' }}>
               {showingReview?.map((review, index) => (
-                <div key={index} className={styles.carouselSlide}>
+                <div key={index} style={{ flex: '0 0 50%' }}>
                   <ReviewCard review={review} />
                 </div>
               ))}
             </div>
 
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-              <button
-                className={styles.gamebutton}
-                onClick={() => {
-                  handlePushReview(reviewNum);
-                }}
-              >
-                <svg className={styles.playicon} viewBox="0 0 40 40">
-                  <path d="M 10,10 L 20,30 L 30,10 z"></path>
-                </svg>
-                더보기
-              </button>
+              {moreReviewButton ? (
+                <button
+                  className={styles.gamebutton}
+                  onClick={() => {
+                    handlePushReview(reviewNum);
+                  }}
+                >
+                  <svg className={styles.playicon} viewBox="0 0 40 40">
+                    <path d="M 10,10 L 20,30 L 30,10 z"></path>
+                  </svg>
+                  더보기
+                </button>
+              ) : null}
             </div>
           </div>
         </div>

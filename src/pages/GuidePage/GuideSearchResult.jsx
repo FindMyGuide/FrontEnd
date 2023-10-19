@@ -48,7 +48,8 @@ const GuideSearchResult = ({ list }) => {
             key={parseInt(guide.guideId)}
             guideId={guide?.guideId}
             name={guide?.guideName}
-            tour={guide?.tourProductTitles[0]?.title}
+            tour={guide?.tourProductResponses[0]?.title}
+            imageLink={guide?.profilePicture}
           ></ResultGuideCard>
         ))}
       </Slider>
