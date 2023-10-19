@@ -55,11 +55,6 @@ const AreaPage = () => {
     const sumX = position.map((posi) => parseFloat(posi.lat)).reduce((acc, cur) => acc + cur, 0);
     const sumY = position.map((posi) => parseFloat(posi.lng)).reduce((acc, cur) => acc + cur, 0);
     setSumLocation([Number(sumX / position.length).toFixed(6), Number(sumY / position.length).toFixed(6)]);
-    console.log(sumX);
-    console.log(sumX / position.length);
-    console.log(sumY);
-    console.log(sumY / position.length);
-    console.log(`여기가 섬${sumLocation}`);
   }, [position]);
 
   const CustomContainer = ({ position, content, idx }) => {
@@ -122,8 +117,6 @@ const AreaPage = () => {
                       SearchArea(e.target.value)
                         .then((getSearch) => {
                           if (getSearch?.tourProductResponses?.length !== 0) {
-                            console.log(getSearch);
-                            console.log('성공');
                             setInfo([]);
                             const searchResultList = getSearch;
                             setInfo(searchResultList);
@@ -132,7 +125,6 @@ const AreaPage = () => {
                               searchResultList.tourProductResponses[0]?.locations[0]?.mapY
                             ]);
                           } else {
-                            console.log('실패');
                             setInfo([]);
                             setPosition([35.121059, 129.043993]);
                           }
@@ -154,7 +146,6 @@ const AreaPage = () => {
                   SearchArea(e.target.value)
                     .then((getSearch) => {
                       if (getSearch?.tourProductResponses?.length !== 0) {
-                        console.log(getSearch);
                         setInfo([]);
                         const searchResultList = getSearch;
                         setInfo(searchResultList);

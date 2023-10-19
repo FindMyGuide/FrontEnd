@@ -33,7 +33,6 @@ const GuidePage = () => {
       .then((getPopularGuideList) => {
         const popularGuideList = getPopularGuideList;
         setPopularGuide(popularGuideList);
-        console.log(popularGuideList);
       })
       .catch((error) => {
         console.error(error);
@@ -56,7 +55,7 @@ const GuidePage = () => {
         <div className={styles.famousGuide}>
           {popularGuide ? (
             popularGuide
-              .slice(0, 4)
+              .slice(0, 5)
               .map((guide) => (
                 <GuideCard
                   key={parseInt(guide?.guideId)}
@@ -190,7 +189,9 @@ const GuidePage = () => {
                 onClick={() => {
                   GuideFilter({ gender: gender, age: ageValue, language: selectedLanguage })
                     .then((getSearchList) => {
+                      serSearchResult([]);
                       const searchGuideList = getSearchList;
+
                       serSearchResult(searchGuideList);
                     })
                     .catch((error) => {

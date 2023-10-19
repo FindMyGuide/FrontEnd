@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from 'react';
 
 import styles from './GuideDetailPage.module.css';
-import { useParams } from 'react-router-dom';
+
 import { GuideDetail, GuideTourReview } from '../../api/guide/Guide';
 import Card from 'components/Card/Card';
 
 import profileImg from 'asset/images/emptyprofile.png';
 import ReviewCard from 'components/Card/ReviewCard';
+import { useParams } from 'react-router-dom';
 
 const GuideDetailPage = () => {
+  const { id } = useParams();
+
   const [moreButton, setMoreButton] = useState(true);
   const [moreReviewButton, setMoreReviewButton] = useState(true);
-  const { id } = useParams();
+
   const [guideDetail, setGuideDetail] = useState([]);
   const [guideReview, setGuideReview] = useState([]);
 
   const [showingList, setShowingList] = useState([]);
-  const [pageNum, setPageNum] = useState(1);
+  const [pageNum, setPageNum] = useState(2);
 
   const [showingReview, setShowingReview] = useState([]);
   const [reviewNum, setReviewNum] = useState(1);
@@ -26,7 +29,8 @@ const GuideDetailPage = () => {
       .then((getGuideDetail) => {
         const GuideDetail = getGuideDetail;
         setGuideDetail(GuideDetail);
-        setShowingList(GuideDetail?.tourProductResponses?.slice(0, 3));
+        setShowingList(GuideDetail?.tourProductResponses?.slice(0, 6));
+        console.log(GuideDetail);
       })
       .catch((error) => {
         console.error(error);
@@ -37,7 +41,7 @@ const GuideDetailPage = () => {
         const GuideReview = getGuideReview;
         setGuideReview(GuideReview);
         setShowingReview(GuideReview?.slice(0, 2));
-        console.log(GuideReview);
+        console.log(guideReview);
       })
       .catch((error) => {
         console.error(error);
@@ -65,17 +69,15 @@ const GuideDetailPage = () => {
     const endIndex = startIndex + 3;
 
     if (guideDetail?.tourProductResponses?.length + 3 > endIndex) {
-      console.log(guideDetail?.tourProductResponses?.length);
-      console.log(endIndex);
       const newTourProducts = guideDetail.tourProductResponses.slice(0, endIndex);
       setShowingList(newTourProducts);
       setPageNum(newPageNum);
-    } else {
-      setMoreButton(false);
+      if (guideDetail?.tourProductResponses?.length <= endIndex) {
+        setMoreButton(false);
+      }
     }
   };
-  console.log(guideDetail);
-  console.log(`리뷰 ${guideReview}`);
+  console.log(showingList.length);
   return (
     <>
       <div className={styles.webGuideDetail}>
@@ -116,7 +118,7 @@ const GuideDetailPage = () => {
               ))}
             </div>
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-              {moreButton ? (
+              {moreButton && guideDetail?.tourProductResponses?.length > 6 ? (
                 <button
                   className={styles.gamebutton}
                   onClick={() => {
