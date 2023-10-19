@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import styles from './WantTour.module.css';
 import { DetailArticle, UpdateArticle } from 'api/want/Want';
 
@@ -9,10 +9,8 @@ import WantThemes from 'components/Theme/WantThemes';
 import Vehicle from 'components/Vehicle/Vehicle';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
-import 'react-modern-calendar-datepicker/lib/DatePicker.css';
-import CustomLocale from 'components/Calendar/CustomLocale';
-// import { Calendar } from 'react-modern-calendar-datepicker';
-import { utils } from 'react-modern-calendar-datepicker';
+import { ReactComponent as Prev } from 'asset/icons/prev.svg';
+import Calendar from 'components/Calendar/Calendar';
 
 function WantTourRegist() {
   const { id } = useParams();
@@ -37,14 +35,16 @@ function WantTourRegist() {
       setPrice(post.price);
       setTotalPeople(post.totalPeople);
       setVehicle(post.vehicle);
-      // setThemes(post.Theme);
+      if (post.Theme) {
+        setThemes(post.Theme);
+      }
 
       const locations = post.locationResponses.map((item) => item.title);
       setLocations(locations);
 
       const formattedDates = post.reservationDates.map((dateString) => {
         const [year, month, day] = dateString.split('-').map(Number);
-        return { year, month, day };
+        return new Date(year, month - 1, day);
       });
       setDate(formattedDates);
 
@@ -54,31 +54,40 @@ function WantTourRegist() {
     fetchPostUpdate(id);
   }, [id]);
 
+  // 날짜 포맷팅
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formattedDates = date.map((selectedDate) => {
-      const formattedDate = `${selectedDate.year}-${String(selectedDate.month).padStart(2, '0')}-${String(
-        selectedDate.day
-      ).padStart(2, '0')}`;
+      const formattedDate = formatDate(selectedDate);
       return formattedDate;
     });
+    formattedDates.sort((a, b) => new Date(a) - new Date(b));
+    console.log(formattedDates)
+    
+    const res = await UpdateArticle({
+      id,
+      title,
+      content,
+      wantDates: formattedDates,
+      totalPeople,
+      vehicle,
+      price,
+      themeIds: themes,
+      location: locations.map((location) => ({ title: location }))
+    });
 
-    try {
-      await UpdateArticle({
-        id,
-        title,
-        content,
-        wantDates: formattedDates,
-        totalPeople,
-        vehicle,
-        price,
-        themeIds: themes,
-        location: locations.map((location) => ({ title: location }))
-      });
-      navigate('/wanttour');
-    } catch (error) {
+    if (res) {
+      navigate(`/wanttour/detail/${id}`);
+    } else {
       alert('다시 작성해주세요');
-      console.error(error);
     }
   };
 
@@ -135,16 +144,17 @@ function WantTourRegist() {
     setLocations(locations.filter((selectedLocation) => selectedLocation !== location));
   };
 
-  // 캘린더
-  const minimumDate = utils().getToday();
-  const myCustomLocale = CustomLocale;
-
   return (
     <div style={{ backgroundColor: '#F9FAFB' }}>
       <div className="container" style={{ padding: '70px 0' }}>
         <div className={styles.container}>
-          <div className={styles.title}>
-            원하는 투어를 <span className="color">직접</span> 등록해보세요
+          <div className={styles.parentContainer} style={{ marginBottom: '20px' }}>
+            <Link to={`/wanttour/detail/${id}`}>
+              <Prev />
+            </Link>
+            <div className={styles.postTitle}>
+              원하는 투어를 <span className="color">직접</span> 등록해보세요
+            </div>
           </div>
           <div className={styles.explain}>
             <div>본인이 원하는 투어를 찾지 못하였다면 원하는 투어의 내용을 작성하여 등록해보세요</div>
@@ -195,16 +205,10 @@ function WantTourRegist() {
                 </span>
               ))}
             </div>
-            {/* <div className={styles.content}>
+            <div className={styles.content}>
               <div className={styles.subtitle}>투어 날짜</div>
-              <Calendar
-                value={date}
-                onChange={setDate}
-                locale={myCustomLocale}
-                minimumDate={minimumDate}
-                shouldHighlightWeekends
-              />
-            </div> */}
+              <Calendar date={date} setDate={setDate} />
+            </div>
             <div className={styles.content}>
               <div className={styles.subtitle}>투어 인원</div>
               <div className={styles.parentContainer}>

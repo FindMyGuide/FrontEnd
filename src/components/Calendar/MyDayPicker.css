@@ -1,0 +1,17 @@
+.my-selected:not([disabled]) {
+  background-color: #50abf2;
+  color: #ffffff;
+  padding: 1px;
+}
+
+.my-selected:hover:not([disabled]) {
+  border-color: #50abf2;
+  color: #50abf2;
+}
+
+.calendar-border {
+  border-radius: 10px;
+  border: 1px solid #c0c0c0;
+  margin: 0;
+  padding: 10px;
+}

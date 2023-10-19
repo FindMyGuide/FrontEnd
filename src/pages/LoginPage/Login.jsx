@@ -6,6 +6,8 @@ import { TextField } from "@mui/material";
 import { UserFindId, UserLogin } from "../../api/user/User";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase";
 
 function Login() {
   const navigate = useNavigate();
@@ -16,8 +18,8 @@ function Login() {
   const loginHandler = async (e) => {
     const userEmail = e.email;
     const res = await UserLogin(e);
-    console.log(res);
     if (res != null) {
+      await signInWithEmailAndPassword(auth, e.email, e.password);
       sessionStorage.setItem("userEmail", userEmail);
       sessionStorage.setItem("accessToken", res.data.accessToken);
       localStorage.setItem("refreshToken", res.data.refreshToken);

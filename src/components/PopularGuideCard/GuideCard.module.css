@@ -1,5 +1,10 @@
 .guideBox {
-  border: 1px solid black;
-  margin: 10px;
+  border: 1px solid silver;
+  margin-top: 40px;
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 130px;
   word-break: keep-all;
+  min-width: 200px;
+  border-radius: 8px 8px 8px 0;
 }

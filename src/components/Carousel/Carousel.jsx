@@ -1,7 +1,8 @@
 import React from 'react';
 import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import './slick-theme.css';
+import './slick.css';
+
 import Card from '../Card/Card';
 // import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 // import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
@@ -35,16 +36,9 @@ function Carousel({ list }) {
         arrows
         autoplay
         autoplaySpeed={3000}
-        // prevArrow={
-        //   <button type="button" className="slick-prev">
-        //     Previous
-        //   </button>
-        // }
-        // nextArrow={
-        //   <button type="button" className="slick-next">
-        //     Next
-        //   </button>
-        // }
+        pauseOnHover
+        // nextArrow: <NextArrow />
+        // prevArrow: <PrevArrow />
       >
         {tourlist?.map((tour, index) => (
           <div key={index}>

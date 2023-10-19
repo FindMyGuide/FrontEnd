@@ -4,16 +4,19 @@ import { TastySearch } from 'api/recommend/Recommend';
 import TastyCard from 'components/Card/Recommend/TastyCard';
 import SideBar from 'components/Recommend/SideBar';
 import styles from './Recommend.module.css';
+import { ReactComponent as Spinner } from 'asset/icons/Spinner.svg';
 
 function TastyList() {
   const navigate = useNavigate();
   const [list, setList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchRecommendList() {
       const tastyList = await TastySearch();
       setList(tastyList);
       console.log(tastyList);
+      setLoading(false);
     }
 
     fetchRecommendList();
@@ -31,19 +34,25 @@ function TastyList() {
           <SideBar />
         </header>
 
-        <div className={styles.length}>
-          # 총 <span className="color">{list.length}</span>개의 맛집이 있습니다
-        </div>
-        <div className={styles.explain}>
-          &nbsp;부산광역시가 제공하는 맛집 중 {list.length}개를 랜덤으로 골라 보여드립니다
-        </div>
-        <div className={styles.cardContainer2}>
-          {list?.map((tasty, index) => (
-            <div key={index} onClick={() => onDetailHandler(tasty.id)} className={styles.cardItem}>
-              <TastyCard tasty={tasty} />
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            <div className={styles.length}>
+              # 총 <span className="color">{list.length}</span>개의 맛집이 있습니다
             </div>
-          ))}
-        </div>
+            <div className={styles.explain}>
+              &nbsp;부산광역시가 제공하는 맛집 중 {list.length}개를 랜덤으로 골라 보여드립니다
+            </div>
+            <div className={styles.cardContainer2}>
+              {list?.map((tasty, index) => (
+                <div key={index} onClick={() => onDetailHandler(tasty.id)} className={styles.cardItem}>
+                  <TastyCard tasty={tasty} />
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
