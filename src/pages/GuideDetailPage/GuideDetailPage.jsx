@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from 'react';
 
 import styles from './GuideDetailPage.module.css';
-import { useParams } from 'react-router-dom';
+
 import { GuideDetail, GuideTourReview } from '../../api/guide/Guide';
 import Card from 'components/Card/Card';
 
 import profileImg from 'asset/images/emptyprofile.png';
 import ReviewCard from 'components/Card/ReviewCard';
+import { useParams } from 'react-router-dom';
 
 const GuideDetailPage = () => {
   const { id } = useParams();
+
+  const [moreButton, setMoreButton] = useState(true);
+  const [moreReviewButton, setMoreReviewButton] = useState(true);
+
   const [guideDetail, setGuideDetail] = useState([]);
   const [guideReview, setGuideReview] = useState([]);
 
   const [showingList, setShowingList] = useState([]);
-  const [pageNum, setPageNum] = useState(1);
+  const [pageNum, setPageNum] = useState(2);
 
   const [showingReview, setShowingReview] = useState([]);
   const [reviewNum, setReviewNum] = useState(1);
@@ -24,7 +29,8 @@ const GuideDetailPage = () => {
       .then((getGuideDetail) => {
         const GuideDetail = getGuideDetail;
         setGuideDetail(GuideDetail);
-        setShowingList(GuideDetail?.tourProductResponses?.slice(0, 3));
+        setShowingList(GuideDetail?.tourProductResponses?.slice(0, 6));
+        console.log(GuideDetail);
       })
       .catch((error) => {
         console.error(error);
@@ -35,7 +41,7 @@ const GuideDetailPage = () => {
         const GuideReview = getGuideReview;
         setGuideReview(GuideReview);
         setShowingReview(GuideReview?.slice(0, 2));
-        console.log(GuideReview);
+        console.log(guideReview);
       })
       .catch((error) => {
         console.error(error);
@@ -52,6 +58,8 @@ const GuideDetailPage = () => {
       const newTourProducts = guideReview.slice(0, endIndex);
       setShowingReview(newTourProducts);
       setReviewNum(newPageNum);
+    } else {
+      setMoreReviewButton(false);
     }
   };
 
@@ -61,21 +69,25 @@ const GuideDetailPage = () => {
     const endIndex = startIndex + 3;
 
     if (guideDetail?.tourProductResponses?.length + 3 > endIndex) {
-      console.log(guideDetail?.tourProductResponses?.length);
-      console.log(endIndex);
       const newTourProducts = guideDetail.tourProductResponses.slice(0, endIndex);
       setShowingList(newTourProducts);
       setPageNum(newPageNum);
+      if (guideDetail?.tourProductResponses?.length <= endIndex) {
+        setMoreButton(false);
+      }
     }
   };
-  console.log(guideDetail);
-  console.log(`리뷰 ${guideReview}`);
+  console.log(showingList.length);
   return (
     <>
       <div className={styles.webGuideDetail}>
         <div className={styles.guideprofile}>
           <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-            <img style={{ width: '240px' }} src={profileImg} alt="얼굴 이미지" />
+            <img
+              style={{ width: '240px' }}
+              src={guideDetail?.profilePicture !== '' ? guideDetail.profilePicture : profileImg}
+              alt="가이드 이미지"
+            />
           </div>
 
           <div className={styles.namebox}>
@@ -106,43 +118,47 @@ const GuideDetailPage = () => {
               ))}
             </div>
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-              <button
-                className={styles.gamebutton}
-                onClick={() => {
-                  handlePushTour(pageNum);
-                }}
-              >
-                <svg className={styles.playicon} viewBox="0 0 40 40">
-                  <path d="M 10,10 L 20,30 L 30,10 z"></path>
-                </svg>
-                더보기
-              </button>
+              {moreButton && guideDetail?.tourProductResponses?.length > 6 ? (
+                <button
+                  className={styles.gamebutton}
+                  onClick={() => {
+                    handlePushTour(pageNum);
+                  }}
+                >
+                  <svg className={styles.playicon} viewBox="0 0 40 40">
+                    <path d="M 10,10 L 20,30 L 30,10 z"></path>
+                  </svg>
+                  더보기
+                </button>
+              ) : null}
             </div>
           </div>
           <div>
             <h5 style={{ marginBottom: '20px' }}>
               <b>가이드 투어 후기</b>
             </h5>
-            <div className={styles.reviewbox}>
+            <div className={styles.reviewbox} style={{ display: 'flex', flexWrap: 'wrap' }}>
               {showingReview?.map((review, index) => (
-                <div key={index} className={styles.carouselSlide}>
+                <div key={index} style={{ flex: '0 0 50%' }}>
                   <ReviewCard review={review} />
                 </div>
               ))}
             </div>
 
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-              <button
-                className={styles.gamebutton}
-                onClick={() => {
-                  handlePushReview(reviewNum);
-                }}
-              >
-                <svg className={styles.playicon} viewBox="0 0 40 40">
-                  <path d="M 10,10 L 20,30 L 30,10 z"></path>
-                </svg>
-                더보기
-              </button>
+              {moreReviewButton ? (
+                <button
+                  className={styles.gamebutton}
+                  onClick={() => {
+                    handlePushReview(reviewNum);
+                  }}
+                >
+                  <svg className={styles.playicon} viewBox="0 0 40 40">
+                    <path d="M 10,10 L 20,30 L 30,10 z"></path>
+                  </svg>
+                  더보기
+                </button>
+              ) : null}
             </div>
           </div>
         </div>

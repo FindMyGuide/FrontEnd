@@ -15,6 +15,7 @@
   z-index: 3;
   width: 300px;
   padding: 10px;
+  overflow-y: scroll;
 }
 
 .map {
@@ -23,6 +24,8 @@
 .tourlisttext {
   margin-top: 10px;
   margin-left: 5px;
+}
+.tourlisttext2 {
   text-decoration-line: underline;
   text-decoration-color: skyblue;
   text-decoration-thickness: 4px;
@@ -30,22 +33,70 @@
 
 .areawrap {
   background-color: white;
-  width: 300px;
-  height: 130px;
+
   border-radius: 6px;
   border: 1px silver solid;
 }
 
-.areainfo {
-}
 .areatitlebox {
   display: flex;
   justify-content: space-between;
   padding: 7px;
   background-color: skyblue;
 }
-.areaclose {
-}
+
 .areabody {
   padding: 7px;
+}
+
+.toursearchlist {
+  margin-left: 5px;
+  display: flex;
+  flex-direction: row;
+}
+
+.tourinfodialog {
+  background-color: white;
+  border-radius: 10px;
+  border: 1px silver solid;
+  min-width: 200px;
+  min-height: 120px;
+}
+
+.tourtitlebox {
+  background-color: skyblue;
+  padding: 5px;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.tourbodybox {
+  border-radius: 10px;
+  padding: 5px;
+}
+.tourinformation {
+  font-size: 14px;
+}
+
+.gotourbutton {
+  width: 80px;
+  height: 24px;
+  text-align: center;
+
+  right: 10px;
+  font-family: monospace;
+  background-color: #3b82f6;
+  color: #fff;
+
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  transition: 0.3s;
+}
+
+.gotourbutton:hover {
+  background-color: #f3f7fe;
+  color: #3b82f6;
+  font-weight: 700;
 }
