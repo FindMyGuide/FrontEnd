@@ -5,7 +5,6 @@ import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import test from 'asset/images/test.png';
 
 function Card({ tour }) {
-  console.log(tour,'확ㅇ니');
   const navigate = useNavigate();
   const onClickHandler = (id) => {
     navigate(`/tour/tourdetail/${id}`);

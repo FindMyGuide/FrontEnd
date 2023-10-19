@@ -30,10 +30,20 @@
   object-fit: cover;
 }
 
-.Name {
+.align {
+  display: flex;
+  align-items: center;
+}
+
+.name {
   font-family: 'Happiness-Sans-Title';
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
+}
+
+.intro {
+  font-size: 15px;
+  margin: 10px 5px 5px 0;
 }
 
 .guideCertificate {
@@ -47,4 +57,5 @@
 
 .explain {
   font-size: 13px;
+  color: #727272;
 }
