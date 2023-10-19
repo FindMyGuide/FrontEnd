@@ -37,7 +37,10 @@ const Search = () => {
   };
 
   const handleKey = (e) => {
-    e.code === "Enter" && handleSearch();
+    if (e.code === "Enter") {
+      handleSearch();
+      setUsername("");
+    }
   };
 
   const handleSelect = async () => {
@@ -76,18 +79,17 @@ const Search = () => {
       <div className={styles.searchForm}>
         <input
           type="text"
-          placeholder="Find a user"
+          placeholder="닉네임을 검색하세요"
           onKeyDown={handleKey}
           onChange={(e) => setUsername(e.target.value)}
           value={username}
         />
       </div>
-      {err && <span>일치하는 유저가 없습니다.</span>}
+      {!user && <span>일치하는 닉네임이 없습니다.</span>}
+
       {user && (
         <div className={styles.userChat} onClick={handleSelect}>
-          <div className={styles.userChatInfo}>
-            <span>{user.displayName}</span>
-          </div>
+          <div className={styles.userChatInfo}>{user.displayName}</div>
         </div>
       )}
     </div>

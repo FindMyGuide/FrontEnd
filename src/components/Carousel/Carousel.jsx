@@ -36,16 +36,9 @@ function Carousel({ list }) {
         arrows
         autoplay
         autoplaySpeed={3000}
-        // prevArrow={
-        //   <button type="button" className="slick-prev">
-        //     Previous
-        //   </button>
-        // }
-        // nextArrow={
-        //   <button type="button" className="slick-next">
-        //     Next
-        //   </button>
-        // }
+        pauseOnHover
+        // nextArrow: <NextArrow />
+        // prevArrow: <PrevArrow />
       >
         {tourlist?.map((tour, index) => (
           <div key={index}>

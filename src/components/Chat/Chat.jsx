@@ -8,13 +8,15 @@ const Chat = () => {
   const { data } = useContext(ChatContext);
 
   return (
-    <div className={styles.chat}>
-      <div className={styles.chatInfo}>
-        <span>{data.user?.displayName}</span>
+    <>
+      <div className={styles.chat}>
+        <div className={styles.chatInfo}>
+          <span>{data.user?.displayName}</span>
+        </div>
+        <Messages />
+        {data.chatId !== "null" && <Input />}
       </div>
-      <Messages />
-      <Input />
-    </div>
+    </>
   );
 };
 

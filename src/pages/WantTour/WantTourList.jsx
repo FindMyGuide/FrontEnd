@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { WantAll } from 'api/want/Want';
 import styles from './WantTourList.module.css';
+import { ReactComponent as Spinner } from 'asset/icons/Spinner.svg';
+import Pagination from 'components/Pagination/Pagination';
 
 function WantTour() {
   const navigate = useNavigate();
@@ -12,13 +14,14 @@ function WantTour() {
   const [listAll, setListAll] = useState(null);
   const [myArticle, setMyArticle] = useState(false);
   const [wait, setWait] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchWantList() {
       const wantList = await WantAll();
       setList(wantList);
       setListAll(wantList);
-      console.log(wantList);
+      setLoading(false);
     }
 
     fetchWantList();
@@ -31,6 +34,7 @@ function WantTour() {
       const filteredList = listAll.filter((item) => item.memberInfoResponse.email === userEmail);
       setList(filteredList);
       setMyArticle(true);
+      // setCurrentPage(1);
     }
   };
 
@@ -38,12 +42,14 @@ function WantTour() {
     const filteredList = listAll.filter((item) => !item.isReserved);
     setList(filteredList);
     setWait(true);
+    // setCurrentPage(1);
   };
 
   const handleAllArticle = () => {
     setList(listAll);
     setWait(false);
     setMyArticle(false);
+    // setCurrentPage(1);
   };
 
   const handleRegist = () => {
@@ -57,6 +63,12 @@ function WantTour() {
   const handlePage = (id) => {
     navigate(`/wanttour/detail/${id}`);
   };
+
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const postsPerPage = 10;
+  // const indexOfLastPost = currentPage * postsPerPage;
+  // const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  // const currentPosts = list && list.slice(indexOfFirstPost, indexOfLastPost);
 
   return (
     <div className={styles.background}>
@@ -89,34 +101,55 @@ function WantTour() {
           </div>
         </div>
         <div className={styles.listContainer}>
-          <div className={styles.listTitle}>
-            <span>제목</span>
-            <span>여행 날짜</span>
-            <span>가이드 매칭 여부</span>
-          </div>
-          <hr />
-          {list ? (
-            [...list].reverse().map((post, index) => (
-              <div key={index} onClick={() => handlePage(post.id)} className={styles.post}>
-                <span>{post.title}</span>
-                {post.reservationDates.length === 1 ? (
-                  <span>{post.reservationDates[0]}</span>
-                ) : (
-                  <span>
-                    {post.reservationDates[0]}(+{post.reservationDates.length - 1})
-                  </span>
-                )}
-                {post.isReserved ? <span>매칭완료</span> : <span>매칭대기</span>}
-              </div>
-            ))
+          {loading ? (
+            <Spinner />
           ) : (
-            <div className={styles.noContent}>
-              <div className="pb-2">아직 등록된 글이 없습니다</div>
-              <button className={styles.button} onClick={handleRegist}>
-                글 작성하기
-              </button>
-            </div>
+            <>
+              <div className={styles.listTitle}>
+                <span>제목</span>
+                <span>여행 날짜</span>
+                <span>가이드 매칭 여부</span>
+              </div>
+              <hr />
+              {list ? (
+                [...list].reverse().map((post, index) => (
+                  <div key={index} className={styles.post}>
+                    <span className={styles.postTitle} onClick={() => handlePage(post.id)}>
+                      {post.title}
+                    </span>
+                    {post.reservationDates.length === 1 ? (
+                      <span>{post.reservationDates[0]}</span>
+                    ) : (
+                      <span>
+                        {post.reservationDates[0]}(+{post.reservationDates.length - 1})
+                      </span>
+                    )}
+                    {post.isReserved ? (
+                      <span>
+                        <div className={styles.status} style={{ backgroundColor: '#C5C5C5' }}>
+                          매칭완료
+                        </div>
+                      </span>
+                    ) : (
+                      <span>
+                        <div className={styles.status} style={{ backgroundColor: '#93D8FF' }}>
+                          매칭대기
+                        </div>
+                      </span>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <div className={styles.noContent}>
+                  <div className="pb-2">아직 등록된 글이 없습니다</div>
+                  <button className={styles.button} onClick={handleRegist}>
+                    글 작성하기
+                  </button>
+                </div>
+              )}
+            </>
           )}
+          {/* <Pagination postsPerPage={postsPerPage} totalPosts={list.length} paginate={setCurrentPage} /> */}
         </div>
       </div>
     </div>

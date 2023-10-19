@@ -77,6 +77,7 @@ function RouteLink() {
         <Route path="/recommend/location" element={<LocationList />} />
         <Route path="/recommend/location/:id" element={<LocationDetail />} />
         <Route path="/tour/tourlist" element={<TourList />} />
+        <Route path="/wanttour/detail/:id" element={<WantTourDetail />} />
 
         <Route path="/tour/tourdetail/:id" element={<TourDetailPage />} />
         {/* <Route path="/resetpassword" element={<ResetPassword />} /> */}
@@ -90,7 +91,6 @@ function RouteLink() {
           <Route path="/mypage/:id" element={<Mypage />} />
           <Route path="/tour/tourregist" element={<TourRegist />} />
           <Route path="/wanttour/regist" element={<WantTourRegist />} />
-          <Route path="/wanttour/detail/:id" element={<WantTourDetail />} />
           <Route path="/wanttour/update/:id" element={<WantTourUpdate />} />
         </Route>
       </Routes>

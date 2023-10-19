@@ -27,7 +27,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
 
@@ -128,6 +128,10 @@ function Signup() {
       );
       const displayName = watch("nickname");
       const email = watch("email");
+
+      await updateProfile(res.user, {
+        displayName,
+      });
       await setDoc(doc(db, "users", res.user.uid), {
         uid: res.user.uid,
         displayName,
@@ -151,11 +155,6 @@ function Signup() {
         <form onSubmit={handleSubmit(signupHandler)} className={styles.formBox}>
           <div className={styles.imgBox}>
             <img src={SignupImage} alt="" className={styles.signupImage} />
-            {/* <h1 className={styles.welcome}>
-              Welcome to
-              <br />
-              Find My Guide!
-            </h1> */}
           </div>
           {mode === 1 && (
             <>
