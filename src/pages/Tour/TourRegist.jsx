@@ -8,7 +8,7 @@ import Language from 'components/Language/Language';
 import Location from 'components/Location/Location';
 
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
-import { Calendar } from 'react-modern-calendar-datepicker';
+import Calendar from 'components/Calendar/Calendar';
 import { utils } from 'react-modern-calendar-datepicker';
 
 import WallpaperIcon from '@mui/icons-material/Wallpaper';
@@ -17,6 +17,7 @@ import WantThemes from 'components/Theme/WantThemes';
 
 import TourRegistLocation from 'components/Location/TourRegistLocation';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import { style } from '@mui/system';
 
 function TourRegist() {
   const navigate = useNavigate();
@@ -43,45 +44,42 @@ function TourRegist() {
 
   var formData = new FormData();
 
+  // 날짜 포맷팅
+  const formatDate = (availableDates) => {
+    const year = availableDates.getFullYear();
+    const month = String(availableDates.getMonth() + 1).padStart(2, '0');
+    const day = String(availableDates.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    const formattedDates = availableDates.map((selectedDate) => {
+      const formattedDate = formatDate(selectedDate);
+      return formattedDate;
+    });
+    formattedDates.sort((a, b) => new Date(a) - new Date(b));
+    console.log(formattedDates);
+
     console.log('images check', images);
     const locationArray = [];
     locations.map((location, index) => locationArray.push(...location));
     console.log(locationArray);
 
+    console.log('가능날짜', availableDates);
     // locations: locationArray
     const data = {
-      title: '확인',
-      content: '확인내용',
-      price: 100,
-      languages: ['한국어', '중국어'],
-      howManyDay: ['2', '3'],
-      location: [
-        {
-          date: '1',
-          title: '우리집',
-          coordinates: [12.2131, 14.3213]
-        },
-        {
-          date: '2',
-          title: '우리집2',
-          coordinates: [12.5, 12.123]
-        }
-      ],
-      themeIds: [4],
-      availableDates: ['2023-10-15']
+      title: title,
+      content: content,
+      price: price,
+      languages: languages,
+      howManyDay: howmanydays,
+      location: locationArray,
+      themeIds: themeIds,
+      availableDates: formattedDates
     };
-    // formData.append('tourProductRequest', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-    // images.forEach((image, index) => {
-    //   formData.append('files', image);
-    //   // console.log(image);
-    // });
-    // formData.append('tourProductRequest', data);
-    // formData.append('files', images);
-    // MytourResister(formData);
-    // console.log(themeIds);
-    // navigate('/tour/tourlist');
+
     formData.append(
       'tourProductRequest',
       new Blob([JSON.stringify(data)], {
@@ -93,8 +91,10 @@ function TourRegist() {
       formData.append('files', image);
     });
     console.log(typeof formData.get('files'));
+    console.log('진짜', data);
     console.log('formdata', formData);
     MytourResister(formData);
+    navigate('/tour/tourlist');
   };
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -108,7 +108,8 @@ function TourRegist() {
     setContent(event.target.value);
   };
   const onPriceHandler = (event) => {
-    setPrice(event.target.value);
+    setPrice(parseInt(event.target.value));
+    console.log(typeof parseInt(event.target.value));
   };
   const onLanguageHandler = (event) => {
     setLanguage(event.target.value);
@@ -143,9 +144,13 @@ function TourRegist() {
       newLocations.push([]);
       newLocationValue.push('');
     }
-
+    let newHowmanydays = [];
     // 새로운 howmanydays 배열 생성
-    const newHowmanydays = [toString(numberOfDays - 1), inputText];
+    if (inputText === '1') {
+      newHowmanydays = ['0', '1'];
+    } else {
+      newHowmanydays = [toString(numberOfDays - 1), inputText];
+    }
     setHowmanyday(inputText);
     setHowmanydays(newHowmanydays);
     setLocations(newLocations);
@@ -322,20 +327,23 @@ function TourRegist() {
                 onKeyPress={handleKeyPress}
               />
             </div>
+
             <div className={styles.content}>
-              <div className={styles.subtitle}>투어가격(원)</div>
-              <div>
+              <div className={styles.subtitle} style={{ width: '18%' }}>
+                투어가격
+              </div>
+              <div className={styles.parentContainer}>
                 <input
                   type="text"
-                  placeholder="투어가격을 입력하세요"
                   value={price}
+                  className={styles.price}
                   onChange={onPriceHandler}
-                  maxLength="20"
-                  className={styles.input}
-                  onKeyPress={handleKeyPress}
+                  style={{ width: '117px' }}
                 />
+                <span style={{ fontSize: '17px', marginLeft: '6px' }}>원</span>
               </div>
             </div>
+
             <div className={styles.content}>
               <div className={styles.subtitle}>가능언어</div>
               <div className={styles.language}>
@@ -386,7 +394,7 @@ function TourRegist() {
               </div>
               <div>ex) 0박 1일(하루) - &gt;1일 / 1박 2일 -&gt; 2일</div>
             </div>
-            {locations.length && (
+            {locations.length > 0 && (
               <TourRegistLocation
                 onLocationSelect={handleLocationSelect}
                 searchWord={searchWord[0]}
@@ -400,22 +408,13 @@ function TourRegist() {
                 {locationValue.length > 0 &&
                   locationValue?.map((_, index) => (
                     <div>
-                      {locations[index]?.map((locationInfo, row) => (
-                        <Location
-                          key={index}
-                          col={index}
-                          row={row}
-                          location={locationInfo.title}
-                          removeLocation={removeLocation}
-                        />
-                      ))}
                       <div key={index} className={styles.location}>
                         <input
                           type="text"
                           placeholder={`장소 입력 - ${index + 1}일차 `}
                           value={locationValue[index]}
                           onChange={(event) => onChangeLocation(event, index)}
-                          style={{ width: '88%' }}
+                          style={{ width: '80%' }}
                           className={styles.input}
                           onKeyDown={(event) => {
                             if (event.key === 'Enter') {
@@ -428,11 +427,22 @@ function TourRegist() {
                           onClick={() => {
                             onSearchLocation(index);
                           }}
+                          className={styles.add}
                         >
                           위치 추가하기
                         </button>
                         <ul></ul>{' '}
                       </div>
+
+                      {locations[index]?.map((locationInfo, row) => (
+                        <Location
+                          key={index}
+                          col={index}
+                          row={row}
+                          location={locationInfo.title}
+                          removeLocation={removeLocation}
+                        />
+                      ))}
                     </div>
                   ))}
               </div>
@@ -442,23 +452,6 @@ function TourRegist() {
                 <div className={styles.subtitle} style={{ color: '#ffffff' }}>
                   투어일정
                 </div>
-
-                {/* {locations.length > 0 &&
-                  locations?.map((location, index) => (
-                    <div key={index}>
-                      <span>
-                        {index + 1}일차
-                      </span>
-                      {location?.map((locationInfo, index) => (
-                        <Location
-                          key={index}
-                          index={index}
-                          location={locationInfo.title}
-                          removeLocation={removeLocation}
-                        />
-                      ))}
-                    </div>
-                  ))} */}
               </div>
             )}
 
@@ -469,15 +462,7 @@ function TourRegist() {
             <div className={styles.content}>
               <div className={styles.subtitle}>가이드 가능 날짜</div>
               {/* 달력  */}
-              {/* <Calendar
-                value={availableDates}
-                onChange={setAvailableDates}
-                locale={myCustomLocale} // custom locale object
-                minimumDate={minimumDate}
-                maximumDate={maximumDate}
-                shouldHighlightWeekends
-                formatMonthYear={(locale, date) => `${date.year}.${String(date.month).padStart(2, '0')}`}
-              /> */}
+              <Calendar date={availableDates} setDate={setAvailableDates} />
             </div>
             <div className={styles.content}>
               <div className={styles.subtitle}>투어 대표 이미지</div>

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { baseAxios } from '../Axios';
 
 //등록한 투어 조회
@@ -44,7 +43,7 @@ export async function MytourResister(formData) {
     console.log(key, value);
   }
   try {
-    const res = await axios.post(`http://localhost:9000/api/tourProduct/register`, formData, {
+    const res = await baseAxios.post(`tourProduct/register`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         charset: 'utf-8',
