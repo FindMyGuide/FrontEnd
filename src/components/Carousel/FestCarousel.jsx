@@ -1,7 +1,7 @@
 import React from 'react';
 import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import './slick.css';
+import './slick-theme.css';
 import fest1 from 'asset/festival/fest1.png';
 import fest2 from 'asset/festival/fest2.png';
 import fest3 from 'asset/festival/fest3.png';
