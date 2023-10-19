@@ -22,7 +22,7 @@ const GuideDetailPage = () => {
   const [pageNum, setPageNum] = useState(2);
 
   const [showingReview, setShowingReview] = useState([]);
-  const [reviewNum, setReviewNum] = useState(1);
+  const [reviewNum, setReviewNum] = useState(2);
 
   useEffect(() => {
     GuideDetail(id)
@@ -40,26 +40,26 @@ const GuideDetailPage = () => {
       .then((getGuideReview) => {
         const GuideReview = getGuideReview;
         setGuideReview(GuideReview);
-        setShowingReview(GuideReview?.slice(0, 2));
-        console.log(guideReview);
+        setShowingReview(GuideReview?.slice(0, 4));
+        console.log(GuideReview);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
+
   const handlePushReview = () => {
     const newPageNum = reviewNum + 1;
     const startIndex = (newPageNum - 1) * 2;
     const endIndex = startIndex + 2;
 
     if (guideReview?.length + 2 > endIndex) {
-      console.log(guideReview?.length);
-      console.log(endIndex);
       const newTourProducts = guideReview.slice(0, endIndex);
       setShowingReview(newTourProducts);
       setReviewNum(newPageNum);
-    } else {
-      setMoreReviewButton(false);
+      if (guideReview?.length <= endIndex) {
+        setMoreReviewButton(false);
+      }
     }
   };
 
@@ -77,7 +77,7 @@ const GuideDetailPage = () => {
       }
     }
   };
-  console.log(showingList.length);
+
   return (
     <>
       <div className={styles.webGuideDetail}>
@@ -108,12 +108,25 @@ const GuideDetailPage = () => {
         <div className={styles.tourofguide}>
           <div>
             <h5 style={{ marginBottom: '20px' }}>
-              <b>현재 진행중인 투어</b>
+              <b>
+                현재 진행중인 투어{' '}
+                {guideDetail?.tourProductResponses?.length !== 0 ? (
+                  <span style={{ fontSize: '12px' }}>({guideDetail?.tourProductResponses?.length})</span>
+                ) : null}
+              </b>
             </h5>
             <div className={styles.touring}>
               {showingList?.map((tourlist, idx) => (
                 <div style={{ marginLeft: 'auto', marginRight: 'auto' }} key={idx}>
-                  <Card tour={{ title: `${tourlist.title}`, price: `20000`, bestImage: `` }}></Card>
+                  <Card
+                    tour={{
+                      id: `${tourlist.id}`,
+                      title: `${tourlist.title}`,
+                      price: `${tourlist.price}`,
+                      bestImage: `${tourlist.bestImage}`,
+                      like: `${tourlist.likeExist}`
+                    }}
+                  ></Card>
                 </div>
               ))}
             </div>
@@ -133,20 +146,32 @@ const GuideDetailPage = () => {
               ) : null}
             </div>
           </div>
-          <div>
+          <div style={{ paddingBottom: '40px' }}>
             <h5 style={{ marginBottom: '20px' }}>
-              <b>가이드 투어 후기</b>
+              <b>
+                가이드 투어 후기{' '}
+                {guideReview?.length !== 0 ? <span style={{ fontSize: '12px' }}>({guideReview?.length})</span> : null}
+              </b>
             </h5>
-            <div className={styles.reviewbox} style={{ display: 'flex', flexWrap: 'wrap' }}>
-              {showingReview?.map((review, index) => (
-                <div key={index} style={{ flex: '0 0 50%' }}>
-                  <ReviewCard review={review} />
+
+            <div className={styles.reviewbox} style={{ display: 'flex', flexWrap: 'wrap', textAlign: 'center' }}>
+              {guideReview?.length !== 0 ? (
+                <>
+                  {showingReview?.map((review, index) => (
+                    <div key={index} style={{ flex: '0 0 50%' }}>
+                      <ReviewCard review={review} />
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <div style={{ textAlign: 'center' }}>
+                  <p>가이드 리뷰가 없습니다.</p>
                 </div>
-              ))}
+              )}
             </div>
 
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-              {moreReviewButton ? (
+              {moreReviewButton && guideReview?.length > 4 ? (
                 <button
                   className={styles.gamebutton}
                   onClick={() => {
