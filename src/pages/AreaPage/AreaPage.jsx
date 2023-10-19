@@ -1,30 +1,62 @@
 import styles from '../AreaPage/AreaPage.module.css';
-import TourAll from 'api/tour/Tour';
-
-import { Map, MapMarker, MapTypeControl, ZoomControl } from 'react-kakao-maps-sdk';
+import { CustomOverlayMap, Map, MapMarker, MapTypeControl, ZoomControl } from 'react-kakao-maps-sdk';
 import { useEffect, useState } from 'react';
-
 import { InputAdornment, OutlinedInput } from '@mui/material';
 import { SearchOutlined } from '@mui/icons-material';
+import { SearchArea } from 'api/searcharea/SearchArea';
+import AreaSearchList from './AreaSearchList';
 
 const AreaPage = () => {
-  const [position, setPosition] = useState();
+  const [position, setPosition] = useState([35.121059, 129.043993]);
+  // 지도의 중심좌표
+
   const [tourList, setTourList] = useState([]);
-  const [info, setInfo] = useState('');
+  const [info, setInfo] = useState([]);
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
-  useEffect(() => {
-    TourAll()
-      .then((getTour) => {
-        const getTourList = getTour;
-        console.log(getTourList);
-        setTourList(getTourList);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+  const [keyword, setKeyword] = useState('');
 
+  const [isOpen, setIsOpen] = useState(false);
+  const alphabetlist = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+
+  const CustomContainer = ({ position, content }) => {
+    const lat = position.lat;
+    const lng = position.lng;
+    const information = content;
+    return (
+      <>
+        <MapMarker
+          position={position} // 마커를 표시할 위치
+          // @ts-ignore
+          onClick={() => {
+            setIsOpen(true);
+          }}
+        ></MapMarker>
+
+        {isOpen && (
+          <CustomOverlayMap information={information} position={{ lat: lat, lng: lng }} yAnchor={1.3}>
+            <div className={styles.areawrap}>
+              <div className={styles.areainfo}>
+                <div className={styles.areatitlebox}>
+                  <b>{information.title}</b>
+                  <div className={styles.areaclose} onClick={() => setIsOpen(false)} title="닫기">
+                    닫기
+                  </div>
+                </div>
+                <div className={styles.areabody}>
+                  {information.content}
+                  <div className="desc">
+                    <div className="ellipsis">제주특별자치도 제주시 첨단로 242</div>
+                    <div className="jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CustomOverlayMap>
+        )}
+      </>
+    );
+  };
   return (
     <>
       <div className={styles.areapage}>
@@ -35,42 +67,101 @@ const AreaPage = () => {
             id="outlined-with-icon-adornment"
             size="small"
             endAdornment={
-              <InputAdornment position="center">
-                <SearchOutlined />
+              <InputAdornment sx={{ margin: '0' }} position="end">
+                <SearchOutlined
+                  sx={{ margin: '0' }}
+                  onClick={(e) => {
+                    if (keyword === '') {
+                      alert('검색어를 입력해주세요');
+                    } else {
+                      SearchArea(e.target.value)
+                        .then((getSearch) => {
+                          if (getSearch?.tourProductResponses?.length !== 0) {
+                            console.log(getSearch);
+                            console.log('성공');
+                            setInfo([]);
+                            const searchResultList = getSearch;
+                            setInfo(searchResultList);
+                            setPosition([
+                              searchResultList.tourProductResponses[0]?.locations[0]?.mapX,
+                              searchResultList.tourProductResponses[0]?.locations[0]?.mapY
+                            ]);
+                          } else {
+                            console.log('실패');
+                            setInfo([]);
+                            setPosition([35.121059, 129.043993]);
+                          }
+                        })
+                        .catch((error) => {
+                          console.error(error);
+                        });
+                    }
+                  }}
+                />
               </InputAdornment>
             }
             className={styles.searcharea}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                if (e.target.value === '') {
+                  alert('검색어를 입력해주세요');
+                } else {
+                  SearchArea(e.target.value)
+                    .then((getSearch) => {
+                      if (getSearch?.tourProductResponses?.length !== 0) {
+                        console.log(getSearch);
+                        console.log('성공');
+                        setInfo([]);
+                        const searchResultList = getSearch;
+                        setInfo(searchResultList);
+                        setPosition([
+                          searchResultList.tourProductResponses[0]?.locations[0]?.mapX,
+                          searchResultList.tourProductResponses[0]?.locations[0]?.mapY
+                        ]);
+                      } else {
+                        console.log('실패');
+                        setInfo([]);
+                        setPosition([35.121059, 129.043993]);
+                      }
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                    });
+                }
+              }
+            }}
             onChange={(e) => {
-              setInfo(e.target.value);
-              console.log(info);
+              setKeyword(e.target.value);
             }}
           />
+          <div className={styles.tourlisttext}>
+            <span>투어 리스트 </span>
+            {info.length !== 0 ? (
+              <span style={{ fontSize: '12px' }}>{info?.tourProductResponses?.length}건</span>
+            ) : null}
+          </div>
+          {info?.tourProductResponses?.slice(0, 10).map((tourList, idx) => (
+            <AreaSearchList key={tourList.id} tourList={tourList} alpha={alphabetlist[idx]}></AreaSearchList>
+          ))}
         </div>
 
         <Map // 지도를 표시할 Container
           id="map"
           center={{
             // 지도의 중심좌표
-            lat: 35.121059,
-            lng: 129.043993
+            lat: position[0],
+            lng: position[1]
           }}
           className={styles.map}
           level={7} // 지도의 확대 레벨
         >
           <MapTypeControl position={'TOPRIGHT'} />
           <ZoomControl position={'RIGHT'} />
-          {tourList?.map((tourlocation) => (
-            <MapMarker
+          {info?.tourProductResponses?.map((tourlocation) => (
+            <CustomContainer
               key={tourlocation.id}
               position={{ lat: tourlocation.locations[0]?.mapX, lng: tourlocation.locations[0]?.mapY }} // 마커를 표시할 위치
-              image={{
-                src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png', // 마커이미지의 주소입니다
-                size: {
-                  width: 24,
-                  height: 35
-                } // 마커이미지의 크기입니다
-              }}
-              title={tourlocation.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+              content={tourlocation}
             />
           ))}
         </Map>
