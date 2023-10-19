@@ -6,24 +6,22 @@
 
 .container {
   border: 1px solid #c9c9c9;
-  padding: 10px;
+  padding: 15px;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
+  transition: box-shadow 0.15s ease-out, transform 0.15s ease-out;
+}
+
+.container:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  /* transform: translateY(-0.5px); */
 }
 
 .guideTop {
   display: flex;
   justify-content: space-between;
 }
-
-/* 
-.guideCardWrapper {
-  display: inline-block;
-  margin-right: 10px;
-  margin-bottom: 10px;
-  width: 100%;
-} */
 
 .profileImg {
   width: 80px;
@@ -33,6 +31,7 @@
 }
 
 .Name {
+  font-family: 'Happiness-Sans-Title';
   font-size: 18px;
   font-weight: 600;
 }
@@ -44,4 +43,8 @@
   color: #ffffff;
   font-size: 0.8rem;
   background-color: #93d8ff;
+}
+
+.explain {
+  font-size: 13px;
 }
