@@ -9,11 +9,8 @@ import WantThemes from 'components/Theme/WantThemes';
 import Vehicle from 'components/Vehicle/Vehicle';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
-import 'react-modern-calendar-datepicker/lib/DatePicker.css';
-import CustomLocale from 'components/Calendar/CustomLocale';
 import { ReactComponent as Prev } from 'asset/icons/prev.svg';
-// import { Calendar } from 'react-modern-calendar-datepicker';
-import { utils } from 'react-modern-calendar-datepicker';
+import Calendar from 'components/Calendar/Calendar';
 
 function WantTourRegist() {
   const navigate = useNavigate();
@@ -28,30 +25,39 @@ function WantTourRegist() {
   const [location, setLocaiton] = useState('');
   const [locations, setLocations] = useState([]);
 
+  // 날짜 포맷팅
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     const formattedDates = date.map((selectedDate) => {
-      const formattedDate = `${selectedDate.year}-${String(selectedDate.month).padStart(2, '0')}-${String(
-        selectedDate.day
-      ).padStart(2, '0')}`;
+      const formattedDate = formatDate(selectedDate);
       return formattedDate;
     });
+    formattedDates.sort((a, b) => new Date(a) - new Date(b));
+    
+    const res = await CreateArticle({
+      title,
+      content,
+      wantDates: formattedDates,
+      totalPeople,
+      vehicle,
+      price,
+      themeIds: themes,
+      location: locations.map((location) => ({ title: location }))
+    });
 
-    try {
-      await CreateArticle({
-        title,
-        content,
-        wantDates: formattedDates,
-        totalPeople,
-        vehicle,
-        price,
-        themeIds: themes,
-        location: locations.map((location) => ({ title: location }))
-      });
-      // navigate('/wanttour');
-    } catch (error) {
+    if (res) {
+      navigate('/wanttour');
+    } else {
       alert('다시 작성해주세요');
-      console.error(error);
     }
   };
 
@@ -108,10 +114,6 @@ function WantTourRegist() {
     setLocations(locations.filter((selectedLocation) => selectedLocation !== location));
   };
 
-  // 캘린더
-  const minimumDate = utils().getToday();
-  const myCustomLocale = CustomLocale;
-
   return (
     <div style={{ backgroundColor: '#F9FAFB' }}>
       <div className="container" style={{ padding: '70px 0' }}>
@@ -124,7 +126,7 @@ function WantTourRegist() {
               원하는 투어를 <span className="color">직접</span> 등록해보세요
             </div>
           </div>
-          {/* <div className={styles.explain}>
+          <div className={styles.explain}>
             <div>본인이 원하는 투어를 찾지 못하였다면 원하는 투어의 내용을 작성하여 등록해보세요</div>
             <div>등록한 후, 가이드를 연락을 기다리시면 됩니다 !</div>
           </div>
@@ -176,13 +178,8 @@ function WantTourRegist() {
             </div>
             <div className={styles.content}>
               <div className={styles.subtitle}>투어 날짜</div>
-              <Calendar
-                value={date}
-                onChange={setDate}
-                locale={myCustomLocale}
-                minimumDate={minimumDate}
-                shouldHighlightWeekends
-              />
+              <Calendar date={date} setDate={setDate} />
+              {/* <div className={styles.explain}>현재 날짜 기준으로 3달 후까지만 날짜 선택이 가능합니다</div> */}
             </div>
             <div className={styles.content}>
               <div className={styles.subtitle}>투어 인원</div>
@@ -225,7 +222,7 @@ function WantTourRegist() {
                 글 작성하기
               </button>
             </div>
-          </form> */}
+          </form>
         </div>
       </div>
     </div>

@@ -1,9 +1,47 @@
-.container {
-  border: 1px solid #c9c9c9;
+.guideCardContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
 }
 
+.container {
+  border: 1px solid #c9c9c9;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.guideTop {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 
 .guideCardWrapper {
   display: inline-block;
   margin-right: 10px;
   margin-bottom: 10px;
+  width: 100%;
+} */
+
+.profileImg {
+  width: 80px;
+  height: 80px;
+  border-radius: 9999px;
+  object-fit: cover;
+}
+
+.Name {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.guideCertificate {
+  padding: 2px 5px;
+  border: none;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 0.8rem;
+  background-color: #93d8ff;
 }

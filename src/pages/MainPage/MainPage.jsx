@@ -4,6 +4,7 @@ import { GuidePopular } from 'api/guide/Guide';
 import { ReviewRecent } from 'api/review/review';
 import Carousel from 'components/Carousel/Carousel';
 import VerticalCarousel from 'components/Carousel/VerticalCarousel';
+import FestCarousel from 'components/Carousel/FestCarousel';
 import SearchBar from 'components/SearchBar/SearchBar';
 import GuideCards from 'components/Card/GuideCards';
 import styles from './MainPage.module.css';
@@ -20,10 +21,15 @@ function MainPage() {
       const guidePopular = await GuidePopular();
       const reviewRecent = await ReviewRecent();
       setTourList(tourPopular);
+      setReviewList(reviewRecent);
+      // setGuideList(guidePopular);
       if (guidePopular && guidePopular.length >= 6) {
         setGuideList(guidePopular.slice(0, 6));
+      } else {
+        setGuideList(guidePopular);
       }
-      setReviewList(reviewRecent);
+      // console.log(guidePopular, '가이드');
+      // console.log(guideList, 'set확인');
     }
 
     fetchTourList();
@@ -46,11 +52,12 @@ function MainPage() {
             {guideList && <GuideCards list={guideList} />}
           </div>
           <div className={styles.content}>
-            <div className={styles.subtitle}>여러가지 축제가 진행중입니다</div>
-          </div>
-          <div className={styles.content}>
             <div className={styles.subtitle}>실제 이용자들의 후기를 둘러보세요</div>
             {reviewList && <VerticalCarousel list={reviewList} />}
+          </div>
+          <div className={styles.content}>
+            <div className={styles.subtitle}>여러가지 축제가 진행중입니다</div>
+            <FestCarousel />
           </div>
         </Fade>
       </div>
