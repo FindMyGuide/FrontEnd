@@ -40,8 +40,10 @@ function MainPage() {
             <span className={styles.title}>당신이 가고싶은 여행을 검색하세요</span>
             <SearchBar />
           </header>
-          {tourList !== null && guideList !== null && reviewList !== null ? (
-            <>
+        </Fade>
+        {tourList !== null && guideList !== null && reviewList !== null ? (
+          <>
+            <Fade cascade damping={0.1}>
               <div className={styles.content}>
                 <div className={styles.subtitle}>인기 투어를 구경해보세요</div>
                 <Carousel list={tourList} />
@@ -58,13 +60,13 @@ function MainPage() {
                 <div className={styles.subtitle}>여러가지 축제가 진행중입니다</div>
                 <FestCarousel />
               </div>
-            </>
-          ) : (
-            <div className={styles.flex}>
-              <Spinner />
-            </div>
-          )}
-        </Fade>
+            </Fade>
+          </>
+        ) : (
+          <div className={styles.flex}>
+            <Spinner />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { IconButton } from "@material-tailwind/react";
-import styles from "./GuideButton.module.css";
-import Popover from "@mui/material/Popover";
-import Home from "pages/ChatPage/Home";
+import React, { useEffect, useState } from 'react';
+import { IconButton } from '@material-tailwind/react';
+import styles from './GuideButton.module.css';
+import Popover from '@mui/material/Popover';
+import Home from 'pages/ChatPage/Home';
 
 function GuideButton() {
   const [anchorEl, setAnchorEl] = useState();
@@ -16,15 +16,23 @@ function GuideButton() {
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const id = open ? 'simple-popover' : undefined;
 
   return (
     <>
       <div className={styles.topButton}>
         <IconButton
           style={{
-            backgroundColor: "#ffffff",
-            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.3)",
+            backgroundColor: '#50abf2',
+            borderRadius: '5px',
+            padding: '10px 20px'
+            // boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.3)'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = '#1783d8';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = '#50abf2';
           }}
           size="lg"
           className={styles.icon}
@@ -33,7 +41,7 @@ function GuideButton() {
         >
           <div
             className={styles.content}
-            style={{ color: "black", fontWeight: "semi-bold" }}
+            // style={{ color: "black", fontWeight: "semi-bold" }}
           >
             📩 작성자와 채팅하기
           </div>
@@ -44,8 +52,8 @@ function GuideButton() {
           anchorEl={anchorEl}
           onClose={handleClose}
           anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
+            vertical: 'top',
+            horizontal: 'right'
           }}
         >
           <Home />
