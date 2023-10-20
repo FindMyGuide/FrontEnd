@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./Card.module.css";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import test from "asset/images/test.png";
+import { useNavigate } from "react-router-dom";
 
 function Card({ tour }) {
   const navigate = useNavigate();
