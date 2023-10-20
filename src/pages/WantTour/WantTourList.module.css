@@ -48,11 +48,11 @@
   padding: 0 15px 5px 15px;
   display: flex;
   justify-content: space-between;
-  color: #ffffff;
+  color: #595959;
 }
 
 .listBtn:hover {
-  color: #6c6c6c;
+  color: #000000;
 }
 
 .category {
@@ -175,7 +175,7 @@
 
 .pagination {
   position: absolute;
-  bottom: 10px; /* 원하는 위치로 조정합니다. */
+  bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
 }

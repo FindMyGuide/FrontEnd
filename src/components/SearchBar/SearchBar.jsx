@@ -28,7 +28,7 @@ function SearchBar({ searchBar }) {
             type="text"
             onChange={handleInput}
             className={styles.input}
-            placeholder="가고 싶은 투어 상품의 제목 또는 장소를 검색해주세요"
+            placeholder="가고 싶은 투어 상품의 제목을 검색해주세요"
           />
           {input ? <X onClick={() => setInput('')} className={styles.search} /> : null}
         </div>

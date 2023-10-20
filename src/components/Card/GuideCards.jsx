@@ -4,9 +4,10 @@ import styles from './GuideCard.module.css';
 
 function GuideCards({ list }) {
   console.log(list);
+
   return (
     <div className={styles.guideCardContainer}>
-      {list?.map((guide, index) => (
+      {list.slice(0, list.length === 6 ? 6 : 3).map((guide, index) => (
         <div key={index} className={styles.guideCardWrapper}>
           <GuideCard guide={guide} />
         </div>
