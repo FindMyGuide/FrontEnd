@@ -80,8 +80,28 @@ export async function TourCancel(props) {
 export async function TourLike(id) {
   try {
     const res = await baseAxios.post(
-      `tourProduct/like?tourProductId=${id}`,
-      {},
+      'tourProduct/like',
+      { tourProductId: id },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: sessionStorage.getItem('accessToken')
+        }
+      }
+    );
+    console.log(res.data);
+    return res.data;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// 투어 좋아요 취소
+export async function TourLikeCancel(id) {
+  try {
+    const res = await baseAxios.delete(
+      'tourProduct/delete-like',
+      { tourProductId: id },
       {
         headers: {
           'Content-Type': 'application/json',

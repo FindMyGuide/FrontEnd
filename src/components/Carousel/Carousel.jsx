@@ -5,7 +5,6 @@ import './slick.css';
 import Card from 'components/Card/Card';
 
 function Carousel({ list }) {
-  console.log(list, '리스트 확인');
   return (
     <div style={{ width: '1000px' }}>
       <Slider

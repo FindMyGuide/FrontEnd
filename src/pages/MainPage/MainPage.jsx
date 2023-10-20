@@ -38,20 +38,24 @@ function MainPage() {
         <Fade cascade damping={0.1}>
           <header className={styles.header}>
             <span className={styles.title}>당신이 가고싶은 여행을 검색하세요</span>
-            <SearchBar />
+            <SearchBar searchBar={setSearchKeyword} />
           </header>
         </Fade>
         {tourList !== null && guideList !== null && reviewList !== null ? (
           <>
             <Fade cascade damping={0.1}>
-              <div className={styles.content}>
-                <div className={styles.subtitle}>인기 투어를 구경해보세요</div>
-                <Carousel list={tourList} />
-              </div>
-              <div className={styles.content}>
-                <div className={styles.subtitle}>인기 가이드를 구경해보세요</div>
-                <GuideCards list={guideList} />
-              </div>
+              {tourList.length !== 0 ? (
+                <div className={styles.content}>
+                  <div className={styles.subtitle}>인기 투어를 구경해보세요</div>
+                  <Carousel list={tourList} />
+                </div>
+              ) : null}
+              {guideList.length !== 0 ? (
+                <div className={styles.content}>
+                  <div className={styles.subtitle}>인기 가이드를 구경해보세요</div>
+                  <GuideCards list={guideList} />
+                </div>
+              ) : null}
               {reviewList.length !== 0 ? (
                 <div className={styles.content}>
                   <div className={styles.subtitle}>실제 이용자들의 후기를 둘러보세요</div>
