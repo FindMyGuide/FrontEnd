@@ -10,11 +10,11 @@ function LocationList() {
   const navigate = useNavigate();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showMoreCount, setShowMoreCount] = useState(10);
 
   useEffect(() => {
     async function fetchRecommendList() {
       const travelList = await TravelSearch();
-      console.log(travelList);
       setList(travelList);
       setLoading(false);
     }
@@ -25,6 +25,12 @@ function LocationList() {
   const onDetailHandler = (id) => {
     navigate(`/recommend/location/${id}`);
   };
+
+  const showMoreItems = () => {
+    setShowMoreCount((prevCount) => prevCount + 10);
+  };
+
+  const showCloseButton = list.length <= showMoreCount;
 
   return (
     <div className={styles.background}>
@@ -45,11 +51,23 @@ function LocationList() {
               &nbsp;한국관광공사가 제공하는 관광지 중 {list.length}개를 랜덤으로 골라 보여드립니다
             </div>
             <div className={styles.cardContainer2}>
-              {list?.map((location, index) => (
-                <div key={index} onClick={() => onDetailHandler(location.id)} className={styles.cardItem}>
+              {list.slice(0, showMoreCount).map((location) => (
+                <div key={location.id} onClick={() => onDetailHandler(location.id)} className={styles.cardItem}>
                   <LocationCard location={location} />
                 </div>
               ))}
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              {list.length > showMoreCount && (
+                <div className={styles.moreBtn} onClick={showMoreItems}>
+                  더보기
+                </div>
+              )}
+              {showCloseButton && (
+                <div className={styles.moreBtn} onClick={() => setShowMoreCount(10)}>
+                  닫기
+                </div>
+              )}
             </div>
           </>
         )}

@@ -3,31 +3,41 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Card.module.css';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import LanguageIcon from '@mui/icons-material/Language';
-import test from 'asset/images/test.png';
+import NoImage from 'asset/images/NoImage2.png';
 import { TourLike } from 'api/tour/Tour';
-
 
 function Card({ tour }) {
   const navigate = useNavigate();
+  const isLoggedIn = sessionStorage.getItem('accessToken');
+
   const onClickHandler = (id) => {
     navigate(`/tour/tourdetail/${id}`);
   };
   const onLikeHandler = (tourId) => {
-    TourLike(tourId);
+    if (isLoggedIn) {
+      TourLike(tourId);
+    } else {
+      if (window.confirm('로그인이 필요한 기능입니다. 로그인 하시겠습니까?')) {
+        navigate('/login');
+      }
+    }
   };
 
   return (
-    <div className={styles.card}>
-      <div style={{ padding: "10px" }}>
+    <div className={styles.card} onClick={() => onClickHandler(tour.id)}>
+      <div style={{ padding: '10px' }}>
         <div className={styles.content}>
           <div>
-            {/* <img src={tour.bestImage} alt="img" className={styles.mainImg} /> */}
-            <img src={test} alt="img" className={styles.mainImg} />
+            <img src={tour.bestImage ? tour.bestImage : NoImage} alt="img" className={styles.mainImg} />
           </div>
           <div>
             <FavoriteRoundedIcon
               className={styles.like}
-              style={{ fill: tour.likeExist ? "#FF6073" : "#FFFFFF" }}
+              style={{ fill: tour.likeExist ? '#FF6073' : '#FFFFFF' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onLikeHandler(tour.id);
+              }}
             />
           </div>
         </div>

@@ -7,7 +7,7 @@ import Card from 'components/Card/Card';
 function Carousel({ list }) {
   console.log(list, '리스트 확인');
   return (
-    <div style={{ width: '1000px', margin: '0 auto' }}>
+    <div style={{ width: '1000px' }}>
       <Slider
         infinite
         slidesToShow={Math.min(3, list.length)}

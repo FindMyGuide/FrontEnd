@@ -20,6 +20,7 @@
   width: 280px;
   height: 180px;
   margin-bottom: 10px;
+  object-fit: cover;
 }
 
 .title {
@@ -33,9 +34,21 @@
   position: absolute;
   top: 3.5px;
   right: 3px;
+  filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.2));
+  transition: transform 0.5s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 .theme {
   color: #c9c9c9;
   font-size: 16px;
+}
+
+.likeIcon {
+  filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.3));
+  fill: #ff6073;
+  margin-right: 3px;
 }

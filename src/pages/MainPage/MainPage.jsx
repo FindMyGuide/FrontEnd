@@ -52,10 +52,12 @@ function MainPage() {
                 <div className={styles.subtitle}>인기 가이드를 구경해보세요</div>
                 <GuideCards list={guideList} />
               </div>
-              <div className={styles.content}>
-                <div className={styles.subtitle}>실제 이용자들의 후기를 둘러보세요</div>
-                <VerticalCarousel list={reviewList} />
-              </div>
+              {reviewList.length !== 0 ? (
+                <div className={styles.content}>
+                  <div className={styles.subtitle}>실제 이용자들의 후기를 둘러보세요</div>
+                  <VerticalCarousel list={reviewList} />
+                </div>
+              ) : null}
               <div className={styles.content}>
                 <div className={styles.subtitle}>여러가지 축제가 진행중입니다</div>
                 <FestCarousel />
