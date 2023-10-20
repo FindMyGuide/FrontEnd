@@ -15,17 +15,24 @@ function WantTour() {
   const [myArticle, setMyArticle] = useState(false);
   const [wait, setWait] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     async function fetchWantList() {
       const wantList = await WantAll();
-      setList(wantList);
-      setListAll(wantList);
+      console.log(wantList, wantList.reverse(), '확인');
+      setList(wantList.reverse());
+      setListAll(wantList.reverse());
       setLoading(false);
     }
 
     fetchWantList();
   }, []);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   const handleMyArticle = () => {
     if (!isLoggedIn) {
@@ -34,7 +41,6 @@ function WantTour() {
       const filteredList = listAll.filter((item) => item.memberInfoResponse.email === userEmail);
       setList(filteredList);
       setMyArticle(true);
-      // setCurrentPage(1);
     }
   };
 
@@ -42,14 +48,12 @@ function WantTour() {
     const filteredList = listAll.filter((item) => !item.isReserved);
     setList(filteredList);
     setWait(true);
-    // setCurrentPage(1);
   };
 
   const handleAllArticle = () => {
     setList(listAll);
     setWait(false);
     setMyArticle(false);
-    // setCurrentPage(1);
   };
 
   const handleRegist = () => {
@@ -63,12 +67,6 @@ function WantTour() {
   const handlePage = (id) => {
     navigate(`/wanttour/detail/${id}`);
   };
-
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const postsPerPage = 10;
-  // const indexOfLastPost = currentPage * postsPerPage;
-  // const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  // const currentPosts = list && list.slice(indexOfFirstPost, indexOfLastPost);
 
   return (
     <div className={styles.background}>
@@ -111,34 +109,43 @@ function WantTour() {
                 <span>가이드 매칭 여부</span>
               </div>
               <hr />
-              {list ? (
-                [...list].reverse().map((post, index) => (
-                  <div key={index} className={styles.post}>
-                    <span className={styles.postTitle} onClick={() => handlePage(post.id)}>
-                      {post.title}
-                    </span>
-                    {post.reservationDates.length === 1 ? (
-                      <span>{post.reservationDates[0]}</span>
-                    ) : (
-                      <span>
-                        {post.reservationDates[0]}(+{post.reservationDates.length - 1})
+              {list && list.length > 0 ? (
+                <>
+                  {list.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((post, index) => (
+                    <div key={index} className={styles.post}>
+                      <span className={styles.postTitle} onClick={() => handlePage(post.id)}>
+                        {post.title}
                       </span>
-                    )}
-                    {post.isReserved ? (
-                      <span>
-                        <div className={styles.status} style={{ backgroundColor: '#C5C5C5' }}>
-                          매칭완료
-                        </div>
-                      </span>
-                    ) : (
-                      <span>
-                        <div className={styles.status} style={{ backgroundColor: '#93D8FF' }}>
-                          매칭대기
-                        </div>
-                      </span>
-                    )}
+                      {post.reservationDates.length === 1 ? (
+                        <span>{post.reservationDates[0]}</span>
+                      ) : (
+                        <span>
+                          {post.reservationDates[0]}(+{post.reservationDates.length - 1})
+                        </span>
+                      )}
+                      {post.isReserved ? (
+                        <span>
+                          <div className={styles.status} style={{ backgroundColor: '#C5C5C5' }}>
+                            매칭완료
+                          </div>
+                        </span>
+                      ) : (
+                        <span>
+                          <div className={styles.status} style={{ backgroundColor: '#93D8FF' }}>
+                            매칭대기
+                          </div>
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                  <div className={styles.pagination}>
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={Math.ceil(list ? list.length / itemsPerPage : 1)}
+                      onPageChange={handlePageChange}
+                    />
                   </div>
-                ))
+                </>
               ) : (
                 <div className={styles.noContent}>
                   <div className="pb-2">아직 등록된 글이 없습니다</div>
@@ -149,7 +156,6 @@ function WantTour() {
               )}
             </>
           )}
-          {/* <Pagination postsPerPage={postsPerPage} totalPosts={list.length} paginate={setCurrentPage} /> */}
         </div>
       </div>
     </div>

@@ -7,13 +7,14 @@ import VerticalCarousel from 'components/Carousel/VerticalCarousel';
 import FestCarousel from 'components/Carousel/FestCarousel';
 import SearchBar from 'components/SearchBar/SearchBar';
 import GuideCards from 'components/Card/GuideCards';
+import { ReactComponent as Spinner } from 'asset/icons/Spinner.svg';
 import styles from './MainPage.module.css';
 import { Fade } from 'react-awesome-reveal';
 
 function MainPage() {
-  const [tourList, setTourList] = useState([]);
-  const [guideList, setGuideList] = useState([]);
-  const [reviewList, setReviewList] = useState([]);
+  const [tourList, setTourList] = useState(null);
+  const [guideList, setGuideList] = useState(null);
+  const [reviewList, setReviewList] = useState(null);
 
   useEffect(() => {
     async function fetchTourList() {
@@ -22,16 +23,12 @@ function MainPage() {
       const reviewRecent = await ReviewRecent();
       setTourList(tourPopular);
       setReviewList(reviewRecent);
-      // setGuideList(guidePopular);
       if (guidePopular && guidePopular.length >= 6) {
         setGuideList(guidePopular.slice(0, 6));
       } else {
         setGuideList(guidePopular);
       }
-      // console.log(guidePopular, '가이드');
-      // console.log(guideList, 'set확인');
     }
-
     fetchTourList();
   }, []);
 
@@ -43,22 +40,30 @@ function MainPage() {
             <span className={styles.title}>당신이 가고싶은 여행을 검색하세요</span>
             <SearchBar />
           </header>
-          <div className={styles.content}>
-            <div className={styles.subtitle}>인기 투어를 구경해보세요</div>
-            {tourList && <Carousel list={tourList} />}
-          </div>
-          <div className={styles.content}>
-            <div className={styles.subtitle}>인기 가이드를 구경해보세요</div>
-            {guideList && <GuideCards list={guideList} />}
-          </div>
-          <div className={styles.content}>
-            <div className={styles.subtitle}>실제 이용자들의 후기를 둘러보세요</div>
-            {reviewList && <VerticalCarousel list={reviewList} />}
-          </div>
-          <div className={styles.content}>
-            <div className={styles.subtitle}>여러가지 축제가 진행중입니다</div>
-            <FestCarousel />
-          </div>
+          {tourList !== null && guideList !== null && reviewList !== null ? (
+            <>
+              <div className={styles.content}>
+                <div className={styles.subtitle}>인기 투어를 구경해보세요</div>
+                <Carousel list={tourList} />
+              </div>
+              <div className={styles.content}>
+                <div className={styles.subtitle}>인기 가이드를 구경해보세요</div>
+                <GuideCards list={guideList} />
+              </div>
+              <div className={styles.content}>
+                <div className={styles.subtitle}>실제 이용자들의 후기를 둘러보세요</div>
+                <VerticalCarousel list={reviewList} />
+              </div>
+              <div className={styles.content}>
+                <div className={styles.subtitle}>여러가지 축제가 진행중입니다</div>
+                <FestCarousel />
+              </div>
+            </>
+          ) : (
+            <div className={styles.flex}>
+              <Spinner />
+            </div>
+          )}
         </Fade>
       </div>
     </div>

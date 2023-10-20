@@ -1,27 +1,8 @@
 import React from 'react';
 import Slider from 'react-slick';
+import Card from 'components/Card/Card';
 import './slick-theme.css';
 import './slick.css';
-
-import Card from '../Card/Card';
-// import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
-// import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
-
-// const PrevArrow = ({ onClick }) => {
-//   return (
-//     <span onClick={onClick}>
-//       <ArrowBackIosNewRoundedIcon color="#9e9e9e" />
-//     </span>
-//   );
-// };
-
-// const NextArrow = ({ onClick }) => {
-//   return (
-//     <span onClick={onClick}>
-//       <ArrowForwardIosRoundedIcon color="#9e9e9e" />
-//     </span>
-//   );
-// };
 
 function Carousel({ list }) {
   const tourlist = list;
@@ -36,9 +17,7 @@ function Carousel({ list }) {
         arrows
         autoplay
         autoplaySpeed={3000}
-        pauseOnHover
-        // nextArrow: <NextArrow />
-        // prevArrow: <PrevArrow />
+        // pauseOnHover
       >
         {tourlist?.map((tour, index) => (
           <div key={index}>
