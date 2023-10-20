@@ -32,11 +32,29 @@ import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import BamtolImg from 'asset/images/bamtol.png';
 // import { Calendar } from 'react-modern-calendar-datepicker';
 
+const language = {
+  KOREAN: '한국어',
+  ENGLISH: '영어',
+  SPANISH: '스페인어',
+  CHINESE: '중국어',
+  JAPANESE: '일본어',
+  FRENCH: '프랑스어',
+  GERMAN: '독일어',
+  RUSSIAN: '러시아어',
+  ITALIAN: '이탈리아어',
+  PORTUGUESE: '포르투갈어'
+};
+
 function TourDetailPage() {
   const tourId = useParams().id;
   const email = sessionStorage.getItem('userEmail');
   const navigate = useNavigate();
-  const [tourDetail, setTourDetail] = useState({});
+  const [tourDetail, setTourDetail] = useState({
+    title: '',
+    imageUrls: [],
+    languages: []
+    //... 다른 기본값들
+  });
 
   const formattedDates = tourDetail.availableDates
     ? tourDetail.availableDates.map((dateObj) => {
@@ -46,12 +64,15 @@ function TourDetailPage() {
     : [];
   useEffect(() => {
     async function fetchPostDetail(id) {
-      console.log(1);
-      const postDetail = await TourDetail(id);
-      setTourDetail(postDetail.data);
-      console.log('hi', postDetail.data);
+      try {
+        const postDetail = await TourDetail(id);
+        if (postDetail?.data) {
+          setTourDetail(postDetail.data);
+        }
+      } catch (error) {
+        console.error('Error fetching the tour detail:', error);
+      }
     }
-
     fetchPostDetail(tourId);
   }, [tourId]);
 
@@ -68,6 +89,10 @@ function TourDetailPage() {
   // const onUpdateHandler = () => {
   //   navigate(`/wanttour/update/${tourDetail.id}`, { state: tourDetail });
   // };
+  const getLanguagesInKorean = (languages) => {
+    if (!languages) return ''; // languages가 undefined나 null일 경우 빈 문자열을 반환
+    return languages.map((lang) => language[lang]).join(', ');
+  };
 
   return (
     <div style={{ backgroundColor: '#F9FAFB' }}>
@@ -77,7 +102,7 @@ function TourDetailPage() {
             <Link to="/tour/tourlist">
               <Prev />
             </Link>
-            <div className={styles.postTitle}>{tourDetail.title && tourDetail.title}</div>
+            <div className={styles.postTitle}>{tourDetail.title && tourDetail?.title}</div>
           </div>
           {tourDetail ? (
             <div className={styles.postInfo}>
@@ -114,7 +139,7 @@ function TourDetailPage() {
             <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', margin: '5px auto 20px' }}>
               <div style={{ alignSelf: 'center' }}>
                 {/* <div>투어 사진:{tourDetail.bestImage}</div> */}
-                <img src={BamtolImg} alt="" style={{ width: '50%' }} />
+                <img src={tourDetail.imageUrls?.[0]} alt={tourDetail.title} className={styles.itemImg} />
 
                 <div style={{ fontSize: '20px' }}>{tourDetail.content}</div>
               </div>
@@ -162,12 +187,13 @@ function TourDetailPage() {
               <div>
                 <div style={{ marginBottom: '20px' }}>
                   <p style={{ fontSize: '35px', fontWeight: '700' }}>가이드 가능 언어</p>
-                  <div style={{ fontSize: '15px' }}>{tourDetail.languages}</div>
+                  <div style={{ fontSize: '15px' }}>{getLanguagesInKorean(tourDetail.languages)}</div>
                 </div>
 
                 <div>
                   <p style={{ fontSize: '35px', fontWeight: '700' }}>투어 테마</p>
-                  <div>{tourDetail.themeResponses && tourDetail.themeResponses[0].title}</div>
+                  {tourDetail.themeResponses &&
+                    tourDetail.themeResponses.map((theme, index) => <div key={index}>{theme.title}</div>)}
                 </div>
               </div>
               {/* <div style={{ display: 'flex', justifyContent: 'center' }}>

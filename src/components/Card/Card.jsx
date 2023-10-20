@@ -1,8 +1,8 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import styles from './Card.module.css';
-import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
-import test from 'asset/images/test.png';
+import React from "react";
+import styles from "./Card.module.css";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+import test from "asset/images/test.png";
+import { useNavigate } from "react-router-dom";
 
 function Card({ tour }) {
   const navigate = useNavigate();
@@ -11,15 +11,18 @@ function Card({ tour }) {
   };
 
   return (
-    <div className={styles.card} onClick={() => onClickHandler(tour.id)}>
-      <div style={{ padding: '10px' }}>
+    <div className={styles.card}>
+      <div style={{ padding: "10px" }}>
         <div className={styles.content}>
           <div>
             {/* <img src={tour.bestImage} alt="img" className={styles.mainImg} /> */}
             <img src={test} alt="img" className={styles.mainImg} />
           </div>
           <div>
-            <FavoriteRoundedIcon className={styles.like} style={{ fill: tour.likeExist ? '#FF6073' : '#FFFFFF' }} />
+            <FavoriteRoundedIcon
+              className={styles.like}
+              style={{ fill: tour.likeExist ? "#FF6073" : "#FFFFFF" }}
+            />
           </div>
         </div>
         <div className={styles.title}>{tour.title}</div>

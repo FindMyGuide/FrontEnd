@@ -14,7 +14,7 @@ import { utils } from 'react-modern-calendar-datepicker';
 import WallpaperIcon from '@mui/icons-material/Wallpaper';
 import CustomLocale from 'components/Calendar/CustomLocale';
 import WantThemes from 'components/Theme/WantThemes';
-
+import AvailableLanguage from 'components/Language/AvailableLanguage';
 import TourRegistLocation from 'components/Location/TourRegistLocation';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { style } from '@mui/system';
@@ -24,7 +24,7 @@ function TourRegist() {
 
   const [title, setTitle] = useState(''); //투어명
   const [content, setContent] = useState(''); //투어설명
-  const [price, setPrice] = useState(); //투어가격
+  const [price, setPrice] = useState(0); //투어가격
   const [languages, setLanguages] = useState([]); //가능 언어
   const [howmanydays, setHowmanydays] = useState([]); // 투어소요기간
   const [locations, setLocations] = useState([]); //투어일정
@@ -108,34 +108,41 @@ function TourRegist() {
     setContent(event.target.value);
   };
   const onPriceHandler = (event) => {
-    setPrice(parseInt(event.target.value));
-    console.log(typeof parseInt(event.target.value));
+    const input = event.target.value;
+    const sanitizedInput = input.replace(/\D/g, '');
+    setPrice(Math.max(0, sanitizedInput));
   };
-  const onLanguageHandler = (event) => {
-    setLanguage(event.target.value);
-  };
-  const onLanguagesHandler = (event) => {
-    event.preventDefault();
-    const cleanedInput = language.trim();
-    if (cleanedInput) {
-      if (!languages.includes(cleanedInput)) {
-        setLanguages([...languages, cleanedInput]);
-        console.log(cleanedInput);
-      } else {
-        alert('이미 추가된 태그입니다');
-      }
-    } else {
-      alert('내용을 입력하세요');
-    }
-    setLanguage('');
-  };
-  const removeLanguage = (language) => {
-    setLanguages(languages.filter((selectedLanguage) => selectedLanguage !== language));
-  };
+  // const onLanguageHandler = (event) => {
+  //   setLanguage(event.target.value);
+  // };
+  // const onLanguagesHandler = (event) => {
+  //   event.preventDefault();
+  //   const cleanedInput = language.trim();
+  //   if (cleanedInput) {
+  //     if (!languages.includes(cleanedInput)) {
+  //       setLanguages([...languages, cleanedInput]);
+  //       console.log(cleanedInput);
+  //     } else {
+  //       alert('이미 추가된 태그입니다');
+  //     }
+  //   } else {
+  //     alert('내용을 입력하세요');
+  //   }
+  //   setLanguage('');
+  // };
+  // const removeLanguage = (language) => {
+  //   setLanguages(languages.filter((selectedLanguage) => selectedLanguage !== language));
+  // };
 
   const onHowmanydaysHandler = (event) => {
     const inputText = event.target.value;
-    const numberOfDays = parseInt(inputText);
+    const sanitizedInput = inputText.replace(/\D/g, ''); // 숫자가 아닌 문자를 모두 제거
+    if (sanitizedInput !== inputText) {
+      event.target.value = sanitizedInput;
+      return;
+    }
+
+    const numberOfDays = parseInt(sanitizedInput);
 
     // 투어 소요기간이 변경될 때, locations 배열을 초기화
     const newLocationValue = [];
@@ -144,42 +151,45 @@ function TourRegist() {
       newLocations.push([]);
       newLocationValue.push('');
     }
+
     let newHowmanydays = [];
     // 새로운 howmanydays 배열 생성
-    if (inputText === '1') {
+    if (sanitizedInput === '1') {
       newHowmanydays = ['0', '1'];
     } else {
-      newHowmanydays = [toString(numberOfDays - 1), inputText];
+      newHowmanydays = [(numberOfDays - 1).toString(), sanitizedInput];
     }
-    setHowmanyday(inputText);
+
+    setHowmanyday(sanitizedInput);
     setHowmanydays(newHowmanydays);
     setLocations(newLocations);
     setLocationValue(newLocationValue);
   };
 
   const onChangeLocation = (event, index) => {
+    event.preventDefault();
     const changeLocationValue = [...locationValue];
     changeLocationValue[index] = event.target.value;
     setLocationValue(changeLocationValue);
   };
 
-  const onLocationsHandler = (event, index) => {
-    const inputValue = event ? event.target.value : locationValue[index]; // button을 클릭했을 때는 location 값을 사용
-    // 현재 location 배열을 복사합니다.
-    const newLocation = [...locations];
-    const changeLocation = [...locationValue];
+  // const onLocationsHandler = (event, index) => {
+  //   const inputValue = event ? event.target.value : locationValue[index]; // button을 클릭했을 때는 location 값을 사용
+  //   // 현재 location 배열을 복사합니다.
+  //   const newLocation = [...locations];
+  //   const changeLocation = [...locationValue];
 
-    // 특정 인덱스의 값에 새 값을 추가합니다.
-    if (newLocation[index]) {
-      newLocation[index] += `, ${inputValue}`;
-    } else {
-      newLocation[index] = inputValue;
-    }
-    changeLocation[index] = '';
-    // location 상태를 업데이트합니다.
-    setLocations(newLocation);
-    setLocationValue(changeLocation);
-  };
+  //   // 특정 인덱스의 값에 새 값을 추가합니다.
+  //   if (newLocation[index]) {
+  //     newLocation[index] += `, ${inputValue}`;
+  //   } else {
+  //     newLocation[index] = inputValue;
+  //   }
+  //   changeLocation[index] = '';
+  //   // location 상태를 업데이트합니다.
+  //   setLocations(newLocation);
+  //   setLocationValue(changeLocation);
+  // };
   const removeLocation = (x, y) => {
     const deleteLocation = [...locations];
     console.log(y);
@@ -189,13 +199,6 @@ function TourRegist() {
     });
     setLocations(deleteLocation);
   };
-
-  const gregorianToday = utils().getToday();
-  const minimumDate = gregorianToday;
-  const maximumDate = utils().getToday();
-  maximumDate.month = gregorianToday.month + 3;
-
-  const myCustomLocale = CustomLocale;
 
   // const onMapHandler = (event, index) => {
   //   event.preventDefault();
@@ -333,18 +336,20 @@ function TourRegist() {
                 투어가격
               </div>
               <div className={styles.parentContainer}>
+                {/* <input hidden="hidden" /> */}
                 <input
                   type="text"
                   value={price}
                   className={styles.price}
                   onChange={onPriceHandler}
+                  onKeyPress={handleKeyPress}
                   style={{ width: '117px' }}
                 />
                 <span style={{ fontSize: '17px', marginLeft: '6px' }}>원</span>
               </div>
             </div>
 
-            <div className={styles.content}>
+            {/* <div className={styles.content}>
               <div className={styles.subtitle}>가능언어</div>
               <div className={styles.language}>
                 <input
@@ -375,7 +380,14 @@ function TourRegist() {
                   <Language key={index} language={language} removeLanguage={removeLanguage} />
                 ))}
               </div>
-            )}
+            )} */}
+            <div className={styles.content}>
+              <div className={styles.subtitle} style={{ width: '30%' }}>
+                가능언어
+              </div>
+              <AvailableLanguage selectedLanguages={languages} setSelectedLanguages={setLanguages} />
+            </div>
+
             <div className={styles.content}>
               <div className={styles.subtitle}>투어소요기간(일)</div>
               <input
@@ -394,6 +406,7 @@ function TourRegist() {
               </div>
               <div>ex) 0박 1일(하루) - &gt;1일 / 1박 2일 -&gt; 2일</div>
             </div>
+
             {locations.length > 0 && (
               <TourRegistLocation
                 onLocationSelect={handleLocationSelect}
@@ -407,7 +420,7 @@ function TourRegist() {
               <div style={{ width: '90%' }}>
                 {locationValue.length > 0 &&
                   locationValue?.map((_, index) => (
-                    <div>
+                    <div key={index}>
                       <div key={index} className={styles.location}>
                         <input
                           type="text"
@@ -427,6 +440,7 @@ function TourRegist() {
                           onClick={() => {
                             onSearchLocation(index);
                           }}
+                          onKeyPress={handleKeyPress}
                           className={styles.add}
                         >
                           위치 추가하기
