@@ -69,7 +69,7 @@ const GuideDetailPage = () => {
     const endIndex = startIndex + 3;
 
     if (guideDetail?.tourProductResponses?.length + 3 > endIndex) {
-      const newTourProducts = guideDetail.tourProductResponses.slice(0, endIndex);
+      const newTourProducts = guideDetail?.tourProductResponses.slice(0, endIndex);
       setShowingList(newTourProducts);
       setPageNum(newPageNum);
       if (guideDetail?.tourProductResponses?.length <= endIndex) {
@@ -118,15 +118,7 @@ const GuideDetailPage = () => {
             <div className={styles.touring}>
               {showingList?.map((tourlist, idx) => (
                 <div style={{ marginLeft: 'auto', marginRight: 'auto' }} key={idx}>
-                  <Card
-                    tour={{
-                      id: `${tourlist.id}`,
-                      title: `${tourlist.title}`,
-                      price: `${tourlist.price}`,
-                      bestImage: `${tourlist.bestImage}`,
-                      like: `${tourlist.likeExist}`
-                    }}
-                  ></Card>
+                  <Card tour={tourlist}></Card>
                 </div>
               ))}
             </div>

@@ -21,9 +21,12 @@ const GuideCard = ({ guideId, name, tour, imageLink }) => {
           <h4 style={{ marginTop: '10px', marginLeft: '10px' }}>{name}</h4>
           <img
             style={{
-              width: '60px',
+              boxSizing: 'border',
+              margin: '0',
+              padding: '0',
+              width: '80px',
               position: 'absolute',
-              right: '0',
+              right: '-10px',
               top: '-30px'
             }}
             src={imageLink !== '' ? image : profileImg}
