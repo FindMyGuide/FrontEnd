@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Calendar from "react-calendar";
+import Modal from "react-modal";
+import StarRatings from "react-star-ratings";
 import moment from "moment";
 import Card from "../../components/Card/Card";
 
@@ -18,6 +20,7 @@ import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 
 // API
 import {
@@ -26,6 +29,8 @@ import {
   LikeGuide,
   LikeTour,
   MemberWantTour,
+  PostReview,
+  GetReview,
 } from "../../api/Mypage/MyUser";
 import GuideCard from "components/Card/GuideCard";
 
@@ -237,6 +242,7 @@ function MemberBookedTour() {
   );
 }
 
+// 지난 투어
 function LastTour() {
   // 완료된 여행 조회
   const dispatch = useDispatch();
@@ -262,6 +268,79 @@ function LastTour() {
 
   const toursToShow = showMore ? lastTour : lastTour.slice(0, 3);
 
+  console.log(lastTour);
+
+  // 모달
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedTourId, setSelectedTourId] = useState(null);
+  const [reviewContent, setReviewContent] = useState("");
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewImage, setReviewImage] = useState(null);
+
+  // 리뷰 작성 모달 열기
+  const openModal = (tourId) => {
+    setSelectedTourId(tourId);
+    setModalIsOpen(true);
+  };
+
+  // 리뷰 작성 모달 닫기
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setSelectedTourId(null);
+    setReviewContent("");
+    setReviewRating(0);
+  };
+
+  // 리뷰 등록 함수
+  const handleReviewSubmit = async () => {
+    try {
+      await PostReview({
+        tour_id: selectedTourId,
+        content: reviewContent,
+        rating: reviewRating,
+        image: reviewImage, // 이미지 추가
+      });
+      closeModal();
+      // 여기서 상태 업데이트 로직 추가 가능...
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // 모달에 적용할 스타일
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      width: "800px", // 원하는 크기로 조정하세요.
+    },
+  };
+
+  const [previewImage, setPreviewImage] = useState(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setReviewImage(file);
+
+    // 이미지 미리보기
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreviewImage(reader.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImage(null);
+    }
+  };
+
+  Modal.setAppElement("#root");
+
   return (
     <div>
       <MemberTitle>
@@ -273,8 +352,90 @@ function LastTour() {
         <LastTourContainer>
           <CardContainer>
             {toursToShow.map((tour) => (
-              <Card key={tour.id} tour={tour} />
+              <div
+                key={tour.tourProductId}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "20px",
+                }}
+              >
+                <Card tour={tour} />
+                <ChatButton onClick={() => openModal(tour.tourProductId)}>
+                  리뷰 작성
+                </ChatButton>
+              </div>
             ))}
+            <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={closeModal}
+              style={customStyles}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "30px",
+                }}
+              >
+                <h2 style={{ fontWeight: "bold" }}>솔직한 후기를 들려주세요</h2>
+
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    alignItems: "center",
+                    flexDirection: "column",
+                  }}
+                >
+                  <div style={{ fontWeight: "bold" }}>투어는 어떠셨나요 ?</div>
+                  <StarRatings
+                    rating={reviewRating}
+                    changeRating={(newRating) => setReviewRating(newRating)}
+                    numberOfStars={5}
+                    starDimension="20px"
+                    starSpacing="5px"
+                    starRatedColor="gold"
+                    starHoverColor="gold"
+                    starEmptyColor="gray"
+                    starResolution="half" // 별점 반개 단위로 줄 수 있게 설정
+                  />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <textarea
+                    value={reviewContent}
+                    onChange={(e) => setReviewContent(e.target.value)}
+                    placeholder="리뷰 내용을 입력하세요."
+                    style={{ height: "100px", width: "400px" }}
+                  />
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  {previewImage && (
+                    <img
+                      src={previewImage}
+                      alt="선택한 사진"
+                      style={{ width: "100px", height: "100px" }}
+                    />
+                  )}
+                  <input type="file" onChange={handleFileChange} />
+                </div>
+                <div>
+                  <ChatButton onClick={handleReviewSubmit}>
+                    등록 완료
+                  </ChatButton>
+                </div>
+              </div>
+            </Modal>
           </CardContainer>
           {lastTour.length > 3 &&
             (showMore ? (
@@ -420,7 +581,7 @@ function MemberWantList() {
         <h4 style={{ fontWeight: "bold" }}>원해요 글 목록</h4>
       </MemberTitle>
       {wantTour.length > 0 ? (
-        <MemberWantContainer style={{ marginBottom: "60px" }}>
+        <MemberWantContainer>
           <div>
             {toursToShow.length > 0 &&
               toursToShow.map((tour) => (
@@ -449,6 +610,58 @@ function MemberWantList() {
   );
 }
 
+// 자신이 쓴 리뷰
+function ReviewList() {
+  const [review, setReview] = useState([]);
+
+  // 3개씩 보여주기
+  const [showMore, setShowMore] = useState(false);
+
+  useEffect(() => {
+    const fetchReview = async () => {
+      try {
+        const res = await GetReview();
+        setReview(res.data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchReview();
+  }, []);
+
+  const reviewsToShow = showMore ? review : review.slice(0, 3);
+
+  console.log(review);
+
+  return (
+    <div>
+      <MemberTitle>
+        <DriveFileRenameOutlineIcon />
+        <h4 style={{ fontWeight: "bold" }}>자신이 쓴 리뷰</h4>
+      </MemberTitle>
+      {review.length > 0 ? (
+        <MemberWantContainer>
+          <div>
+            {reviewsToShow.length > 0 &&
+              reviewsToShow.map((review) => (
+                <WantList key={review.id}>
+                  <WantTitle>{review.title}</WantTitle>
+                </WantList>
+              ))}
+          </div>
+          {review.length > 3 && showMore ? (
+            <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
+          ) : review.length > 3 && !showMore ? (
+            <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
+          ) : null}
+        </MemberWantContainer>
+      ) : (
+        <p>작성한 리뷰가 없습니다.</p>
+      )}
+    </div>
+  );
+}
+
 // 회원메뉴
 function MemberMenu() {
   return (
@@ -458,6 +671,7 @@ function MemberMenu() {
       <MemberLikeTour />
       <MemberLikeGuide />
       <MemberWantList />
+      <ReviewList />
     </MemberMenuContainer>
   );
 }
