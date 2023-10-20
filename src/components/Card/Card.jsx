@@ -17,15 +17,11 @@ function Card({ tour }) {
   };
 
   const onLikeHandler = (tourId) => {
-    console.log(tour, tourId, '확인');
     if (isLoggedIn) {
-      console.log(tourId, '로그인 확인');
       if (isLiked) {
-        console.log(tourId, '좋아요 상태');
         TourLikeCancel(tourId);
         setLikes(likes - 1);
       } else {
-        console.log(tourId, '좋아요 x 상태');
         TourLike(tourId);
         setLikes(likes + 1);
       }

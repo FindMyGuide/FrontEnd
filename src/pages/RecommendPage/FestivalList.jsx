@@ -14,7 +14,6 @@ function FestivalList() {
   useEffect(() => {
     async function fetchFestivalList() {
       const festivalList = await FestivalSearch();
-      console.log(festivalList);
       setList(festivalList);
       setLoading(false);
     }
@@ -37,9 +36,15 @@ function FestivalList() {
           <Spinner />
         ) : (
           <>
-            <div className={styles.length} style={{ marginBottom: '35px' }}>
-              # 총 <span className="color">{list.length}</span>개의 축제가 있습니다
-            </div>
+            {list === undefined ? (
+              <div className={styles.length} style={{ marginBottom: '35px' }}>
+                # 총 <span className="color">0</span>개의 축제가 있습니다
+              </div>
+            ) : (
+              <div className={styles.length} style={{ marginBottom: '35px' }}>
+                # 총 <span className="color">{list.length}</span>개의 축제가 있습니다
+              </div>
+            )}
             <div className={styles.cardContainer}>
               {list?.map((festival, index) => (
                 <div key={index} onClick={() => onDetailHandler(festival.id)} className={styles.cardItem}>
