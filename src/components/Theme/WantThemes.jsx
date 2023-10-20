@@ -4,11 +4,11 @@ function WantThemes({ selectedThemes, setSelectedThemes }) {
   const themes = ['맛집여행', '역사투어', '애견동반', '힐링투어', '기타'];
 
   const themeMappings = {
-    맛집여행: 4,
-    역사투어: 6,
-    애견동반: 1,
-    힐링투어: 5,
-    기타: 7
+    맛집여행: 1,
+    역사투어: 2,
+    애견동반: 3,
+    힐링투어: 4,
+    기타: 5
   };
 
   const handleThemeChange = (e) => {

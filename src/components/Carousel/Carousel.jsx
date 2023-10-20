@@ -1,25 +1,23 @@
 import React from 'react';
 import Slider from 'react-slick';
-import Card from 'components/Card/Card';
 import './slick-theme.css';
 import './slick.css';
+import Card from 'components/Card/Card';
 
 function Carousel({ list }) {
-  const tourlist = list;
-
+  console.log(list, '리스트 확인');
   return (
     <div style={{ width: '1000px' }}>
       <Slider
         infinite
-        slidesToShow={3}
+        slidesToShow={Math.min(3, list.length)}
         slidesToScroll={1}
         speed={400}
         arrows
         autoplay
         autoplaySpeed={3000}
-        // pauseOnHover
       >
-        {tourlist?.map((tour, index) => (
+        {list?.map((tour, index) => (
           <div key={index}>
             <Card tour={tour} />
           </div>

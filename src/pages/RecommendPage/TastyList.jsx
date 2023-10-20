@@ -10,12 +10,12 @@ function TastyList() {
   const navigate = useNavigate();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showMoreCount, setShowMoreCount] = useState(10);
 
   useEffect(() => {
     async function fetchRecommendList() {
       const tastyList = await TastySearch();
       setList(tastyList);
-      console.log(tastyList);
       setLoading(false);
     }
 
@@ -25,6 +25,12 @@ function TastyList() {
   const onDetailHandler = (id) => {
     navigate(`/recommend/tasty/${id}`);
   };
+
+  const showMoreItems = () => {
+    setShowMoreCount((prevCount) => prevCount + 10);
+  };
+
+  const showCloseButton = list.length <= showMoreCount;
 
   return (
     <div className={styles.background}>
@@ -45,11 +51,23 @@ function TastyList() {
               &nbsp;부산광역시가 제공하는 맛집 중 {list.length}개를 랜덤으로 골라 보여드립니다
             </div>
             <div className={styles.cardContainer2}>
-              {list?.map((tasty, index) => (
-                <div key={index} onClick={() => onDetailHandler(tasty.id)} className={styles.cardItem}>
+              {list.slice(0, showMoreCount)?.map((tasty) => (
+                <div key={tasty.id} onClick={() => onDetailHandler(tasty.id)} className={styles.cardItem}>
                   <TastyCard tasty={tasty} />
                 </div>
               ))}
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              {list.length > showMoreCount && (
+                <div className={styles.moreBtn} onClick={showMoreItems}>
+                  더보기
+                </div>
+              )}
+              {showCloseButton && (
+                <div className={styles.moreBtn} onClick={() => setShowMoreCount(10)}>
+                  닫기
+                </div>
+              )}
             </div>
           </>
         )}
