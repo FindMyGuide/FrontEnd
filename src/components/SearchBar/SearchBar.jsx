@@ -3,7 +3,7 @@ import { ReactComponent as Search } from 'asset/icons/search.svg';
 import { ReactComponent as X } from 'asset/icons/x.svg';
 import styles from './SearchBar.module.css';
 
-function SearchBar() {
+function SearchBar({ searchBar }) {
   const [input, setInput] = useState('');
 
   const handleInput = (event) => {
@@ -14,6 +14,7 @@ function SearchBar() {
     e.preventDefault();
     console.log(input);
     // 검색 axios
+    searchBar(input);
     setInput('');
   };
 

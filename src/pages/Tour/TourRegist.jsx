@@ -53,8 +53,22 @@ function TourRegist() {
     return `${year}-${month}-${day}`;
   };
 
-  const handleSubmit = (event) => {
+  async function handleSubmit(event) {
     event.preventDefault();
+    if (
+      title === '' ||
+      content === '' ||
+      price === 0 ||
+      languages.length === 0 ||
+      howmanydays.length === 0 ||
+      locations.length === 0 ||
+      themeIds.length === 0 ||
+      availableDates.length === 0 ||
+      images.length === 0
+    ) {
+      alert('모든 항목을 입력해주세요!');
+      return;
+    }
     const formattedDates = availableDates.map((selectedDate) => {
       const formattedDate = formatDate(selectedDate);
       return formattedDate;
@@ -93,9 +107,9 @@ function TourRegist() {
     console.log(typeof formData.get('files'));
     console.log('진짜', data);
     console.log('formdata', formData);
-    MytourResister(formData);
+    await MytourResister(formData);
     navigate('/tour/tourlist');
-  };
+  }
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -437,8 +451,9 @@ function TourRegist() {
                           }}
                         />
                         <button
-                          onClick={() => {
-                            onSearchLocation(index);
+                          onClick={(event) => {
+                            event.preventDefault();
+                            onSearchLocation(event, index);
                           }}
                           onKeyPress={handleKeyPress}
                           className={styles.add}
