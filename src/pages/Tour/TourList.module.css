@@ -8,7 +8,7 @@ FormGroup {
 
 .topdiv {
   position: absolute;
-  top: -40%;
+  top: -25%;
   /* left: -10%; */
   font-size: 90px;
   font-weight: bold;
@@ -24,6 +24,7 @@ FormGroup {
   font-weight: bold;
   border: 0px;
   border-radius: 10px;
+  margin-top: 10px;
 }
 
 .topcard {
@@ -35,7 +36,7 @@ FormGroup {
 
 .cardovertext {
   position: absolute;
-  top: 68%;
+  top: 50%;
   left: 10%;
   bottom: 50px;
   font-size: 50px;
@@ -83,10 +84,12 @@ FormGroup {
 .item {
   padding: 2%;
   display: flex;
+  height: 250px;
 }
 
 .itemImg {
   width: 50%;
+  /* height: 90%; */
 }
 
 .itemDetail {

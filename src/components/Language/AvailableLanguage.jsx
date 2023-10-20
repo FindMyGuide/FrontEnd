@@ -28,7 +28,7 @@ function AvailableLanguage({ selectedLanguages, setSelectedLanguages }) {
   };
 
   const handleLanguageChange = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     const language = e.target.value;
     const isChecked = e.target.checked;
@@ -38,7 +38,6 @@ function AvailableLanguage({ selectedLanguages, setSelectedLanguages }) {
     } else {
       setSelectedLanguages(selectedLanguages.filter((selectedLanguage) => selectedLanguage !== language)); // parseInt를 제거
     }
-    console.log('선택됨', language);
   };
 
   return (

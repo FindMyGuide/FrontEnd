@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from '../MainPage/MainPage.module.css';
 import TourAll from '../../api/tour/Tour.jsx';
+import { SearchTour } from 'api/tour/SearchTour';
 import TourListCard from 'components/Card/TourListCard';
 import SearchBar from 'components/SearchBar/SearchBar';
 import tourListStyle from './TourList.module.css';
@@ -17,6 +18,7 @@ function TourList() {
   const themes = ['전체', '맛집탐방', '역사탐방', '애견동반', '힐링투어', '기타'];
   const [tourList, setTourList] = useState([]);
   const [selectedDatas, setSelectedDatas] = useState(tourList);
+  const [searchKeyword, setSearchKeyword] = useState('');
 
   // 상세 페이지로 이동하기 전에 스크롤 위치 저장
   const saveScrollPosition = () => {
@@ -86,7 +88,7 @@ function TourList() {
         }
       }
     })();
-  }, []);
+  }, [location.state]);
 
   useEffect(() => {
     if (selectedThemes.includes('전체')) {
@@ -99,20 +101,31 @@ function TourList() {
     }
   }, [tourList, selectedThemes]);
 
+  useEffect(() => {
+    (async () => {
+      if (searchKeyword !== '') {
+        const data = await SearchTour(searchKeyword);
+        console.log('data', data);
+        if (data && data.tourProductResponses) {
+          setSelectedDatas(data.tourProductResponses);
+        }
+      }
+    })();
+  }, [searchKeyword]);
   return (
     <div className={styles.background}>
       <div className="container">
         <div>
           <header className={styles.header}>
             <span className={styles.title}>당신이 가고싶은 여행을 검색하세요</span>
-            <SearchBar />
+            <SearchBar searchBar={setSearchKeyword} />
           </header>
         </div>
         <div style={{ position: 'relative' }}>
           <div className={tourListStyle.topdiv}>
             <div>TOP</div>
             <button onClick={() => navigate('/tour/tourregist')} className={tourListStyle.registButton}>
-              투어 등록하러 가기
+              투어 등록
             </button>
           </div>
           {/* <div className={tourListStyle.topcard}>
@@ -142,7 +155,9 @@ function TourList() {
             className={tourListStyle.topcard}
             onClick={() => {
               saveScrollPosition();
-              navigate(`/tour/tourdetail/${randomItems[0].id}`);
+              if (randomItems[0]) {
+                navigate(`/tour/tourdetail/${randomItems[0].id}`);
+              }
             }}
           >
             {randomItems[0] && (
@@ -157,7 +172,9 @@ function TourList() {
                 style={{ position: 'relative' }}
                 onClick={() => {
                   saveScrollPosition();
-                  navigate(`/tour/tourdetail/${randomItems[1].id}`);
+                  if (randomItems[1]) {
+                    navigate(`/tour/tourdetail/${randomItems[1].id}`);
+                  }
                 }}
               >
                 <TourListCard title={randomItems[1].title || ''} likes={randomItems[1].likes || ''}></TourListCard>
@@ -170,7 +187,9 @@ function TourList() {
                 style={{ position: 'relative' }}
                 onClick={() => {
                   saveScrollPosition();
-                  navigate(`/tour/tourdetail/${randomItems[2].id}`);
+                  if (randomItems[2]) {
+                    navigate(`/tour/tourdetail/${randomItems[2].id}`);
+                  }
                 }}
               >
                 <TourListCard title={randomItems[2].title || ''} likes={randomItems[2].likes || ''}></TourListCard>
@@ -188,7 +207,7 @@ function TourList() {
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
             <div className={tourListStyle.themes}>
-              {themes.map((theme) => (
+              {themes.map((theme, index) => (
                 <div
                   key={theme}
                   className={`${tourListStyle.tourtheme} ${
@@ -210,14 +229,15 @@ function TourList() {
             {selectedDatas.map((tour) => (
               <div key={tour.id}>
                 <div
-                  key={tour.id}
                   className={tourListStyle.item}
                   onClick={() => {
                     saveScrollPosition();
                     navigate(`/tour/tourdetail/${tour.id}`);
                   }}
                 >
-                  <img src={tour.imageUrls[0]} alt={tour.title} className={tourListStyle.itemImg} />
+                  {tour.imageUrls && tour.imageUrls.length > 0 && (
+                    <img src={tour.imageUrls[0]} alt={tour.title} className={tourListStyle.itemImg} />
+                  )}
                   <div className={tourListStyle.itemDetail}>
                     <p
                       style={{
