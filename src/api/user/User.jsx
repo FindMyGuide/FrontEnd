@@ -88,8 +88,7 @@ export async function UserLogin(props) {
       email: props.email,
       password: props.password
     });
-    console.log(res.data);
-    return res.data;
+    return res;
   } catch (e) {
     console.error(e);
   }
