@@ -126,18 +126,29 @@ function RegisteredTour() {
   const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
-    const fetchWantTour = async () => {
-      try {
-        const res = await MyTour();
-        setTour(res.data);
-      } catch (e) {
-        console.error(e);
-      }
-    };
     fetchWantTour();
   }, []);
 
-  // console.log(Tour);
+  const fetchWantTour = async () => {
+    try {
+      const res = await MyTour();
+      setTour(res.data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // 취소하기 버튼을 눌렀을 때 실행될 함수입니다.
+  const handleCancel = async (id) => {
+    try {
+      await MytourDelete(id); // 해당 tour 삭제
+      fetchWantTour(); // tour 상태 업데이트
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  console.log(tour);
 
   const toursToShow = showMore ? tour : tour.slice(0, 3);
 
@@ -151,7 +162,22 @@ function RegisteredTour() {
         <RegisterContainer>
           <CardContainer>
             {toursToShow.length > 0 &&
-              toursToShow.map((tour) => <Card key={tour.id} tour={tour} />)}
+              toursToShow.map((tour) => (
+                <div
+                  key={tour.id}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "30px",
+                  }}
+                >
+                  <Card tour={tour} />
+                  <CancelButton onClick={() => handleCancel(tour.id)}>
+                    투어 삭제
+                  </CancelButton>
+                </div>
+              ))}
           </CardContainer>
           {tour.length > 3 &&
             (showMore ? (
@@ -250,7 +276,7 @@ function GuideWantList() {
     fetchBookedTour();
   }, []);
 
-  console.log(wantList);
+  // console.log(wantList);
 
   const toursToShow = showMore ? wantList : wantList.slice(0, 3);
 

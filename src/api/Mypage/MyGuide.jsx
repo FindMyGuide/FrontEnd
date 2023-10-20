@@ -91,16 +91,12 @@ export async function MytourResister(formData) {
 //투어 삭제
 export async function MytourDelete(props) {
   try {
-    const res = await baseAxios.post(
-      `tourProduct/delete-reserved-tour/${props}`,
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("accessToken"),
-        },
-      }
-    );
+    const res = await baseAxios.delete(`tourProduct/delete/${props}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionStorage.getItem("accessToken"),
+      },
+    });
     return res;
   } catch (e) {
     console.error(e);
