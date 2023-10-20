@@ -10,13 +10,15 @@ function VerticalCarousel({ list }) {
     <div className={styles.carouselContainer} style={{ height: '150px' }}>
       <Slider
         infinite
-        slidesToShow={Math.min(3, list.length)}
+        slidesToShow={1}
         slidesToScroll={1}
         speed={500}
         arrows
         autoplay
         autoplaySpeed={3000}
         vertical={true}
+        pauseOnHover
+        dots
       >
         {list?.map((review, index) => (
           <div key={index} className={styles.carouselSlide}>
