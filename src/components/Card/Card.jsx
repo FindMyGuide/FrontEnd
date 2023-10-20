@@ -6,6 +6,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import test from 'asset/images/test.png';
 import { TourLike } from 'api/tour/Tour';
 
+
 function Card({ tour }) {
   const navigate = useNavigate();
   const onClickHandler = (id) => {
@@ -16,17 +17,17 @@ function Card({ tour }) {
   };
 
   return (
-    <div className={styles.card} onClick={() => onClickHandler(tour.id)}>
-      <div style={{ padding: '10px' }}>
+    <div className={styles.card}>
+      <div style={{ padding: "10px" }}>
         <div className={styles.content}>
           <div>
             {/* <img src={tour.bestImage} alt="img" className={styles.mainImg} /> */}
             <img src={test} alt="img" className={styles.mainImg} />
           </div>
-          <div onClick={() => onLikeHandler(tour.id)}>
+          <div>
             <FavoriteRoundedIcon
               className={styles.like}
-              style={{ fill: tour.likeExist ? '#FF6073' : '#FFFFFF', zIndex: '2' }}
+              style={{ fill: tour.likeExist ? "#FF6073" : "#FFFFFF" }}
             />
           </div>
         </div>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import Pimg from "./img.png";
 import "./MypageCalendar.css";
 
 // API
@@ -40,6 +39,8 @@ const EditButton = styled(BasicButton)`
   width: 10rem;
   height: 3rem;
   background: #fff;
+  font-weight: bold;
+  border: 1px solid gray;
 `;
 
 const MyTour = styled.div`
@@ -49,9 +50,10 @@ const MyTour = styled.div`
   flex-direction: column;
   width: 10rem;
   height: 6rem;
-  border: 2px solid #000000;
+  border: 1px solid gray;
   border-radius: 1rem;
   margin-top: 1rem;
+  gap: 10px;
 `;
 
 const ChatList = styled.button`
@@ -67,7 +69,7 @@ const ChatList = styled.button`
 
 // 왼쪽 개인정보 변경 모달창
 const ModalContainer = styled.div`
-  border: 2px solid #000;
+  border: 0.5px solid gray;
   border-radius: 10px;
   position: absolute;
   background: #fff;
@@ -345,11 +347,11 @@ function Privacy({
       <PrivacyBox>
         <b>자격증 </b>
         <Selector
-          value={certification ? "true" : "false"}
+          value={certification === "y" ? "Y" : "N"}
           onChange={(e) => setCertification(e.target.value)}
         >
-          <option value="true">보유</option>
-          <option value="false">미보유</option>
+          <option value="Y">보유</option>
+          <option value="N">미보유</option>
         </Selector>
       </PrivacyBox>
       {userInformation.languages.length > 0 && (
@@ -402,8 +404,10 @@ function EditModal({ setEditModal }) {
   );
   const [phoneNumber, setPhoneNumber] = useState(userInformation.phoneNumber);
   const [certification, setCertification] = useState(
-    userInformation.nationalCertificationOfGuideYn
+    userInformation.nationalCerftificationOfGuideYn
   );
+
+  const dispatch = useDispatch();
 
   async function handleSubmit() {
     try {
@@ -411,11 +415,16 @@ function EditModal({ setEditModal }) {
         nickname: nickname,
         languages: languages,
         guideExperience: guideExperience,
-        national_certification_of_quide_yn: certification === "true",
+        national_certification_of_quide_yn: certification === "y",
         phoneNumber: phoneNumber,
         profilePicture: profilePicture,
         guideIntro: guideIntro,
       });
+
+      // 사용자 정보를 다시 가져옵니다.
+      const res = await UserInfo();
+      dispatch(setUserInformation(res.data));
+
       closeModal();
     } catch (error) {
       console.error(error);
@@ -427,9 +436,14 @@ function EditModal({ setEditModal }) {
       <EditCloseButton onClick={closeModal}>X</EditCloseButton>
       <EditModalTop>
         {/* 프로필 이미지 수정 */}
-        {/* <ProfileImg src={profilePicture} /> */}
-        {/* <input type="file" onChange={(e) => setProfilePicture(URL.createObjectURL(e.target.files[0]))} /> */}
-        <ProfileImg src={Pimg} />
+        <ProfileImg src={profilePicture} />
+        <input
+          type="file"
+          onChange={(e) =>
+            setProfilePicture(URL.createObjectURL(e.target.files[0]))
+          }
+        />
+        {/* <ProfileImg src={Pimg} /> */}
 
         {/* 가이드 소개 수정 */}
         {userInformation.guideIntroduction && (
@@ -521,15 +535,17 @@ function Left() {
 
   return (
     <MyPageLeft>
-      <ProfileImg src={Pimg} />
-      {/* <ProfileImg src={userInformation.guideProfilePicture} /> */}
+      {/* <ProfileImg src={Pimg} /> */}
+      <ProfileImg src={userInformation.guideProfilePicture} />
       <BoldP>{userInformation.nickname}</BoldP>
       <EditProfile />
       <MyTour>
-        <BoldP>예정된 투어 : {upComingTour.length} </BoldP>
-        <BoldP>지난 투어 : {lastTour.length}</BoldP>
+        <div style={{ fontWeight: "bold" }}>
+          예정된 투어 : {upComingTour.length}{" "}
+        </div>
+        <div style={{ fontWeight: "bold" }}>지난 투어 : {lastTour.length}</div>
       </MyTour>
-      <ChatList>대화목록</ChatList>
+      {/* <ChatList>대화목록</ChatList> */}
     </MyPageLeft>
   );
 }
