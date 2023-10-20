@@ -7,11 +7,10 @@ import ReviewCard from 'components/Card/ReviewMain';
 
 function VerticalCarousel({ list }) {
   return (
-    <div className={styles.carouselContainer} style={{ height: '350px' }}>
+    <div className={styles.carouselContainer} style={{ height: '150px' }}>
       <Slider
         infinite
-        // slidesToShow={Math.min(3, list.length)}
-        slidesToShow={3}
+        slidesToShow={Math.min(3, list.length)}
         slidesToScroll={1}
         speed={500}
         arrows
