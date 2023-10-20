@@ -22,7 +22,16 @@ function GuideCard({ guide }) {
             <div className={styles.name}>{guide.guideName}</div>
             <div style={{ marginLeft: '5px' }}>{guide.gender === '여' ? <FemaleIcon /> : <MaleIcon />}</div>
           </div>
-          <div className={styles.intro}>{introDisplay}</div>
+          <div className={styles.intro}>
+            {guide.guideIntro ? (
+              introDisplay
+            ) : (
+              <div>
+                안녕하세요 <br />
+                가이드 {guide.guideName}입니다
+              </div>
+            )}
+          </div>
         </div>
         {guide.profilePicture ? (
           <img src={guide.profilePicture} alt="guideImg" className={styles.profileImg}></img>
