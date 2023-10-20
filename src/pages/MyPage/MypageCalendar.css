@@ -113,7 +113,7 @@
 }
 
 .react-calendar__tile--now {
-  background: #ef5350;
+  background: #2d40d0;
   color: #fafafa;
 }
 
@@ -147,5 +147,5 @@
 }
 
 .highlight {
-  background: #f3a95f;
+  background: #0073ff99;
 }

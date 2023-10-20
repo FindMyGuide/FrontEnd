@@ -4,7 +4,6 @@ import styled from "styled-components";
 import Calendar from "react-calendar";
 import moment from "moment";
 import Card from "../../components/Card/Card";
-// import { ReactComponent as heartIcon } from "../../asset/Icon/heart.svg";
 
 // 캐러셀
 import "./MyPageCarousel.css";
@@ -14,6 +13,12 @@ import { Carousel } from "react-responsive-carousel";
 import { setLastTour } from "../../slices/LastTourSlice";
 import { setUpComingTour } from "slices/UpcomingTourSlice";
 
+// Icon
+import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
+import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ContentPasteIcon from "@mui/icons-material/ContentPaste";
+
 // API
 import {
   UpcomingTours,
@@ -22,14 +27,17 @@ import {
   LikeTour,
   MemberWantTour,
 } from "../../api/Mypage/MyUser";
+import GuideCard from "components/Card/GuideCard";
 
 // 오른쪽 - 회원전용
 const MemberMenuContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-color: grey;
   border-width: 1px 1px 1px 1px;
   border-style: solid;
+  border-radius: 0px 10px 10px 10px;
   gap: 100px;
 `;
 
@@ -42,14 +50,18 @@ const LastTourContainer = styled.div`
 
 const CardContainer = styled.div`
   display: flex;
-
+  justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
 `;
 
 // 오른쪽 - MemberBookedTour
-const MemberBookedTourTitle = styled.div`
-  margin-top: 50px;
+const MemberTitle = styled.div`
+  margin-top: 30px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  width: 1000px;
 `;
 
 const MemberBookedTourContainer = styled.div`
@@ -83,7 +95,7 @@ const MemberWantContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 30px;
+
   gap: 30px;
 `;
 
@@ -147,59 +159,80 @@ function MemberBookedTour() {
 
   const [value, onChange] = useState(new Date());
 
-  // 캐러셀
+  // console.log(upComingTour);
+
+  // Carousel의 현재 슬라이드 인덱스 상태
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   return (
     <div>
-      <MemberBookedTourTitle>
-        {/* <heartIcon /> */}
-        <h4>예정된 투어</h4>
-      </MemberBookedTourTitle>
+      <MemberTitle style={{ marginTop: "80px" }}>
+        <AirplanemodeActiveIcon style={{ color: "#0073ff99" }} />
+        <h4 style={{ fontWeight: "bold" }}>예정된 투어</h4>
+      </MemberTitle>
 
-      <Carousel
-        swipeable={true}
-        showThumbs={false}
-        showArrows={false}
-        showStatus={false}
-        emulateTouch={true}
-        width={"800px"}
-      >
-        {upComingTour.length > 0 &&
-          upComingTour.map((tour) => (
-            <SlideContainer>
-              <MemberBookedTourContainer key={tour.id}>
-                <Calendar
-                  onChange={onChange}
-                  value={value}
-                  formatDay={(locale, date) => moment(date).format("DD")}
-                  tileClassName={({ date, view }) => {
-                    if (
-                      tour.reservedDates.find(
-                        (x) => x === moment(date).format("YYYY-MM-DD")
-                      )
-                    ) {
-                      return "highlight";
+      {upComingTour.length > 0 ? (
+        <Carousel
+          swipeable={true}
+          showThumbs={false}
+          showArrows={false}
+          showStatus={false}
+          emulateTouch={true}
+          width={"800px"}
+          // onChange event handler 추가
+          onChange={(index) => setCurrentSlide(index)}
+        >
+          {upComingTour.length > 0 &&
+            upComingTour.map((tour, index) => (
+              <SlideContainer key={tour.index}>
+                <MemberBookedTourContainer>
+                  <Calendar
+                    onChange={onChange}
+                    // 현재 슬라이드와 맵핑되는 투어의 첫 번째 예약 날짜로 설정
+                    value={
+                      currentSlide === index &&
+                      tour.reservedDates &&
+                      tour.reservedDates[0]
+                        ? new Date(tour.reservedDates[0])
+                        : value
                     }
-                  }}
-                />
-                <BookedTourBody>
-                  {tour.reservedDates && tour.reservedDates[0] && (
-                    <h4 style={{ color: "blue" }}>
-                      {moment(tour.reservedDates[0]).diff(moment(), "days")}일
-                      뒤 예정된 투어가 있습니다
-                    </h4>
-                  )}
+                    formatDay={(locale, date) => moment(date).format("DD")}
+                    tileClassName={({ date, view }) => {
+                      if (
+                        tour.reservedDates.find(
+                          (x) => x === moment(date).format("YYYY-MM-DD")
+                        )
+                      ) {
+                        return "highlight";
+                      }
+                    }}
+                  />
+                  <BookedTourBody>
+                    {tour.reservedDates && tour.reservedDates[0] && (
+                      <h4 style={{ fontWeight: "bold" }}>
+                        {moment(tour.reservedDates[0]).diff(moment(), "days") <=
+                        0
+                          ? "현재 여행 중입니다."
+                          : `${moment(tour.reservedDates[0]).diff(
+                              moment(),
+                              "days"
+                            )}일 뒤 예정된 투어가 있습니다`}
+                      </h4>
+                    )}
 
-                  {!tour.reservedDates ||
-                    (!tour.reservedDates[0] && (
-                      <h4>예정된 투어 정보가 없습니다.</h4>
-                    ))}
-                  <Card tour={tour} />
-                </BookedTourBody>
-              </MemberBookedTourContainer>
-            </SlideContainer>
-          ))}
-      </Carousel>
+                    {!tour.reservedDates ||
+                      (!tour.reservedDates[0] && (
+                        <h4>예정된 투어 정보가 없습니다.</h4>
+                      ))}
+                    <Card tour={tour} />
+                  </BookedTourBody>
+                </MemberBookedTourContainer>
+              </SlideContainer>
+            ))}
+        </Carousel>
+      ) : (
+        <p>예정된 투어가 없습니다.</p>
+      )}
     </div>
   );
 }
@@ -231,20 +264,28 @@ function LastTour() {
 
   return (
     <div>
-      <h4>지난 투어</h4>
+      <MemberTitle>
+        <BusinessCenterIcon style={{ color: "#8e4000" }} />
+        <h4 style={{ fontWeight: "bold" }}>지난 투어</h4>
+      </MemberTitle>
 
-      <LastTourContainer>
-        <CardContainer>
-          {toursToShow.map((tour) => (
-            <Card key={tour.id} tour={tour} />
-          ))}
-        </CardContainer>
-        {showMore ? (
-          <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
-        ) : (
-          <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
-        )}
-      </LastTourContainer>
+      {lastTour.length > 0 ? (
+        <LastTourContainer>
+          <CardContainer>
+            {toursToShow.map((tour) => (
+              <Card key={tour.id} tour={tour} />
+            ))}
+          </CardContainer>
+          {lastTour.length > 3 &&
+            (showMore ? (
+              <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
+            ) : (
+              <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
+            ))}
+        </LastTourContainer>
+      ) : (
+        <p>지난 투어가 없습니다.</p>
+      )}
     </div>
   );
 }
@@ -274,20 +315,27 @@ function MemberLikeTour() {
 
   return (
     <div>
-      <h4>좋아요한 투어</h4>
-
-      <LastTourContainer>
-        <CardContainer>
-          {toursToShow.map((tour) => (
-            <Card key={tour.id} tour={tour} />
-          ))}
-        </CardContainer>
-        {showMore ? (
-          <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
-        ) : (
-          <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
-        )}
-      </LastTourContainer>
+      <MemberTitle>
+        <FavoriteIcon style={{ color: "red" }} />
+        <h4 style={{ fontWeight: "bold" }}>좋아요한 투어</h4>
+      </MemberTitle>
+      {likeTours.length > 0 ? (
+        <LastTourContainer>
+          <CardContainer>
+            {toursToShow.map((tour) => (
+              <Card key={tour.id} tour={tour} />
+            ))}
+          </CardContainer>
+          {likeTours.length > 3 &&
+            (showMore ? (
+              <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
+            ) : (
+              <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
+            ))}
+        </LastTourContainer>
+      ) : (
+        <p>좋아요한 투어가 없습니다.</p>
+      )}
     </div>
   );
 }
@@ -295,6 +343,9 @@ function MemberLikeTour() {
 // 좋아요한 가이드
 function MemberLikeGuide() {
   const [likeGuides, setLikeGuides] = useState([]);
+
+  // 3개씩 보여주기
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     const fetchLikeGuides = async () => {
@@ -309,10 +360,32 @@ function MemberLikeGuide() {
     fetchLikeGuides();
   }, []);
 
+  const toursToShow = showMore ? likeGuides : likeGuides.slice(0, 3);
+
   // console.log(likeGuides);
   return (
     <div>
-      <h4>좋아요한 가이드</h4>
+      <MemberTitle>
+        <FavoriteIcon style={{ color: "red" }} />
+        <h4 style={{ fontWeight: "bold" }}>좋아요한 가이드</h4>
+      </MemberTitle>
+      {likeGuides.length > 0 ? (
+        <LastTourContainer>
+          <CardContainer>
+            {toursToShow.map((guide) => (
+              <GuideCard key={guide.id} guide={guide} />
+            ))}
+          </CardContainer>
+          {likeGuides.length > 3 &&
+            (showMore ? (
+              <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
+            ) : (
+              <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
+            ))}
+        </LastTourContainer>
+      ) : (
+        <p>좋아요한 가이드가 없습니다.</p>
+      )}
     </div>
   );
 }
@@ -342,25 +415,36 @@ function MemberWantList() {
 
   return (
     <div>
-      <h4>원해요 글 목록</h4>
-      <MemberWantContainer>
-        <div>
-          {toursToShow.length > 0 &&
-            toursToShow.map((tour) => (
-              <WantList key={tour.id}>
-                <WantTitle>{tour.title}</WantTitle>
-                <div>{moment(tour.createAt).format("YYYY.MM.DD")}</div>
-                <ChatButton>채팅하기 </ChatButton>
-                <StatusButton>상태</StatusButton>
-              </WantList>
-            ))}
-        </div>
-        {showMore ? (
-          <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
-        ) : (
-          <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
-        )}
-      </MemberWantContainer>
+      <MemberTitle>
+        <ContentPasteIcon />
+        <h4 style={{ fontWeight: "bold" }}>원해요 글 목록</h4>
+      </MemberTitle>
+      {wantTour.length > 0 ? (
+        <MemberWantContainer style={{ marginBottom: "60px" }}>
+          <div>
+            {toursToShow.length > 0 &&
+              toursToShow.map((tour) => (
+                <WantList key={tour.id}>
+                  <WantTitle>{tour.title}</WantTitle>
+                  <div>{moment(tour.createAt).format("YYYY.MM.DD")}</div>
+                  <ChatButton>채팅하기 </ChatButton>
+                  {tour.isReserved ? (
+                    <StatusButton>예약 완료</StatusButton>
+                  ) : (
+                    <StatusButton>대기</StatusButton>
+                  )}
+                </WantList>
+              ))}
+          </div>
+          {wantTour.length > 3 && showMore ? (
+            <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
+          ) : wantTour.length > 3 && !showMore ? (
+            <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
+          ) : null}
+        </MemberWantContainer>
+      ) : (
+        <p>원해요 글이 없습니다.</p>
+      )}
     </div>
   );
 }
