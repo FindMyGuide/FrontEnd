@@ -10,6 +10,33 @@ import ReviewCard from 'components/Card/ReviewCard';
 import { useParams } from 'react-router-dom';
 
 const GuideDetailPage = () => {
+  const languageImage = {
+    KOREAN: (
+      <img width="28" height="28" src="https://img.icons8.com/emoji/96/south-korea-emoji.png" alt="south-korea-emoji" />
+    ),
+    ENGLISH: (
+      <img
+        width="28"
+        height="28"
+        src="https://img.icons8.com/emoji/96/united-states-emoji.png"
+        alt="united-states-emoji"
+      />
+    ),
+    SPANISH: <img width="28" height="28" src="https://img.icons8.com/emoji/96/spain-emoji.png" alt="spain-emoji" />,
+    JAPANESE: <img width="28" height="28" src="https://img.icons8.com/emoji/96/japan-emoji.png" alt="japan-emoji" />,
+    CHINESE: <img width="28" height="28" src="https://img.icons8.com/emoji/96/china-emoji.png" alt="china-emoji" />,
+    PORTUGUESE: (
+      <img width="28" height="28" src="https://img.icons8.com/emoji/96/portugal-emoji.png" alt="portugal-emoji" />
+    ),
+    FRENCH: <img width="28" height="28" src="https://img.icons8.com/emoji/96/france-emoji.png" alt="france-emoji" />,
+    RUSSIAN: <img width="28" height="28" src="https://img.icons8.com/emoji/96/russia-emoji.png" alt="russia-emoji" />,
+    ITALIAN: <img width="28" height="28" src="https://img.icons8.com/emoji/96/italy-emoji.png" alt="italy-emoji" />,
+    GERMAN: <img width="28" height="28" src="https://img.icons8.com/emoji/96/germany-emoji.png" alt="germany-emoji" />
+  };
+  const [uniqueLanguages, setUniqueLanguages] = useState([]);
+
+  // 중복 언어 제거 (선택 사항)
+
   const { id } = useParams();
 
   const [moreButton, setMoreButton] = useState(true);
@@ -31,6 +58,10 @@ const GuideDetailPage = () => {
         setGuideDetail(GuideDetail);
         setShowingList(GuideDetail?.tourProductResponses?.slice(0, 6));
         console.log(GuideDetail);
+        const allLanguages = GuideDetail?.tourProductResponses.reduce((languagesList, tour) => {
+          return languagesList.concat(tour.languages);
+        }, []);
+        setUniqueLanguages([...new Set(allLanguages)]);
       })
       .catch((error) => {
         console.error(error);
@@ -98,7 +129,12 @@ const GuideDetailPage = () => {
             <p>경력 {guideDetail.guideExperience}년</p>
           </div>
           <div style={{ paddingLeft: '20px' }}>
-            <p>언어 {guideDetail?.languages}</p>
+            <p>
+              언어{' '}
+              {uniqueLanguages?.map((language) => {
+                return languageImage[`${language}`];
+              })}
+            </p>
             {/* 소개 수정필요 */}
             <div>
               <p>{guideDetail.guideIntro}</p>

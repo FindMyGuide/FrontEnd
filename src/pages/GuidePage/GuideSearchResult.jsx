@@ -7,7 +7,7 @@ import ResultGuideCard from 'components/PopularGuideCard/ResultGuideCard';
 import RowResultGuideCard from 'components/PopularGuideCard/RowResultGuide';
 const GuideSearchResult = ({ list }) => {
   const guideList = list;
-
+  console.log(guideList);
   return (
     <>
       {guideList?.length <= 6 ? (
