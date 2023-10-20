@@ -12,26 +12,36 @@ import { AuthContext } from 'components/Chat/context/AuthContext';
 import { collection, query, where, getDocs, setDoc, doc, updateDoc, serverTimestamp, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import GuideButton from 'components/Chat/GuideButton';
+import Calendar from 'components/Calendar/Calendar';
 
 function WantTourDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const email = sessionStorage.getItem('userEmail');
   const [post, setPost] = useState('');
+  const [date, setDate] = useState([]);
   const [loading, setLoading] = useState(true);
   const { currentUser } = useContext(AuthContext);
   const [user, setUser] = useState('');
+  const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);
 
   useEffect(() => {
     async function fetchPostDetail(id) {
       const postDetail = await DetailArticle(id);
-      setPost(postDetail);
+      await setPost(postDetail);
+      if (post.reservationDates) {
+        const formattedDates = await post.reservationDates.map((dateString) => {
+          const [year, month, day] = dateString.split('-').map(Number);
+          return new Date(year, month - 1, day);
+        });
+        setDate(formattedDates);
+      }
       await handleSearch(postDetail.memberInfoResponse.nickname);
       setLoading(false);
     }
 
     fetchPostDetail(id);
-  }, [id]);
+  }, [id, post.reservationDates]);
 
   const onDeleteHandler = (id) => {
     if (window.confirm('글을 삭제하시겠습니까?')) {
@@ -136,6 +146,22 @@ function WantTourDetail() {
                   <div className={styles.category}>
                     <div className={styles.categoryTitle}>희망 투어 날짜</div>
                     <div className={styles.categoryContent}>
+                      <div className={styles.calendarLayout}>
+                        <div>
+                          📆&nbsp;
+                          <span
+                            className={styles.calendar}
+                            onClick={() => setIsCalendarModalOpen(!isCalendarModalOpen)}
+                          >
+                            달력으로 확인하기
+                          </span>
+                        </div>
+                        {isCalendarModalOpen ? (
+                          <div style={{ display: 'flex' }}>
+                            <Calendar date={date} />
+                          </div>
+                        ) : null}
+                      </div>
                       {post.reservationDates
                         .map((dateString) => {
                           const date = new Date(dateString);

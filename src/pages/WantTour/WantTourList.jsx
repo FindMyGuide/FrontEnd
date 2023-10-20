@@ -113,7 +113,7 @@ function WantTour() {
                   {list.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((post, index) => (
                     <div key={index} className={styles.post}>
                       <span className={styles.postTitle} onClick={() => handlePage(post.id)}>
-                        {post.title}
+                        {post.title.length > 35 ? post.title.slice(0, 34) + '...' : post.title}
                       </span>
                       {post.reservationDates.length === 1 ? (
                         <span>{post.reservationDates[0]}</span>

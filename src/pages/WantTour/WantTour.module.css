@@ -196,3 +196,16 @@
   font-size: 17px;
   white-space: pre-line;
 }
+
+.calendar {
+  text-decoration: underline;
+  color: #838383;
+
+  &:hover {
+    color: #545454;
+  }
+}
+
+.calendarLayout {
+  margin-bottom: 10px;
+}
