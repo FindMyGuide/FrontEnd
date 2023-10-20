@@ -458,7 +458,7 @@ function TourRegist() {
                           onKeyPress={handleKeyPress}
                           className={styles.add}
                         >
-                          위치 추가하기
+                          위치 검색하기
                         </button>
                         <ul></ul>{' '}
                       </div>

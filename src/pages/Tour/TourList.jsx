@@ -145,35 +145,12 @@ function TourList() {
               투어 등록
             </button>
           </div>
-          {/* <div className={tourListStyle.topcard}>
-            <div style={{ position: 'relative' }} onClick={() => navigate(`/tour/tourdetail/${randomItems[0].id}`)}>
-              <TourListCard
-                title={randomItems.length > 0 ? randomItems[0].title : ''}
-                likes={randomItems.length > 0 ? randomItems[0].likes : ''}
-              ></TourListCard>
-              <div className={tourListStyle.cardovertext}>1</div>
-            </div>
-            <div style={{ position: 'relative' }} onClick={() => navigate(`/tour/tourdetail/${randomItems[1].id}`)}>
-              <TourListCard
-                title={randomItems.length > 0 ? randomItems[1].title : ''}
-                likes={randomItems.length > 0 ? randomItems[1].likes : ''}
-              ></TourListCard>
-              <div className={tourListStyle.cardovertext}>2</div>
-            </div>
-            <div style={{ position: 'relative' }} onClick={() => navigate(`/tour/tourdetail/${randomItems[2].id}`)}>
-              <TourListCard
-                title={randomItems.length > 0 ? randomItems[2].title : ''}
-                likes={randomItems.length > 0 ? randomItems[2].likes : ''}
-              ></TourListCard>
-              <div className={tourListStyle.cardovertext}>3</div>
-            </div>
-          </div> */}
           <div
             className={tourListStyle.topcard}
             onClick={() => {
               saveScrollPosition();
               if (randomItems[0]) {
-                navigate(`/tour/tourdetail/${randomItems[0].id}`);
+                navigate(`/tour/tourdetail/${randomItems[0].tourProductId}`);
               }
             }}
           >
@@ -190,7 +167,7 @@ function TourList() {
                 onClick={() => {
                   saveScrollPosition();
                   if (randomItems[1]) {
-                    navigate(`/tour/tourdetail/${randomItems[1].id}`);
+                    navigate(`/tour/tourdetail/${randomItems[1].tourProductId}`);
                   }
                 }}
               >
@@ -205,7 +182,7 @@ function TourList() {
                 onClick={() => {
                   saveScrollPosition();
                   if (randomItems[2]) {
-                    navigate(`/tour/tourdetail/${randomItems[2].id}`);
+                    navigate(`/tour/tourdetail/${randomItems[2].tourProductId}`);
                   }
                 }}
               >
@@ -244,12 +221,12 @@ function TourList() {
           </p>
           <div className={tourListStyle.listItems}>
             {selectedDatas.map((tour) => (
-              <div key={tour.id}>
+              <div key={tour.tourProductId}>
                 <div
                   className={tourListStyle.item}
                   onClick={() => {
                     saveScrollPosition();
-                    navigate(`/tour/tourdetail/${tour.id}`);
+                    navigate(`/tour/tourdetail/${tour.tourProductId}`);
                   }}
                 >
                   {tour.imageUrls && tour.imageUrls.length > 0 && (

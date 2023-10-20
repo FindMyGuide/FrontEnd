@@ -27,10 +27,24 @@ import { ReactComponent as Watch } from 'asset/icons/watch.svg';
 import { ReactComponent as Writer } from 'asset/icons/writer.svg';
 import FormatTime from 'components/Format/FormatTime';
 import styles from './TourDetail.module.css';
+// import styles from './WantTour.module.css';
+
 import { TourDetail } from '../../api/tour/Tour';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import BamtolImg from 'asset/images/bamtol.png';
 // import { Calendar } from 'react-modern-calendar-datepicker';
+import TourDetailCarousel from 'components/Carousel/TourDetailCarousel';
+
+import korea from 'asset/nation/Korea.png';
+import usa from 'asset/nation/USA.png';
+import spain from 'asset/nation/Spain.png';
+import china from 'asset/nation/China.png';
+import japan from 'asset/nation/Japan.png';
+import france from 'asset/nation/France.png';
+import germany from 'asset/nation/Germany.png';
+import russia from 'asset/nation/Russia.png';
+import italy from 'asset/nation/Italy.png';
+import portugal from 'asset/nation/Portugal.png';
 
 const language = {
   KOREAN: '한국어',
@@ -44,11 +58,21 @@ const language = {
   ITALIAN: '이탈리아어',
   PORTUGUESE: '포르투갈어'
 };
+const languageEmoji = {
+  KOREAN: korea,
+  ENGLISH: usa,
+  SPANISH: spain,
+  CHINESE: china,
+  JAPANESE: japan,
+  FRENCH: france,
+  GERMAN: germany,
+  RUSSIAN: russia,
+  ITALIAN: italy,
+  PORTUGUESE: portugal
+};
 
 function TourDetailPage() {
   const tourId = useParams().id;
-  const email = sessionStorage.getItem('userEmail');
-  const navigate = useNavigate();
   const [tourDetail, setTourDetail] = useState({
     title: '',
     imageUrls: [],
@@ -91,7 +115,18 @@ function TourDetailPage() {
   // };
   const getLanguagesInKorean = (languages) => {
     if (!languages) return ''; // languages가 undefined나 null일 경우 빈 문자열을 반환
-    return languages.map((lang) => language[lang]).join(', ');
+    return languages.map((lang, index) => (
+      <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+        <img
+          src={languageEmoji[lang]}
+          alt={lang}
+          width="30"
+          height="20"
+          style={{ marginRight: '10px', border: '0.3px solid #bcbcbc' }}
+        />
+        {language[lang]}
+      </div>
+    ));
   };
 
   return (
@@ -109,10 +144,10 @@ function TourDetailPage() {
               <div className={styles.infoLayout}>
                 <div className={styles.secondParentContainer}>
                   <div>
-                    <Writer className={styles.icon} />
-                    {tourDetail.memberInfoResponse && tourDetail.memberInfoResponse.nickname} &nbsp;&nbsp;
-                    <Watch className={styles.icon} />
-                    <FormatTime dateTimeString={tourDetail.createAt} />
+                    <div>
+                      <Writer className={styles.icon} />
+                      {tourDetail.guideNickName && tourDetail.guideNickName} &nbsp;&nbsp;
+                    </div>
                   </div>
                   <div>
                     <FavoriteRoundedIcon className={styles.like} style={{ fill: '#FF6073' }} />
@@ -120,93 +155,71 @@ function TourDetailPage() {
                     {tourDetail.like}
                   </div>
                 </div>
-                {/* {tourDetail.memberInfoResponse && tourDetail.memberInfoResponse.email === email && !post.isReserved ? (
-                  <div className={styles.parentContainer}>
-                    <div className={styles.postBtn} onClick={onUpdateHandler}>
-                      수정
-                    </div>
-                    &nbsp;&nbsp;|&nbsp;&nbsp;
-                    <div className={styles.postBtn} onClick={() => onDeleteHandler(tourDetail.id)}>
-                      삭제
-                    </div>
-                  </div>
-                ) : null} */}
               </div>
             </div>
           ) : null}
-          <hr style={{ margin: '10px' }} />
-          <div style={{ padding: '20px 50px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', margin: '5px auto 20px' }}>
-              <div style={{ alignSelf: 'center' }}>
-                {/* <div>투어 사진:{tourDetail.bestImage}</div> */}
-                <img src={tourDetail.imageUrls?.[0]} alt={tourDetail.title} className={styles.itemImg} />
 
-                <div style={{ fontSize: '20px' }}>{tourDetail.content}</div>
-              </div>
-              <div
-                className={styles.pricecontainer}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  alignSelf: 'center'
-                }}
-              >
-                <div>
-                  <span style={{ fontSize: '35px', fontWeight: '900' }}>
-                    {tourDetail.price && tourDetail.price.toLocaleString()}원
-                  </span>
+          <hr style={{ margin: '10px' }} />
+          <div className={styles.categoryContainer} style={{ margin: '30px 40px' }}>
+            {tourDetail.imageUrls && (
+              <div className={styles.category}>
+                <div className={styles.categoryTitle}>투어 이미지</div>
+                <div className={styles.categoryContent}>
+                  <TourDetailCarousel images={tourDetail.imageUrls} />
                 </div>
-                <div>
-                  {tourDetail.howManyDay && tourDetail.howManyDay[0]}박
+              </div>
+            )}
+            {tourDetail.price && (
+              <div className={styles.category}>
+                <div className={styles.categoryTitle}>투어 가격</div>
+                <div className={styles.categoryContent}>{tourDetail.price && tourDetail.price.toLocaleString()} 원</div>
+              </div>
+            )}
+            {tourDetail.howManyDay && (
+              <div className={styles.category}>
+                <div className={styles.categoryTitle}>투어 소요 기간</div>
+                <div className={styles.categoryContent}>
+                  {tourDetail.howManyDay && tourDetail.howManyDay[0]}박{' '}
                   {tourDetail.howManyDay && tourDetail.howManyDay[1]}일
                 </div>
               </div>
-            </div>
-
-            <hr />
-
-            <div>
-              <p style={{ fontSize: '35px', fontWeight: '700' }}>투어 일정</p>
-              <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr' }}>
-                <div>지도</div>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  {tourDetail.locations &&
-                    tourDetail.locations.map((location, index) => (
-                      <div key={index}>
-                        {index + 1}일차: {location.title}
-                      </div>
-                    ))}
-                </div>
-              </div>
-            </div>
-
-            <hr />
-
-            <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', margin: '5px auto 20px' }}>
+            )}
+            {tourDetail.locations && (
               <div>
-                <div style={{ marginBottom: '20px' }}>
-                  <p style={{ fontSize: '35px', fontWeight: '700' }}>가이드 가능 언어</p>
-                  <div style={{ fontSize: '15px' }}>{getLanguagesInKorean(tourDetail.languages)}</div>
-                </div>
-
-                <div>
-                  <p style={{ fontSize: '35px', fontWeight: '700' }}>투어 테마</p>
-                  {tourDetail.themeResponses &&
-                    tourDetail.themeResponses.map((theme, index) => <div key={index}>{theme.title}</div>)}
+                <div className={styles.category}>
+                  <div className={styles.categoryTitle}>투어 일정</div>
+                  <div className={styles.categoryContent}>
+                    {tourDetail.locations &&
+                      // locations 배열을 date 값에 따라 정렬
+                      tourDetail.locations
+                        .sort((a, b) => a.date - b.date)
+                        .map((location) => (
+                          <div key={location.date}>
+                            {location.date}일차: {location.title}
+                          </div>
+                        ))}
+                  </div>
                 </div>
               </div>
-              {/* <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <Calendar value={formattedDates} shouldHighlightWeekends />
-              </div> */}
-            </div>
-            {/* <div className={styles.flex}>
-              {tourDetail && !tourDetail.isReseved ? (
-                <button className={styles.chatBtn}>📩 작성자와 채팅하기</button>
-              ) : (
-                <button className={styles.completeBtn}>매칭완료</button>
-              )}
-            </div> */}
+            )}
+
+            {tourDetail.languages && (
+              <div className={styles.category}>
+                <div className={styles.categoryTitle}>가이드 가능 언어</div>
+                <div className={styles.categoryContent}>{getLanguagesInKorean(tourDetail.languages)}</div>
+              </div>
+            )}
+            {tourDetail.themeResponses && (
+              <div className={styles.category}>
+                <div className={styles.categoryTitle}>투어 테마</div>
+                {tourDetail.themeResponses &&
+                  tourDetail.themeResponses.map((theme, index) => (
+                    <div key={index} className={styles.categoryContent}>
+                      {theme.title}
+                    </div>
+                  ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
