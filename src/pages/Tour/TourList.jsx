@@ -20,6 +20,13 @@ function TourList() {
   const [selectedDatas, setSelectedDatas] = useState(tourList);
   const [searchKeyword, setSearchKeyword] = useState('');
 
+  const fetchData = async (keyword) => {
+    const data = await SearchTour(keyword);
+    if (data && data.tourProductResponses) {
+      setSelectedDatas(data.tourProductResponses);
+    }
+  };
+
   // 상세 페이지로 이동하기 전에 스크롤 위치 저장
   const saveScrollPosition = () => {
     sessionStorage.setItem('scrollPosition', window.scrollY);
@@ -87,8 +94,17 @@ function TourList() {
           window.scrollTo(0, 0);
         }
       }
+      const searchParams = new URLSearchParams(location.search);
+      if (searchParams) {
+        const keyword = searchParams.get('search');
+        setSearchKeyword(keyword);
+
+        if (keyword) {
+          fetchData(keyword);
+        }
+      }
     })();
-  }, [location.state]);
+  }, [location.state, location.search]);
 
   useEffect(() => {
     if (selectedThemes.includes('전체')) {
@@ -112,6 +128,7 @@ function TourList() {
       }
     })();
   }, [searchKeyword]);
+
   return (
     <div className={styles.background}>
       <div className="container">

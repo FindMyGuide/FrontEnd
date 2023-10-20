@@ -1,21 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Card.module.css';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import LanguageIcon from '@mui/icons-material/Language';
 import NoImage from 'asset/images/NoImage2.png';
-import { TourLike } from 'api/tour/Tour';
+import { TourLike, TourLikeCancel } from 'api/tour/Tour';
 
 function Card({ tour }) {
   const navigate = useNavigate();
   const isLoggedIn = sessionStorage.getItem('accessToken');
+  const [likes, setLikes] = useState(parseInt(tour.likes));
+  const [isLiked, setIsLiked] = useState(tour.likeExist);
 
   const onClickHandler = (id) => {
     navigate(`/tour/tourdetail/${id}`);
   };
+
   const onLikeHandler = (tourId) => {
     if (isLoggedIn) {
-      TourLike(tourId);
+      if (isLiked) {
+        TourLikeCancel(tourId);
+        setLikes(likes - 1);
+      } else {
+        TourLike(tourId);
+        setLikes(likes + 1);
+      }
+      setIsLiked(!isLiked);
     } else {
       if (window.confirm('로그인이 필요한 기능입니다. 로그인 하시겠습니까?')) {
         navigate('/login');
@@ -24,7 +34,7 @@ function Card({ tour }) {
   };
 
   return (
-    <div className={styles.card} onClick={() => onClickHandler(tour.id)}>
+    <div className={styles.card} onClick={() => onClickHandler(tour.tourProductId)}>
       <div style={{ padding: '10px' }}>
         <div className={styles.content}>
           <div>
@@ -33,10 +43,10 @@ function Card({ tour }) {
           <div>
             <FavoriteRoundedIcon
               className={styles.like}
-              style={{ fill: tour.likeExist ? '#FF6073' : '#FFFFFF' }}
+              style={{ fill: isLiked ? '#FF6073' : '#FFFFFF' }}
               onClick={(e) => {
                 e.stopPropagation();
-                onLikeHandler(tour.id);
+                onLikeHandler(tour.tourProductId);
               }}
             />
           </div>
@@ -64,9 +74,8 @@ function Card({ tour }) {
           </div>
           <div>
             <FavoriteRoundedIcon style={{ fill: '#FF6073', marginRight: '3px' }} />
-            {tour.likes}
+            {likes}
           </div>
-          <div></div>
           <div style={{ textAlign: 'end' }}>￦&nbsp;{tour.price.toLocaleString()}</div>
         </div>
       </div>

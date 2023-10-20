@@ -5,12 +5,13 @@ import './slick.css';
 import styles from './VerticalCarousel.module.css';
 import ReviewCard from 'components/Card/ReviewMain';
 
-function Carousel({ list }) {
+function VerticalCarousel({ list }) {
   return (
-    <div className={styles.carouselContainer}>
+    <div className={styles.carouselContainer} style={{ height: '350px' }}>
       <Slider
         infinite
-        slidesToShow={Math.min(3, list.length)}
+        // slidesToShow={Math.min(3, list.length)}
+        slidesToShow={3}
         slidesToScroll={1}
         speed={500}
         arrows
@@ -28,4 +29,4 @@ function Carousel({ list }) {
   );
 }
 
-export default Carousel;
+export default VerticalCarousel;

@@ -64,7 +64,7 @@ function TastyList() {
                 </div>
               )}
               {showCloseButton && (
-                <div className={styles.moreBtn} onClick={() => setShowMoreCount(10)}>
+                <div className={styles.closeBtn} onClick={() => setShowMoreCount(10)}>
                   닫기
                 </div>
               )}

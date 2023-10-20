@@ -36,13 +36,33 @@ function WantTourRegist() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (title.trim() === '') {
+      alert('제목을 입력하세요');
+      return;
+    }
+    if (content === '') {
+      alert('내용을 입력하세요');
+      return;
+    }
+    if (date.length === 0) {
+      alert('날짜를 선택하세요');
+      return;
+    }
+    if (price === 0) {
+      alert('가격을 입력하세요');
+      return;
+    }
+    if (vehicle === '') {
+      alert('선호 교통수단을 선택하세요');
+      return;
+    }
 
     const formattedDates = date.map((selectedDate) => {
       const formattedDate = formatDate(selectedDate);
       return formattedDate;
     });
     formattedDates.sort((a, b) => new Date(a) - new Date(b));
-    
+
     const res = await CreateArticle({
       title,
       content,
