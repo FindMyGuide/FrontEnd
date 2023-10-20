@@ -53,6 +53,7 @@
   margin-left: 5px;
   display: flex;
   flex-direction: row;
+  padding-bottom: 10px;
 }
 
 .tourinfodialog {
@@ -99,4 +100,8 @@
   background-color: #f3f7fe;
   color: #3b82f6;
   font-weight: 700;
+}
+
+.touractive {
+  position: 'relative';
 }

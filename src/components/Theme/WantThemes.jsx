@@ -1,7 +1,13 @@
 import React from 'react';
 
 function WantThemes({ selectedThemes, setSelectedThemes }) {
-  const themes = ['맛집여행', '역사투어', '애견동반', '힐링투어', '기타'];
+  const themes = [
+    { themeId: 1, title: '맛집여행' },
+    { themeId: 2, title: '역사투어' },
+    { themeId: 3, title: '애견동반' },
+    { themeId: 4, title: '힐링투어' },
+    { themeId: 5, title: '기타' }
+  ];
 
   const themeMappings = {
     맛집여행: 1,
@@ -24,17 +30,17 @@ function WantThemes({ selectedThemes, setSelectedThemes }) {
 
   return (
     <div style={{ display: 'flex', marginTop: '1px' }}>
-      {themes.map((theme, index) => (
-        <div key={index}>
+      {themes.map((theme) => (
+        <div key={theme.themeId}>
           <label style={{ display: 'flex', alignItems: 'center' }}>
             <input
               type="checkbox"
-              value={themeMappings[theme]}
-              checked={selectedThemes.includes(themeMappings[theme])}
+              value={theme.themeId}
+              checked={selectedThemes.includes(theme.themeId)}
               onChange={handleThemeChange}
               style={{ width: '17px', height: '17px', marginRight: '5px' }}
             />
-            <div style={{ display: 'flex', width: '100px', fontSize: '17px' }}>{theme}</div>
+            <div style={{ display: 'flex', width: '100px', fontSize: '17px' }}>{theme.title}</div>
           </label>
         </div>
       ))}

@@ -67,7 +67,6 @@ const AreaPage = () => {
     return (
       <>
         <MapMarker
-          key={`${position.title}-${position.lat}`}
           position={{ lat: position?.lat, lng: position?.lng }} // 마커를 표시할 위치
           onMouseOver={() => setIsVisible(true)}
           onMouseOut={() => setIsVisible(false)}
@@ -111,27 +110,39 @@ const AreaPage = () => {
                 <SearchOutlined
                   sx={{ margin: '0' }}
                   onClick={(e) => {
-                    if (keyword === '') {
-                      alert('검색어를 입력해주세요');
-                    } else {
-                      SearchArea(e.target.value)
-                        .then((getSearch) => {
-                          if (getSearch?.tourProductResponses?.length !== 0) {
+                    if (e.key === 'Enter') {
+                      if (e.target.value === '') {
+                        alert('검색어를 입력해주세요');
+                      } else {
+                        SearchArea(e.target.value)
+                          .then((getSearch) => {
+                            if (getSearch?.tourProductResponses?.length !== 0) {
+                              setInfo([]);
+                              const searchResultList = getSearch;
+                              setSelectTour(searchResultList?.tourProductResponses[0]);
+                              setInfo(searchResultList);
+                              const newPositions = searchResultList.tourProductResponses[0]?.locations.map(
+                                (tourmarker) => {
+                                  return { lat: tourmarker.mapX, lng: tourmarker.mapY, title: tourmarker.title };
+                                }
+                              );
+                              setPosition(newPositions);
+                              setIsOpen(true);
+                              setIsInfoOpen(true);
+                            } else {
+                              setInfo([]);
+                              setIsOpen(false);
+                              setIsInfoOpen(false);
+                              setPosition([{ lat: 35.121059, lng: 129.043993 }]);
+                            }
+                          })
+                          .catch((error) => {
+                            setIsOpen(false);
+                            setIsInfoOpen(false);
                             setInfo([]);
-                            const searchResultList = getSearch;
-                            setInfo(searchResultList);
-                            setPosition([
-                              searchResultList.tourProductResponses[0]?.locations[0]?.mapX,
-                              searchResultList.tourProductResponses[0]?.locations[0]?.mapY
-                            ]);
-                          } else {
-                            setInfo([]);
-                            setPosition([35.121059, 129.043993]);
-                          }
-                        })
-                        .catch((error) => {
-                          console.error(error);
-                        });
+                            setPosition([{ lat: 35.121059, lng: 129.043993 }]);
+                          });
+                      }
                     }
                   }}
                 />
@@ -148,6 +159,7 @@ const AreaPage = () => {
                       if (getSearch?.tourProductResponses?.length !== 0) {
                         setInfo([]);
                         const searchResultList = getSearch;
+                        setSelectTour(searchResultList?.tourProductResponses[0]);
                         setInfo(searchResultList);
                         const newPositions = searchResultList.tourProductResponses[0]?.locations.map((tourmarker) => {
                           return { lat: tourmarker.mapX, lng: tourmarker.mapY, title: tourmarker.title };
@@ -157,11 +169,16 @@ const AreaPage = () => {
                         setIsInfoOpen(true);
                       } else {
                         setInfo([]);
-                        setPosition([35.121059, 129.043993]);
+                        setIsOpen(false);
+                        setIsInfoOpen(false);
+                        setPosition([{ lat: 35.121059, lng: 129.043993 }]);
                       }
                     })
                     .catch((error) => {
-                      console.error(error);
+                      setIsOpen(false);
+                      setIsInfoOpen(false);
+                      setInfo([]);
+                      setPosition([{ lat: 35.121059, lng: 129.043993 }]);
                     });
                 }
               }
@@ -177,31 +194,54 @@ const AreaPage = () => {
               <span style={{ marginLeft: '5px', fontSize: '12px' }}>{info?.tourProductResponses?.length}건</span>
             ) : null}
           </div>
-          {info?.tourProductResponses?.slice(0, 27).map((tourList, idx) => (
-            <div
-              key={tourList.id}
-              style={{ position: 'relative' }}
-              onClick={() => {
-                handlePostion(tourList);
-              }}
-            >
-              <hr style={{ marginBottom: '5px' }} />
-              <div className={styles.toursearchlist}>
-                <div style={{ flex: 3 }}>
-                  <b>
-                    {alphabetlist[idx]}. {tourList.title}
-                  </b>
-                  <p style={{ margin: 0, paddingLeft: '3px' }}>{tourList.guideName}</p>
-                  <p style={{ margin: 0, paddingLeft: '3px' }}>{tourList.content}</p>
+          {info?.length !== 0 ? (
+            <>
+              {info?.tourProductResponses?.slice(0, 27).map((tourList, idx) => (
+                <div
+                  key={tourList.id}
+                  className={styles.touractive}
+                  onClick={() => {
+                    handlePostion(tourList);
+                  }}
+                >
+                  <hr style={{ marginBottom: '5px', marginTop: '3px' }} />
+                  <div className={styles.toursearchlist}>
+                    <div style={{ flex: 3 }}>
+                      <b>
+                        {alphabetlist[idx]}. {tourList.title}
+                      </b>
+                      <div style={{ margin: 0, padding: '3px 0 4px 3px' }}>
+                        <span
+                          style={{
+                            padding: '2px',
+                            fontSize: '14px',
+                            border: '1px solid silver',
+                            borderRadius: '4px'
+                          }}
+                        >
+                          {tourList.guideName} 가이드
+                        </span>
+                      </div>
+                      {tourList.title.length > 15 ? (
+                        <p style={{ margin: 0, paddingLeft: '3px', lineHeight: '1.1' }}>
+                          {tourList.content.substring(0, 40)}...
+                        </p>
+                      ) : (
+                        <p style={{ margin: 0, paddingLeft: '3px', lineHeight: '1.1' }}>{tourList.content}</p>
+                      )}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      {tourList.guidePicture ? (
+                        <img style={{ width: '60px', height: '60px' }} src={tourList.guidePicture} alt="" />
+                      ) : null}
+                    </div>
+                  </div>
                 </div>
-                <div style={{ flex: 1 }}>
-                  {tourList.guidePicture ? (
-                    <img style={{ width: '60px', height: '60px' }} src={tourList.guidePicture} alt="" />
-                  ) : null}
-                </div>
-              </div>
-            </div>
-          ))}
+              ))}
+            </>
+          ) : (
+            <div style={{ margin: 0, paddingLeft: '3px', paddingTop: '10px' }}>검색결과가 없습니다</div>
+          )}
         </div>
         <Map // 지도를 표시할 Container
           id="map"
@@ -235,7 +275,7 @@ const AreaPage = () => {
               <div className={styles.tourinfodialog}>
                 <div className={styles.tourtitlebox}>
                   <div>
-                    <b>{selectTour.title}</b>
+                    <b>{selectTour?.title}</b>
                   </div>
                   <div className="close" onClick={() => setIsInfoOpen(false)} title="닫기">
                     X
@@ -244,19 +284,20 @@ const AreaPage = () => {
                 <div className={styles.tourbodybox}>
                   <a
                     href="#"
-                    onClick={() => {
-                      movePage(`/guide/detail/${selectTour.guideId}`);
+                    onClick={(e) => {
+                      e.preventDefault();
+                      movePage(`/guide/detail/${selectTour?.guideId}`);
                     }}
                     style={{ textDecorationLine: 'none' }}
                   >
-                    {selectTour.guideName}
+                    {selectTour?.guideName}
                   </a>
-                  <div className={styles.tourinformation}>{selectTour.content}</div>
+                  <div className={styles.tourinformation}>{selectTour?.content}</div>
                   {/* 투어 보러가기 */}
                   <div style={{ textAlign: 'center' }}>
                     <button
                       onClick={() => {
-                        gotour(selectTour.id);
+                        gotour(selectTour?.id);
                       }}
                       className={styles.gotourbutton}
                     >
@@ -271,6 +312,7 @@ const AreaPage = () => {
             position?.map((position, index) => (
               <>
                 <CustomContainer
+                  key={`${alphabetlist[index]}-${position.title}-${position.lat}-${position.lng}`}
                   idx={index}
                   position={{ lat: position.lat, lng: position.lng }} // 마커를 표시할 위치
                   content={position.title}

@@ -8,3 +8,10 @@
   min-width: 200px;
   border-radius: 8px 8px 8px 0;
 }
+
+.guideBox:hover {
+  box-shadow: 1px 1px 0 rgb(0, 0, 0, 0.5);
+  position: relative;
+  bottom: 2px;
+  right: 2px;
+}

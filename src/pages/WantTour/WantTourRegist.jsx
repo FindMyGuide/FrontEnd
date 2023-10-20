@@ -159,7 +159,7 @@ function WantTourRegist() {
                 placeholder="제목을 입력하세요"
                 value={title}
                 onChange={onTitleHandler}
-                maxLength="40"
+                // maxLength="40"
                 className={styles.input}
               />
             </div>
