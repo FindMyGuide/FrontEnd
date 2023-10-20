@@ -58,6 +58,7 @@
 
   content: '';
 }
+
 .slick-track:after {
   clear: both;
 }

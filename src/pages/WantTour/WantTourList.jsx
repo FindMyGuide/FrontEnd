@@ -82,10 +82,9 @@ function WantTour() {
           <div className={styles.flex}>
             {!myArticle ? (
               <div onClick={handleMyArticle} className={styles.listBtn}>
-                내가 쓴 글 보기
+                내가 쓴 글 보기&nbsp;&nbsp;
               </div>
             ) : null}
-            &nbsp;&nbsp;|&nbsp;&nbsp;
             {myArticle || wait ? (
               <div onClick={handleAllArticle} className={styles.listBtn}>
                 전체보기
@@ -93,7 +92,7 @@ function WantTour() {
             ) : null}
             {!wait ? (
               <div onClick={handleWait} className={styles.listBtn}>
-                매칭대기 보기
+                &nbsp;매칭대기 보기
               </div>
             ) : null}
           </div>
@@ -114,7 +113,7 @@ function WantTour() {
                   {list.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((post, index) => (
                     <div key={index} className={styles.post}>
                       <span className={styles.postTitle} onClick={() => handlePage(post.id)}>
-                        {post.title}
+                        {post.title.length > 35 ? post.title.slice(0, 34) + '...' : post.title}
                       </span>
                       {post.reservationDates.length === 1 ? (
                         <span>{post.reservationDates[0]}</span>

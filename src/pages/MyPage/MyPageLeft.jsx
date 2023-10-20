@@ -56,17 +56,6 @@ const MyTour = styled.div`
   gap: 10px;
 `;
 
-const ChatList = styled.button`
-  width: 10rem;
-  height: 3rem;
-  background-color: skyblue;
-  color: #fff;
-  border-radius: 1rem;
-  margin-top: 1rem;
-  border: 0px solid #fff;
-  font-weight: bold;
-`;
-
 // 왼쪽 개인정보 변경 모달창
 const ModalContainer = styled.div`
   border: 0.5px solid gray;
@@ -286,8 +275,6 @@ function Privacy({
   setGuideExperience,
   phoneNumber,
   setPhoneNumber,
-  certification,
-  setCertification,
 }) {
   const userInformation = useSelector((state) => state.user);
 
@@ -346,14 +333,11 @@ function Privacy({
       </PrivacyBox>
       <PrivacyBox>
         <b>자격증 </b>
-        <Selector
-          value={certification === "y" ? "Y" : "N"}
-          onChange={(e) => setCertification(e.target.value)}
-        >
-          <option value="Y">보유</option>
-          <option value="N">미보유</option>
-        </Selector>
+        <PrivacyDiv>
+          {userInformation.nationalCerftificationOfGuideYn ? "보유" : "미보유"}
+        </PrivacyDiv>
       </PrivacyBox>
+
       {userInformation.languages.length > 0 && (
         <PrivacyBox>
           <b>언어</b>
@@ -404,7 +388,7 @@ function EditModal({ setEditModal }) {
   );
   const [phoneNumber, setPhoneNumber] = useState(userInformation.phoneNumber);
   const [certification, setCertification] = useState(
-    userInformation.nationalCerftificationOfGuideYn
+    userInformation.nationalCerftificationOfGuideYn ? "Y" : "N"
   );
 
   const dispatch = useDispatch();
@@ -415,7 +399,7 @@ function EditModal({ setEditModal }) {
         nickname: nickname,
         languages: languages,
         guideExperience: guideExperience,
-        national_certification_of_quide_yn: certification === "y",
+        national_certification_of_quide_yn: certification === "Y",
         phoneNumber: phoneNumber,
         profilePicture: profilePicture,
         guideIntro: guideIntro,

@@ -98,7 +98,7 @@ export async function UserInfoChange(props) {
       {
         nickname: props.nickname,
         phoneNumber: props.phoneNumber,
-        national_certification_of_quide_yn:
+        nationalCertificationOfGuideYn:
           props.national_certification_of_quide_yn,
         guideExperience: props.guideExperience,
         profilePicture: props.profilePicture,
@@ -135,6 +135,44 @@ export async function PassWordChange(props) {
         },
       }
     );
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// 리뷰 등록
+export async function PostReview(props) {
+  try {
+    const res = await baseAxios.post(
+      `tour-product-review/register/${props.tour_id}`,
+      {
+        content: props.content,
+        rating: props.rating,
+        image: props.image,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: sessionStorage.getItem("accessToken"),
+        },
+      }
+    );
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// 내가 쓴 리뷰 리스트
+export async function GetReview(props) {
+  try {
+    const res = await baseAxios.get("tour-product-review/all/by-member", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionStorage.getItem("accessToken"),
+      },
+    });
     return res;
   } catch (e) {
     console.error(e);

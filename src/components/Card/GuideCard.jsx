@@ -7,7 +7,6 @@ import MaleIcon from '@mui/icons-material/Male';
 
 function GuideCard({ guide }) {
   const navigate = useNavigate();
-  console.log(guide, 'guideCard에서 확인');
   const introDisplay = guide.guideIntro.length > 28 ? `${guide.guideIntro.slice(0, 26)}...` : guide.guideIntro;
 
   const onClickHandler = (id) => {
