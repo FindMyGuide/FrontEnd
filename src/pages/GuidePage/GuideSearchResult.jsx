@@ -17,9 +17,9 @@ const GuideSearchResult = ({ list }) => {
               key={parseInt(guide.guideId)}
               guideId={guide?.guideId}
               name={guide?.guideName}
-              tour={guide?.tourProductResponses[0]?.title}
+              tour={guide?.tourProductInformation[0]?.price}
               imageLink={guide?.profilePicture}
-              style={{ flex: 1 }}
+              price={guide?.tourProductInformation[0]?.price}
             ></RowResultGuideCard>
           ))}
         </div>
@@ -30,8 +30,9 @@ const GuideSearchResult = ({ list }) => {
               key={parseInt(guide.guideId)}
               guideId={guide?.guideId}
               name={guide?.guideName}
-              tour={guide?.tourProductResponses[0]?.title}
+              tour={guide?.tourProductInformation[0]?.title}
               imageLink={guide?.profilePicture}
+              price={guide?.tourProductInformation[0]?.price}
             ></ResultGuideCard>
           ))}
         </Slider>
