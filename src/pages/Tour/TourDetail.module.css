@@ -189,3 +189,41 @@
 .itemImg {
   width: 90%;
 }
+
+.parentContainer {
+  display: flex;
+  align-items: center;
+}
+
+.infoLayout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.categoryContainer {
+  border-radius: 10px;
+  border: 1px solid #c0c0c0;
+  margin: 0;
+  padding: 10px;
+}
+
+.category {
+  display: flex;
+  justify-content: center;
+  margin: 7px 0 5px 20px;
+}
+
+.categoryTitle {
+  /* font-family: 'Happiness-Sans-Title'; */
+  font-size: 17px;
+  color: #878787;
+  width: 20%;
+  font-size: 19px;
+}
+
+.categoryContent {
+  width: 80%;
+  font-size: 17px;
+  white-space: pre-line;
+}
