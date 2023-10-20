@@ -1,21 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styles from '../MainPage/MainPage.module.css';
 import TourAll from '../../api/tour/Tour.jsx';
 import TourListCard from 'components/Card/TourListCard';
 import SearchBar from 'components/SearchBar/SearchBar';
 import tourListStyle from './TourList.module.css';
-import BamtolImg from 'asset/images/bamtol.png';
+// import BamtolImg from 'asset/images/bamtol.png';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 
 function TourList() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [randomItems, setRandomItems] = useState([]);
   const [selectedThemes, setSelectedThemes] = useState(['전체']);
-  const themes = ['전체', '맛집탐방', '역사탐방', '애견동반', '힐링투어'];
+  const themes = ['전체', '맛집탐방', '역사탐방', '애견동반', '힐링투어', '기타'];
   const [tourList, setTourList] = useState([]);
   const [selectedDatas, setSelectedDatas] = useState(tourList);
+
+  // 상세 페이지로 이동하기 전에 스크롤 위치 저장
+  const saveScrollPosition = () => {
+    sessionStorage.setItem('scrollPosition', window.scrollY);
+  };
+
+  // 리스트 페이지로 돌아왔을 때 스크롤 위치 복원
+  const restoreScrollPosition = () => {
+    const scrollY = sessionStorage.getItem('scrollPosition');
+    if (scrollY) {
+      setTimeout(() => {
+        window.scrollTo(0, scrollY);
+      }, 100); // 100ms 딜레이를 줍니다.
+    }
+  };
 
   const toggleTheme = (theme) => {
     let updatedSelectedThemes = [...selectedThemes]; // 상태를 직접 수정하지 않기 위한 임시 배열
@@ -63,6 +79,11 @@ function TourList() {
         const randomSelectedItems = getRandomItemsFromArray(data, 3);
         setRandomItems(randomSelectedItems);
         console.log(randomSelectedItems);
+        if (location.state && location.state.fromDetail) {
+          restoreScrollPosition();
+        } else {
+          window.scrollTo(0, 0);
+        }
       }
     })();
   }, []);
@@ -88,7 +109,12 @@ function TourList() {
           </header>
         </div>
         <div style={{ position: 'relative' }}>
-          <div className={tourListStyle.topdiv}>TOP</div>
+          <div className={tourListStyle.topdiv}>
+            <div>TOP</div>
+            <button onClick={() => navigate('/tour/tourregist')} className={tourListStyle.registButton}>
+              투어 등록하러 가기
+            </button>
+          </div>
           {/* <div className={tourListStyle.topcard}>
             <div style={{ position: 'relative' }} onClick={() => navigate(`/tour/tourdetail/${randomItems[0].id}`)}>
               <TourListCard
@@ -112,23 +138,41 @@ function TourList() {
               <div className={tourListStyle.cardovertext}>3</div>
             </div>
           </div> */}
-          <div className={tourListStyle.topcard}>
+          <div
+            className={tourListStyle.topcard}
+            onClick={() => {
+              saveScrollPosition();
+              navigate(`/tour/tourdetail/${randomItems[0].id}`);
+            }}
+          >
             {randomItems[0] && (
-              <div style={{ position: 'relative' }} onClick={() => navigate(`/tour/tourdetail/${randomItems[0].id}`)}>
+              <div style={{ position: 'relative' }}>
                 <TourListCard title={randomItems[0].title || ''} likes={randomItems[0].likes || ''}></TourListCard>
                 <div className={tourListStyle.cardovertext}>1</div>
               </div>
             )}
 
             {randomItems[1] && (
-              <div style={{ position: 'relative' }} onClick={() => navigate(`/tour/tourdetail/${randomItems[1].id}`)}>
+              <div
+                style={{ position: 'relative' }}
+                onClick={() => {
+                  saveScrollPosition();
+                  navigate(`/tour/tourdetail/${randomItems[1].id}`);
+                }}
+              >
                 <TourListCard title={randomItems[1].title || ''} likes={randomItems[1].likes || ''}></TourListCard>
                 <div className={tourListStyle.cardovertext}>2</div>
               </div>
             )}
 
             {randomItems[2] && (
-              <div style={{ position: 'relative' }} onClick={() => navigate(`/tour/tourdetail/${randomItems[2].id}`)}>
+              <div
+                style={{ position: 'relative' }}
+                onClick={() => {
+                  saveScrollPosition();
+                  navigate(`/tour/tourdetail/${randomItems[2].id}`);
+                }}
+              >
                 <TourListCard title={randomItems[2].title || ''} likes={randomItems[2].likes || ''}></TourListCard>
                 <div className={tourListStyle.cardovertext}>3</div>
               </div>
@@ -165,11 +209,17 @@ function TourList() {
           <div className={tourListStyle.listItems}>
             {selectedDatas.map((tour) => (
               <div key={tour.id}>
-                <div key={tour.id} className={tourListStyle.item}>
-                  <img src={BamtolImg} alt="" className={tourListStyle.itemImg} />
+                <div
+                  key={tour.id}
+                  className={tourListStyle.item}
+                  onClick={() => {
+                    saveScrollPosition();
+                    navigate(`/tour/tourdetail/${tour.id}`);
+                  }}
+                >
+                  <img src={tour.imageUrls[0]} alt={tour.title} className={tourListStyle.itemImg} />
                   <div className={tourListStyle.itemDetail}>
                     <p
-                      onClick={() => navigate(`/tour/tourdetail/${tour.id}`)}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
