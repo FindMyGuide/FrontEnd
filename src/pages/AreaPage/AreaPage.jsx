@@ -111,7 +111,7 @@ const AreaPage = () => {
                 <SearchOutlined
                   sx={{ margin: '0' }}
                   onClick={(e) => {
-                    if (keyword === '') {
+                    if (e.target.value === '') {
                       alert('검색어를 입력해주세요');
                     } else {
                       SearchArea(e.target.value)
@@ -120,10 +120,14 @@ const AreaPage = () => {
                             setInfo([]);
                             const searchResultList = getSearch;
                             setInfo(searchResultList);
-                            setPosition([
-                              searchResultList.tourProductResponses[0]?.locations[0]?.mapX,
-                              searchResultList.tourProductResponses[0]?.locations[0]?.mapY
-                            ]);
+                            const newPositions = searchResultList.tourProductResponses[0]?.locations.map(
+                              (tourmarker) => {
+                                return { lat: tourmarker.mapX, lng: tourmarker.mapY, title: tourmarker.title };
+                              }
+                            );
+                            setPosition(newPositions);
+                            setIsOpen(true);
+                            setIsInfoOpen(true);
                           } else {
                             setInfo([]);
                             setPosition([35.121059, 129.043993]);
@@ -191,8 +195,14 @@ const AreaPage = () => {
                   <b>
                     {alphabetlist[idx]}. {tourList.title}
                   </b>
-                  <p style={{ margin: 0, paddingLeft: '3px' }}>{tourList.guideName}</p>
-                  <p style={{ margin: 0, paddingLeft: '3px' }}>{tourList.content}</p>
+                  <p style={{ margin: 0, paddingLeft: '3px' }}>{tourList.guideName} 가이드</p>
+                  {tourList.title.length > 15 ? (
+                    <p style={{ margin: 0, paddingLeft: '3px', lineHeight: '1.1' }}>
+                      {tourList.content.substring(0, 40)}...
+                    </p>
+                  ) : (
+                    <p style={{ margin: 0, paddingLeft: '3px', lineHeight: '1.1' }}>{tourList.content}</p>
+                  )}
                 </div>
                 <div style={{ flex: 1 }}>
                   {tourList.guidePicture ? (

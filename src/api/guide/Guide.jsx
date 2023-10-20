@@ -22,13 +22,14 @@ export async function GuideAll() {
 
 //가이드 필터링
 export async function GuideFilter(props) {
+  console.log('여기가 프롭');
   console.log(props);
   try {
     const res = await baseAxios.get(`find-my-guide/guide/search`, {
       params: {
         gender: props.gender,
         age: `${props.age[0]}-${props.age[1]}`,
-        languages: props.languages
+        languages: props.language
       }
     });
     console.log(res.data);
