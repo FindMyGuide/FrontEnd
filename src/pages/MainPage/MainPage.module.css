@@ -33,3 +33,9 @@
 .content {
   margin-bottom: 100px;
 }
+
+.flex {
+  display: flex;
+  justify-content: center;
+  margin: 30px;
+}

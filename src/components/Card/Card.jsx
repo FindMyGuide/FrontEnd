@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import styles from "./Card.module.css";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import test from "asset/images/test.png";
@@ -11,7 +10,7 @@ function Card({ tour }) {
   };
 
   return (
-    <div className={styles.card} onClick={() => onClickHandler(tour.id)}>
+    <div className={styles.card}>
       <div style={{ padding: "10px" }}>
         <div className={styles.content}>
           <div>

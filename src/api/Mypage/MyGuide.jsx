@@ -1,3 +1,4 @@
+import axios from "axios";
 import { baseAxios } from "../Axios";
 
 //등록한 투어 조회
