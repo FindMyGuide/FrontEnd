@@ -81,6 +81,7 @@ const Input = () => {
           placeholder="Type something..."
           onChange={(e) => setText(e.target.value)}
           value={text}
+          required
         />
         <div className={styles.send}>
           <button type="submit">Send</button>

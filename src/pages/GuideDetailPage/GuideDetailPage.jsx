@@ -1,13 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from "react";
 
-import styles from './GuideDetailPage.module.css';
+import styles from "./GuideDetailPage.module.css";
 
-import { GuideDetail, GuideTourReview } from '../../api/guide/Guide';
-import Card from 'components/Card/Card';
+import { GuideDetail, GuideTourReview } from "../../api/guide/Guide";
+import Card from "components/Card/Card";
 
-import profileImg from 'asset/images/emptyprofile.png';
-import ReviewCard from 'components/Card/ReviewCard';
-import { useParams } from 'react-router-dom';
+import profileImg from "asset/images/emptyprofile.png";
+import ReviewCard from "components/Card/ReviewCard";
+import { useParams } from "react-router-dom";
+
+import GuideButton from "components/Chat/GuideButton";
+import { AuthContext } from "components/Chat/context/AuthContext";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  setDoc,
+  doc,
+  updateDoc,
+  serverTimestamp,
+  getDoc,
+} from "firebase/firestore";
+import { db } from "../../firebase";
 
 const GuideDetailPage = () => {
   const { id } = useParams();
@@ -24,6 +39,9 @@ const GuideDetailPage = () => {
   const [showingReview, setShowingReview] = useState([]);
   const [reviewNum, setReviewNum] = useState(2);
 
+  const { currentUser } = useContext(AuthContext);
+  const [user, setUser] = useState("");
+
   useEffect(() => {
     GuideDetail(id)
       .then((getGuideDetail) => {
@@ -31,6 +49,7 @@ const GuideDetailPage = () => {
         setGuideDetail(GuideDetail);
         setShowingList(GuideDetail?.tourProductResponses?.slice(0, 6));
         console.log(GuideDetail);
+        handleSearch(GuideDetail.guideEmail);
       })
       .catch((error) => {
         console.error(error);
@@ -69,7 +88,10 @@ const GuideDetailPage = () => {
     const endIndex = startIndex + 3;
 
     if (guideDetail?.tourProductResponses?.length + 3 > endIndex) {
-      const newTourProducts = guideDetail.tourProductResponses.slice(0, endIndex);
+      const newTourProducts = guideDetail.tourProductResponses.slice(
+        0,
+        endIndex
+      );
       setShowingList(newTourProducts);
       setPageNum(newPageNum);
       if (guideDetail?.tourProductResponses?.length <= endIndex) {
@@ -78,18 +100,62 @@ const GuideDetailPage = () => {
     }
   };
 
+  const handleSearch = async (props) => {
+    const q = query(collection(db, "users"), where("email", "==", props));
+    try {
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setUser(doc.data());
+      });
+    } catch (err) {}
+  };
+
+  const openChat = async () => {
+    if (currentUser.uid !== user.uid) {
+      const combinedId =
+        currentUser.uid > user.uid
+          ? currentUser.uid + user.uid
+          : user.uid + currentUser.uid;
+      try {
+        const res = await getDoc(doc(db, "chats", combinedId));
+
+        if (!res.exists()) {
+          await setDoc(doc(db, "chats", combinedId), { messages: [] });
+          await updateDoc(doc(db, "userChats", currentUser.uid), {
+            [combinedId + ".userInfo"]: {
+              uid: user.uid,
+              displayName: user.displayName,
+            },
+            [combinedId + ".date"]: serverTimestamp(),
+          });
+
+          await updateDoc(doc(db, "userChats", user.uid), {
+            [combinedId + ".userInfo"]: {
+              uid: currentUser.uid,
+              displayName: currentUser.displayName,
+            },
+            [combinedId + ".date"]: serverTimestamp(),
+          });
+        }
+      } catch (err) {}
+    }
+  };
+
   return (
     <>
       <div className={styles.webGuideDetail}>
         <div className={styles.guideprofile}>
-          <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+          <div style={{ textAlign: "center", marginBottom: "30px" }}>
             <img
-              style={{ width: '240px' }}
-              src={guideDetail?.profilePicture !== '' ? guideDetail.profilePicture : profileImg}
+              style={{ width: "240px" }}
+              src={
+                guideDetail?.profilePicture !== ""
+                  ? guideDetail.profilePicture
+                  : profileImg
+              }
               alt="가이드 이미지"
             />
           </div>
-
           <div className={styles.namebox}>
             <h5>
               <b>{guideDetail.guideName}</b>
@@ -97,40 +163,48 @@ const GuideDetailPage = () => {
             <p>{guideDetail.gender}성</p>
             <p>경력 {guideDetail.guideExperience}년</p>
           </div>
-          <div style={{ paddingLeft: '20px' }}>
+          <div style={{ paddingLeft: "20px" }}>
             <p>언어 {guideDetail?.languages}</p>
             {/* 소개 수정필요 */}
             <div>
               <p>{guideDetail.guideIntro}</p>
             </div>
           </div>
+          <div onClick={openChat}>
+            <GuideButton text="가이드"></GuideButton>
+          </div>
         </div>
         <div className={styles.tourofguide}>
           <div>
-            <h5 style={{ marginBottom: '20px' }}>
+            <h5 style={{ marginBottom: "20px" }}>
               <b>
-                현재 진행중인 투어{' '}
+                현재 진행중인 투어{" "}
                 {guideDetail?.tourProductResponses?.length !== 0 ? (
-                  <span style={{ fontSize: '12px' }}>({guideDetail?.tourProductResponses?.length})</span>
+                  <span style={{ fontSize: "12px" }}>
+                    ({guideDetail?.tourProductResponses?.length})
+                  </span>
                 ) : null}
               </b>
             </h5>
             <div className={styles.touring}>
               {showingList?.map((tourlist, idx) => (
-                <div style={{ marginLeft: 'auto', marginRight: 'auto' }} key={idx}>
+                <div
+                  style={{ marginLeft: "auto", marginRight: "auto" }}
+                  key={idx}
+                >
                   <Card
                     tour={{
                       id: `${tourlist.id}`,
                       title: `${tourlist.title}`,
                       price: `${tourlist.price}`,
                       bestImage: `${tourlist.bestImage}`,
-                      like: `${tourlist.likeExist}`
+                      like: `${tourlist.likeExist}`,
                     }}
                   ></Card>
                 </div>
               ))}
             </div>
-            <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+            <div style={{ textAlign: "center", marginBottom: "30px" }}>
               {moreButton && guideDetail?.tourProductResponses?.length > 6 ? (
                 <button
                   className={styles.gamebutton}
@@ -146,31 +220,38 @@ const GuideDetailPage = () => {
               ) : null}
             </div>
           </div>
-          <div style={{ paddingBottom: '40px' }}>
-            <h5 style={{ marginBottom: '20px' }}>
+          <div style={{ paddingBottom: "40px" }}>
+            <h5 style={{ marginBottom: "20px" }}>
               <b>
-                가이드 투어 후기{' '}
-                {guideReview?.length !== 0 ? <span style={{ fontSize: '12px' }}>({guideReview?.length})</span> : null}
+                가이드 투어 후기{" "}
+                {guideReview?.length !== 0 ? (
+                  <span style={{ fontSize: "12px" }}>
+                    ({guideReview?.length})
+                  </span>
+                ) : null}
               </b>
             </h5>
 
-            <div className={styles.reviewbox} style={{ display: 'flex', flexWrap: 'wrap', textAlign: 'center' }}>
+            <div
+              className={styles.reviewbox}
+              style={{ display: "flex", flexWrap: "wrap", textAlign: "center" }}
+            >
               {guideReview?.length !== 0 ? (
                 <>
                   {showingReview?.map((review, index) => (
-                    <div key={index} style={{ flex: '0 0 50%' }}>
+                    <div key={index} style={{ flex: "0 0 50%" }}>
                       <ReviewCard review={review} />
                     </div>
                   ))}
                 </>
               ) : (
-                <div style={{ textAlign: 'center' }}>
+                <div style={{ textAlign: "center" }}>
                   <p>가이드 리뷰가 없습니다.</p>
                 </div>
               )}
             </div>
 
-            <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+            <div style={{ textAlign: "center", marginBottom: "30px" }}>
               {moreReviewButton && guideReview?.length > 4 ? (
                 <button
                   className={styles.gamebutton}

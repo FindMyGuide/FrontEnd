@@ -4,7 +4,7 @@ import styles from "./GuideButton.module.css";
 import Popover from "@mui/material/Popover";
 import Home from "pages/ChatPage/Home";
 
-function GuideButton() {
+function GuideButton(props) {
   const [anchorEl, setAnchorEl] = useState();
 
   const handleClick = (event) => {
@@ -35,7 +35,7 @@ function GuideButton() {
             className={styles.content}
             style={{ color: "black", fontWeight: "semi-bold" }}
           >
-            📩 작성자와 채팅하기
+            📩 {props.text}와 채팅하기
           </div>
         </IconButton>
         <Popover

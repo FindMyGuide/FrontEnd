@@ -1,4 +1,4 @@
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, orderBy, query } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./context/AuthContext";
 import { ChatContext } from "./context/ChatContext";
@@ -14,14 +14,14 @@ const Chats = () => {
   useEffect(() => {
     const getChats = () => {
       const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
-        setChats(doc.data());
+        setChats(
+          Object.entries(doc.data()).sort((a, b) => b[1].date - a[1].date)
+        );
       });
-
       return () => {
         unsub();
       };
     };
-
     currentUser.uid && getChats();
   }, [currentUser.uid]);
 
@@ -41,19 +41,17 @@ const Chats = () => {
       >
         대화 상대 목록
       </h4>
-      {Object.entries(chats)
-        ?.sort((a, b) => b[1].date - a[1].date)
-        .map((chat) => (
-          <div
-            className={styles.userChat}
-            key={chat[0]}
-            onClick={() => handleSelect(chat[1].userInfo)}
-          >
-            <div className={styles.userChatInfo}>
-              <span>{chat[1].userInfo.displayName}</span>
-            </div>
+      {chats.map((chat) => (
+        <div
+          className={styles.userChat}
+          key={chat[0]}
+          onClick={() => handleSelect(chat[1].userInfo)}
+        >
+          <div className={styles.userChatInfo}>
+            <span>{chat[1].userInfo.displayName}</span>
           </div>
-        ))}
+        </div>
+      ))}
     </div>
   );
 };

@@ -68,32 +68,34 @@ function WantTourDetail() {
     } catch (err) {}
   };
   const openChat = async () => {
-    const combinedId =
-      currentUser.uid > user.uid
-        ? currentUser.uid + user.uid
-        : user.uid + currentUser.uid;
-    try {
-      const res = await getDoc(doc(db, "chats", combinedId));
+    if (currentUser.uid !== user.uid) {
+      const combinedId =
+        currentUser.uid > user.uid
+          ? currentUser.uid + user.uid
+          : user.uid + currentUser.uid;
+      try {
+        const res = await getDoc(doc(db, "chats", combinedId));
 
-      if (!res.exists()) {
-        await setDoc(doc(db, "chats", combinedId), { messages: [] });
-        await updateDoc(doc(db, "userChats", currentUser.uid), {
-          [combinedId + ".userInfo"]: {
-            uid: user.uid,
-            displayName: user.displayName,
-          },
-          [combinedId + ".date"]: serverTimestamp(),
-        });
+        if (!res.exists()) {
+          await setDoc(doc(db, "chats", combinedId), { messages: [] });
+          await updateDoc(doc(db, "userChats", currentUser.uid), {
+            [combinedId + ".userInfo"]: {
+              uid: user.uid,
+              displayName: user.displayName,
+            },
+            [combinedId + ".date"]: serverTimestamp(),
+          });
 
-        await updateDoc(doc(db, "userChats", user.uid), {
-          [combinedId + ".userInfo"]: {
-            uid: currentUser.uid,
-            displayName: currentUser.displayName,
-          },
-          [combinedId + ".date"]: serverTimestamp(),
-        });
-      }
-    } catch (err) {}
+          await updateDoc(doc(db, "userChats", user.uid), {
+            [combinedId + ".userInfo"]: {
+              uid: currentUser.uid,
+              displayName: currentUser.displayName,
+            },
+            [combinedId + ".date"]: serverTimestamp(),
+          });
+        }
+      } catch (err) {}
+    }
   };
 
   return (
@@ -228,7 +230,7 @@ function WantTourDetail() {
               <div className={styles.flex}>
                 {post && !post.isReseved ? (
                   <div onClick={openChat}>
-                    <GuideButton />
+                    <GuideButton text="작성자" />
                   </div>
                 ) : (
                   <button className={styles.completeBtn}>매칭완료</button>
