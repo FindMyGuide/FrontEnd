@@ -191,6 +191,7 @@ const GuidePage = () => {
                     .then((getSearchList) => {
                       serSearchResult([]);
                       const searchGuideList = getSearchList;
+                      console.log(`이게 받은 데이터유 ${searchGuideList}`);
 
                       serSearchResult(searchGuideList);
                     })
