@@ -206,10 +206,9 @@ function GuideBookedTour() {
       {bookedTour.length > 0
         ? bookedTour.map((tour) => (
             <BookedTourContainer key={tour.tourHistoryManagerId}>
-              <BookedImg src={tour.images} />
+              <BookedImg style={{ marginLeft: "60px" }} src={tour.images} />
               <BookedMemberContainer>
-                {/* <BookedTitle>{tour.title}</BookedTitle> */}
-                <BookedTitle>가나다라마</BookedTitle>
+                <BookedTitle>{tour.title}</BookedTitle>
                 <MemberBox>
                   <div>{tour.touristEmail}</div>
                   <div>
