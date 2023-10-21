@@ -38,7 +38,9 @@ function GuideButton(props) {
           type="button"
           onClick={handleClick}
         >
-          <div className={styles.content}>📩 {props.text}와 채팅하기</div>
+          <div className={styles.content} style={{ color: 'black', fontWeight: 'semi-bold' }}>
+            📩 {props.text}와 채팅하기
+          </div>
         </IconButton>
         <Popover
           id={id}

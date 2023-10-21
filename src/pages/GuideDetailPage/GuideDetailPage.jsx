@@ -165,7 +165,6 @@ const GuideDetailPage = () => {
               alt="가이드 이미지"
             />
           </div>
-
           <div className={styles.namebox}>
             <h5>
               <b>{guideDetail.guideName}</b>
