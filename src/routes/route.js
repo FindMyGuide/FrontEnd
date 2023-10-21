@@ -30,35 +30,10 @@ import TourDetailPage from "pages/Tour/TourDetail.jsx";
 import PrivateRouter from "./PrivateRouter";
 import PublicRouter from "./PublicRouter";
 
-import { Navigate } from "react-router-dom";
-import { useContext } from "react";
-import Home from "pages/ChatPage/Home";
-import { AuthContext } from "components/Chat/context/AuthContext";
-
 function RouteLink() {
-  const { currentUser } = useContext(AuthContext);
-
-  const ProtectedRoute = ({ children }) => {
-    if (!currentUser) {
-      return <Navigate to="/login" />;
-    }
-
-    return children;
-  };
   return (
     <>
       <Routes>
-        <Route path="/chat">
-          <Route
-            index
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
-
         <Route path="/" element={<MainPage />} />
         {/* <Route path="/products" element={<Themeproduct />} /> */}
 

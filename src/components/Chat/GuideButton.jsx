@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { IconButton } from '@material-tailwind/react';
 import styles from './GuideButton.module.css';
 import Popover from '@mui/material/Popover';
 import Home from 'pages/ChatPage/Home';
 
-function GuideButton() {
+function GuideButton(props) {
   const [anchorEl, setAnchorEl] = useState();
 
   const handleClick = (event) => {
@@ -26,7 +26,6 @@ function GuideButton() {
             backgroundColor: '#50abf2',
             borderRadius: '5px',
             padding: '10px 20px'
-            // boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.3)'
           }}
           onMouseEnter={(e) => {
             e.target.style.backgroundColor = '#1783d8';
@@ -39,11 +38,8 @@ function GuideButton() {
           type="button"
           onClick={handleClick}
         >
-          <div
-            className={styles.content}
-            // style={{ color: "black", fontWeight: "semi-bold" }}
-          >
-            📩 작성자와 채팅하기
+          <div className={styles.content} style={{ color: 'black', fontWeight: 'semi-bold' }}>
+            📩 {props.text}와 채팅하기
           </div>
         </IconButton>
         <Popover

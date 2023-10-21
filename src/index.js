@@ -15,19 +15,19 @@ import { ChatContextProvider } from "components/Chat/context/ChatContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <AuthContextProvider>
-      <ChatContextProvider>
-        <BrowserRouter>
-          <Provider store={store}>
-            {/* <PersistGate loading={null} persistor={persistor}> */}
-            <App />
-          </Provider>
-          {/* </PersistGate> */}
-        </BrowserRouter>
-      </ChatContextProvider>
-    </AuthContextProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <AuthContextProvider>
+    <ChatContextProvider>
+      <BrowserRouter>
+        <Provider store={store}>
+          {/* <PersistGate loading={null} persistor={persistor}> */}
+          <App />
+        </Provider>
+        {/* </PersistGate> */}
+      </BrowserRouter>
+    </ChatContextProvider>
+  </AuthContextProvider>
+  // </React.StrictMode>
 );
 
 // If you want your app to work offline and load faster, you can change

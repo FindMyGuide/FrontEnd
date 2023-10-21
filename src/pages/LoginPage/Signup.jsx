@@ -76,12 +76,11 @@ function Signup() {
     const data = { ...e, nationality: nationality, languages: languages };
     const res = await UserSignup(data);
     if (res !== undefined) {
-      setLoading(false);
       setMode(3);
     } else {
-      setLoading(false);
       window.alert("오류가 발생하였습니다. 다시 시도해주세요.");
     }
+    setLoading(false);
   };
 
   const changeEmail = async (e) => {
@@ -115,6 +114,7 @@ function Signup() {
   };
 
   const checkCode = async (e) => {
+    setLoading(true);
     const data = {
       code: watch("code"),
       email: watch("email"),
@@ -128,6 +128,7 @@ function Signup() {
       );
       const displayName = watch("nickname");
       const email = watch("email");
+      const alarm = 0;
 
       await updateProfile(res.user, {
         displayName,
@@ -136,6 +137,7 @@ function Signup() {
         uid: res.user.uid,
         displayName,
         email,
+        alarm,
       });
       await setDoc(doc(db, "userChats", res.user.uid), {});
       window.alert("인증이 완료되었습니다.로그인 페이지로 이동합니다.");
@@ -143,6 +145,7 @@ function Signup() {
     } else {
       window.alert("인증번호가 틀립니다.");
     }
+    setLoading(false);
   };
 
   const changeNationality = (e) => {
@@ -298,9 +301,9 @@ function Signup() {
                     다음단계
                   </Button>
                 )}
-                <h5 style={{ marginTop: "30px" }}>
+                <p style={{ marginTop: "30px" }}>
                   Are you a member? <a href="/login">Login now</a>
-                </h5>
+                </p>
               </div>
             </>
           )}
@@ -440,7 +443,6 @@ function Signup() {
                   checkPhone &&
                   phoneRex.test(watch("phoneNumber")) ? (
                     <>
-                      {/* <Box sx={{ m: 1, position: "relative" }}> */}
                       <Button
                         variant="contained"
                         disabled={loading}
@@ -460,8 +462,6 @@ function Signup() {
                         )}
                         이메일 인증
                       </Button>
-
-                      {/* </Box> */}
                     </>
                   ) : (
                     <Button variant="contained" disabled>
@@ -470,9 +470,9 @@ function Signup() {
                   )}
                 </div>
 
-                <h5 style={{ marginTop: "30px" }}>
+                <p style={{ marginTop: "30px" }}>
                   Are you a member? <a href="/login">Login now</a>
-                </h5>
+                </p>
               </div>
             </>
           )}
@@ -489,12 +489,28 @@ function Signup() {
                   label="인증번호"
                   {...register("code")}
                 ></TextField>
-                <Button variant="contained" onClick={checkCode}>
+                <Button
+                  variant="contained"
+                  onClick={checkCode}
+                  disabled={loading}
+                >
+                  {loading && (
+                    <CircularProgress
+                      size={24}
+                      sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        marginTop: "-12px",
+                        marginLeft: "-12px",
+                      }}
+                    />
+                  )}
                   이메일 인증완료
                 </Button>
-                <h5 style={{ marginTop: "30px" }}>
+                <p style={{ marginTop: "30px" }}>
                   Are you a member? <a href="/login">Login now</a>
-                </h5>
+                </p>
               </div>
             </>
           )}

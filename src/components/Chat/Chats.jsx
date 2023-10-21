@@ -1,9 +1,9 @@
-import { doc, onSnapshot } from "firebase/firestore";
-import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "./context/AuthContext";
-import { ChatContext } from "./context/ChatContext";
-import { db } from "../../firebase";
-import styles from "../../pages/ChatPage/style.module.scss";
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from './context/AuthContext';
+import { ChatContext } from './context/ChatContext';
+import { db } from '../../firebase';
+import styles from '../../pages/ChatPage/style.module.scss';
 
 const Chats = () => {
   const [chats, setChats] = useState([]);
@@ -12,31 +12,38 @@ const Chats = () => {
   const { dispatch } = useContext(ChatContext);
 
   useEffect(() => {
-    const getChats = () => {
-      const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
-        setChats(doc.data());
-      });
+    const getChats = async () => {
+      try {
+        const docRef = doc(db, 'userChats', currentUser.uid);
+        const docSnap = await getDoc(docRef);
 
-      return () => {
-        unsub();
-      };
+        if (docSnap.exists()) {
+          setChats(docSnap.data());
+        } else {
+          console.log('Document not found');
+        }
+      } catch (error) {
+        console.error('Error getting document:', error);
+      }
     };
 
-    currentUser.uid && getChats();
+    if (currentUser.uid) {
+      getChats();
+    }
   }, [currentUser.uid]);
 
   const handleSelect = (u) => {
-    dispatch({ type: "CHANGE_USER", payload: u });
+    dispatch({ type: 'CHANGE_USER', payload: u });
   };
 
   return (
     <div className={styles.chats}>
       <h4
         style={{
-          color: "white",
-          textAlign: "left",
-          marginLeft: "10px",
-          marginTop: "30px",
+          color: 'white',
+          textAlign: 'left',
+          marginLeft: '10px',
+          marginTop: '30px'
         }}
       >
         대화 상대 목록
@@ -44,11 +51,7 @@ const Chats = () => {
       {Object.entries(chats)
         ?.sort((a, b) => b[1].date - a[1].date)
         .map((chat) => (
-          <div
-            className={styles.userChat}
-            key={chat[0]}
-            onClick={() => handleSelect(chat[1].userInfo)}
-          >
+          <div className={styles.userChat} key={chat[0]} onClick={() => handleSelect(chat[1].userInfo)}>
             <div className={styles.userChatInfo}>
               <span>{chat[1].userInfo.displayName}</span>
             </div>

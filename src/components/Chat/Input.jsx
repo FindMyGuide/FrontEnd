@@ -1,20 +1,14 @@
-import React, { useContext, useState } from "react";
-import { AuthContext } from "./context/AuthContext";
-import { ChatContext } from "./context/ChatContext";
-import {
-  arrayUnion,
-  doc,
-  serverTimestamp,
-  Timestamp,
-  updateDoc,
-} from "firebase/firestore";
-import { db, storage } from "../../firebase";
-import { v4 as uuid } from "uuid";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import styles from "../../pages/ChatPage/style.module.scss";
+import React, { useContext, useState } from 'react';
+import { AuthContext } from './context/AuthContext';
+import { ChatContext } from './context/ChatContext';
+import { arrayUnion, doc, getDoc, serverTimestamp, Timestamp, updateDoc } from 'firebase/firestore';
+import { db, storage } from '../../firebase';
+import { v4 as uuid } from 'uuid';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import styles from '../../pages/ChatPage/style.module.scss';
 
 const Input = () => {
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
   const [img, setImg] = useState(null);
 
   const { currentUser } = useContext(AuthContext);
@@ -33,44 +27,49 @@ const Input = () => {
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            await updateDoc(doc(db, "chats", data.chatId), {
+            await updateDoc(doc(db, 'chats', data.chatId), {
               messages: arrayUnion({
                 id: uuid(),
                 text,
                 senderId: currentUser.uid,
                 date: Timestamp.now(),
-                img: downloadURL,
-              }),
+                img: downloadURL
+              })
             });
           });
         }
       );
     } else {
-      await updateDoc(doc(db, "chats", data.chatId), {
+      await updateDoc(doc(db, 'chats', data.chatId), {
         messages: arrayUnion({
           id: uuid(),
           text,
           senderId: currentUser.uid,
-          date: Timestamp.now(),
-        }),
+          date: Timestamp.now()
+        })
+      });
+
+      const alarmdata = await getDoc(doc(db, 'users', data.user.uid));
+
+      await updateDoc(doc(db, 'users', data.user.uid), {
+        alarm: alarmdata.data().alarm + 1
       });
     }
 
-    await updateDoc(doc(db, "userChats", currentUser.uid), {
-      [data.chatId + ".lastMessage"]: {
-        text,
+    await updateDoc(doc(db, 'userChats', currentUser.uid), {
+      [data.chatId + '.lastMessage']: {
+        text
       },
-      [data.chatId + ".date"]: serverTimestamp(),
+      [data.chatId + '.date']: serverTimestamp()
     });
 
-    await updateDoc(doc(db, "userChats", data.user.uid), {
-      [data.chatId + ".lastMessage"]: {
-        text,
+    await updateDoc(doc(db, 'userChats', data.user.uid), {
+      [data.chatId + '.lastMessage']: {
+        text
       },
-      [data.chatId + ".date"]: serverTimestamp(),
+      [data.chatId + '.date']: serverTimestamp()
     });
-
-    setText("");
+    setText('');
     setImg(null);
   };
   return (
@@ -81,6 +80,7 @@ const Input = () => {
           placeholder="Type something..."
           onChange={(e) => setText(e.target.value)}
           value={text}
+          required
         />
         <div className={styles.send}>
           <button type="submit">Send</button>
