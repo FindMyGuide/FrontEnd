@@ -39,9 +39,8 @@ function WantTourDetail() {
       await handleSearch(postDetail.memberInfoResponse.nickname);
       setLoading(false);
     }
-
     fetchPostDetail(id);
-  }, [id, post.reservationDates]);
+  }, []);
 
   const onDeleteHandler = (id) => {
     if (window.confirm('글을 삭제하시겠습니까?')) {
@@ -58,7 +57,6 @@ function WantTourDetail() {
   };
 
   const handleSearch = async (props) => {
-    console.log(props);
     const q = query(collection(db, 'users'), where('displayName', '==', props));
     try {
       const querySnapshot = await getDocs(q);
@@ -213,7 +211,7 @@ function WantTourDetail() {
               <div className={styles.flex}>
                 {post && !post.isReseved ? (
                   <div onClick={openChat}>
-                    <GuideButton />
+                    <GuideButton text="작성자" />
                   </div>
                 ) : (
                   <button className={styles.completeBtn}>매칭완료</button>

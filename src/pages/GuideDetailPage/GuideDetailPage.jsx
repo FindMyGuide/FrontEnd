@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 
 import styles from './GuideDetailPage.module.css';
 
@@ -8,6 +8,11 @@ import Card from 'components/Card/Card';
 import profileImg from 'asset/images/emptyprofile.png';
 import ReviewCard from 'components/Card/ReviewCard';
 import { useParams } from 'react-router-dom';
+
+import { AuthContext } from 'components/Chat/context/AuthContext';
+import { collection, query, where, getDocs, setDoc, doc, updateDoc, serverTimestamp, getDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
+import GuideButton from 'components/Chat/GuideButton';
 
 const GuideDetailPage = () => {
   const languageImage = {
@@ -51,6 +56,9 @@ const GuideDetailPage = () => {
   const [showingReview, setShowingReview] = useState([]);
   const [reviewNum, setReviewNum] = useState(2);
 
+  const { currentUser } = useContext(AuthContext);
+  const [user, setUser] = useState('');
+
   useEffect(() => {
     GuideDetail(id)
       .then((getGuideDetail) => {
@@ -62,6 +70,7 @@ const GuideDetailPage = () => {
           return languagesList.concat(tour.languages);
         }, []);
         setUniqueLanguages([...new Set(allLanguages)]);
+        handleSearch(GuideDetail.guideEmail);
       })
       .catch((error) => {
         console.error(error);
@@ -109,6 +118,42 @@ const GuideDetailPage = () => {
     }
   };
 
+  const handleSearch = async (props) => {
+    console.log(props);
+    const q = query(collection(db, 'users'), where('email', '==', props));
+    try {
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setUser(doc.data());
+      });
+    } catch (err) {}
+  };
+  const openChat = async () => {
+    const combinedId = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid;
+    try {
+      const res = await getDoc(doc(db, 'chats', combinedId));
+
+      if (!res.exists()) {
+        await setDoc(doc(db, 'chats', combinedId), { messages: [] });
+        await updateDoc(doc(db, 'userChats', currentUser.uid), {
+          [combinedId + '.userInfo']: {
+            uid: user.uid,
+            displayName: user.displayName
+          },
+          [combinedId + '.date']: serverTimestamp()
+        });
+
+        await updateDoc(doc(db, 'userChats', user.uid), {
+          [combinedId + '.userInfo']: {
+            uid: currentUser.uid,
+            displayName: currentUser.displayName
+          },
+          [combinedId + '.date']: serverTimestamp()
+        });
+      }
+    } catch (err) {}
+  };
+
   return (
     <>
       <div className={styles.webGuideDetail}>
@@ -138,6 +183,9 @@ const GuideDetailPage = () => {
             {/* 소개 수정필요 */}
             <div>
               <p>{guideDetail.guideIntro}</p>
+            </div>
+            <div onClick={openChat}>
+              <GuideButton text="가이드" />
             </div>
           </div>
         </div>

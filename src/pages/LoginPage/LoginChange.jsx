@@ -5,22 +5,23 @@ import { Button, CircularProgress } from "@mui/material";
 import { TextField } from "@mui/material";
 import { UserFindId, UserFindPassword, UserLogin } from "../../api/user/User";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
 
-function Login() {
+function LoginChange() {
+  let { token } = useParams();
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm();
+  const { register, watch, handleSubmit } = useForm();
   const [mode, setMode] = useState(1);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [findemail, setFindemail] = useState("");
 
   const loginHandler = async (e) => {
     setLoading(true);
     const userEmail = e.email;
     const res = await UserLogin(e);
-
     if (res != null) {
       await signInWithEmailAndPassword(auth, e.email, e.password);
       sessionStorage.setItem("userEmail", userEmail);
@@ -34,28 +35,19 @@ function Login() {
   };
 
   const findEmail = async (e) => {
-    setLoading(true);
-    const res = await UserFindId(e);
+    console.log(e);
+    const res = await UserFindId(e.findEmail);
     if (res !== undefined) {
       setEmail(res.data.email);
     } else {
       window.alert("일치하는 이메일이 없습니다.");
     }
-    setLoading(false);
   };
 
   const findPassword = async (e) => {
-    setLoading(true);
-    const res = await UserFindPassword(e.findEmail);
-    if (res !== undefined) {
-      window.alert("임시비밀번호가 전송되었습니다.");
-      window.location.reload();
-    } else {
-      window.alert("일치하는 이메일이 없습니다.");
-    }
-    setLoading(false);
+    const res = await UserFindPassword(e);
+    console.log(res);
   };
-
   return (
     <div className="container">
       {mode === 1 && (
@@ -117,7 +109,7 @@ function Login() {
                     setMode(2);
                   }}
                 >
-                  이메일 찾기
+                  이메일 찾기asdgasd
                 </Button>
                 <Button
                   onClick={() => {
@@ -162,24 +154,7 @@ function Login() {
                 {...register("phoneNumber")}
               ></TextField>
 
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                disabled={loading}
-              >
-                {loading && (
-                  <CircularProgress
-                    size={24}
-                    sx={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      marginTop: "-12px",
-                      marginLeft: "-12px",
-                    }}
-                  />
-                )}
+              <Button type="submit" variant="contained" fullWidth>
                 이메일 확인
               </Button>
               <Button
@@ -219,24 +194,7 @@ function Login() {
                 {...register("findEmail")}
               ></TextField>
 
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                disabled={loading}
-              >
-                {loading && (
-                  <CircularProgress
-                    size={24}
-                    sx={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      marginTop: "-12px",
-                      marginLeft: "-12px",
-                    }}
-                  />
-                )}
+              <Button type="submit" variant="contained" fullWidth>
                 인증메일 전송
               </Button>
               <Button
@@ -260,4 +218,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginChange;

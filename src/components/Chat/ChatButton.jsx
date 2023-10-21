@@ -1,14 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { IconButton } from "@material-tailwind/react";
 import styles from "./ChatButton.module.css";
 import Popover from "@mui/material/Popover";
 import Home from "pages/ChatPage/Home";
+import Badge from "@mui/material/Badge";
+import MailIcon from "@mui/icons-material/Mail";
+import { AuthContext } from "./context/AuthContext";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 function ChatButton() {
   const [anchorEl, setAnchorEl] = useState();
 
+  const { currentUser, alarm } = useContext(AuthContext);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    updateDoc(doc(db, "users", currentUser.uid), {
+      alarm: 0,
+    });
   };
 
   const handleClose = () => {
@@ -25,18 +35,20 @@ function ChatButton() {
           style={{
             backgroundColor: "#ffffff",
             boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.3)",
+            width: "70px",
+            height: "70px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
           size="lg"
           className={styles.icon}
           type="button"
           onClick={handleClick}
         >
-          <div
-            className={styles.content}
-            style={{ color: "black", fontWeight: "semi-bold" }}
-          >
-            CHAT
-          </div>
+          <Badge badgeContent={alarm} color="primary">
+            <MailIcon color="action" />
+          </Badge>
         </IconButton>
         <Popover
           id={id}
