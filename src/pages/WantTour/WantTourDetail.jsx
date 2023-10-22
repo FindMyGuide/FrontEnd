@@ -29,18 +29,20 @@ function WantTourDetail() {
     async function fetchPostDetail(id) {
       const postDetail = await DetailArticle(id);
       await setPost(postDetail);
-      if (post.reservationDates) {
-        const formattedDates = await post.reservationDates.map((dateString) => {
+
+      if (postDetail.reservationDates) {
+        const formattedDates = postDetail.reservationDates.map((dateString) => {
           const [year, month, day] = dateString.split('-').map(Number);
           return new Date(year, month - 1, day);
         });
         setDate(formattedDates);
       }
+
       await handleSearch(postDetail.memberInfoResponse.nickname);
       setLoading(false);
     }
     fetchPostDetail(id);
-  }, []);
+  }, [id]);
 
   const onDeleteHandler = (id) => {
     if (window.confirm('글을 삭제하시겠습니까?')) {
