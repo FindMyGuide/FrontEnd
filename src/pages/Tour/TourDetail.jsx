@@ -1,38 +1,11 @@
-// import React, { useEffect, useState } from 'react';
-// import { useParams } from 'react-router-dom';
-// import { TourDetail } from '../../api/tour/Tour';
-
-// function TourDetailPage() {
-//   const tourId = useParams().id;
-//   const [tourDetail, setTourDetail] = useState([]);
-
-//   console.log('check', tourId);
-//   useEffect(() => {
-//     (async () => {
-//       const data = await TourDetail(tourId);
-//       if (data) {
-//         setTourDetail(data);
-//       }
-//     })();
-//   }, [tourId]);
-//   return <div>hi</div>;
-// }
-
-// export default TourDetailPage;
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { ReactComponent as Prev } from 'asset/icons/prev.svg';
-import { ReactComponent as Watch } from 'asset/icons/watch.svg';
 import { ReactComponent as Writer } from 'asset/icons/writer.svg';
-import FormatTime from 'components/Format/FormatTime';
 import styles from './TourDetail.module.css';
-// import styles from './WantTour.module.css';
 
 import { TourDetail } from '../../api/tour/Tour';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
-import BamtolImg from 'asset/images/bamtol.png';
-// import { Calendar } from 'react-modern-calendar-datepicker';
 import TourDetailCarousel from 'components/Carousel/TourDetailCarousel';
 
 import korea from 'asset/nation/Korea.png';
@@ -45,6 +18,12 @@ import germany from 'asset/nation/Germany.png';
 import russia from 'asset/nation/Russia.png';
 import italy from 'asset/nation/Italy.png';
 import portugal from 'asset/nation/Portugal.png';
+
+import { AuthContext } from 'components/Chat/context/AuthContext';
+import { collection, query, where, getDocs, setDoc, doc, updateDoc, serverTimestamp, getDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
+import GuideButton from 'components/Chat/GuideButton';
+import Calendar from 'components/Calendar/Calendar';
 
 const language = {
   KOREAN: '한국어',
@@ -72,6 +51,9 @@ const languageEmoji = {
 };
 
 function TourDetailPage() {
+  const navigate = useNavigate();
+  const { id } = useParams();
+
   const tourId = useParams().id;
   const [tourDetail, setTourDetail] = useState({
     title: '',
@@ -79,40 +61,75 @@ function TourDetailPage() {
     languages: []
     //... 다른 기본값들
   });
+  const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);
+  const [date, setDate] = useState([]);
 
-  const formattedDates = tourDetail.availableDates
-    ? tourDetail.availableDates.map((dateObj) => {
-        const [year, month, day] = dateObj.date.split('-').map(Number);
-        return { year, month, day };
-      })
-    : [];
+  const { currentUser } = useContext(AuthContext);
+  const [user, setUser] = useState('');
+
+  const handleSearch = async (props) => {
+    console.log(props);
+    if (props) {
+      const q = query(collection(db, 'users'), where('email', '==', props));
+      try {
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          setUser(doc.data());
+        });
+      } catch (err) {}
+    } else {
+      console.error('Email is undefined');
+    }
+  };
+
+  const openChat = async () => {
+    const combinedId = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid;
+    try {
+      const res = await getDoc(doc(db, 'chats', combinedId));
+
+      if (!res.exists()) {
+        await setDoc(doc(db, 'chats', combinedId), { messages: [] });
+        await updateDoc(doc(db, 'userChats', currentUser.uid), {
+          [combinedId + '.userInfo']: {
+            uid: user.uid,
+            displayName: user.displayName
+          },
+          [combinedId + '.date']: serverTimestamp()
+        });
+
+        await updateDoc(doc(db, 'userChats', user.uid), {
+          [combinedId + '.userInfo']: {
+            uid: currentUser.uid,
+            displayName: currentUser.displayName
+          },
+          [combinedId + '.date']: serverTimestamp()
+        });
+      }
+    } catch (err) {}
+  };
+
   useEffect(() => {
     async function fetchPostDetail(id) {
       try {
         const postDetail = await TourDetail(id);
+        console.log(postDetail);
         if (postDetail?.data) {
           setTourDetail(postDetail.data);
+          handleSearch(postDetail.guideEmail);
+          const formattedDates = postDetail.availableDates.map((dateString) => {
+            const [year, month, day] = dateString.split('-').map(Number);
+            return new Date(year, month - 1, day);
+          });
+          setDate(formattedDates);
         }
       } catch (error) {
         console.error('Error fetching the tour detail:', error);
       }
     }
+
     fetchPostDetail(tourId);
   }, [tourId]);
 
-  // const onDeleteHandler = (id) => {
-  //   if (window.confirm('글을 삭제하시겠습니까?')) {
-  //     DeleteArticle(id);
-  //     alert('삭제완료');
-  //     navigate('/wanttour');
-  //   } else {
-  //     alert('취소');
-  //   }
-  // };
-
-  // const onUpdateHandler = () => {
-  //   navigate(`/wanttour/update/${tourDetail.id}`, { state: tourDetail });
-  // };
   const getLanguagesInKorean = (languages) => {
     if (!languages) return ''; // languages가 undefined나 null일 경우 빈 문자열을 반환
     return languages.map((lang, index) => (
@@ -144,7 +161,7 @@ function TourDetailPage() {
               <div className={styles.infoLayout}>
                 <div className={styles.secondParentContainer}>
                   <div>
-                    <div>
+                    <div onClick={() => navigate(`/guide/detail/${tourDetail?.guideId}`)}>
                       <Writer className={styles.icon} />
                       {tourDetail.guideNickName && tourDetail.guideNickName} &nbsp;&nbsp;
                     </div>
@@ -179,8 +196,10 @@ function TourDetailPage() {
               <div className={styles.category}>
                 <div className={styles.categoryTitle}>투어 소요 기간</div>
                 <div className={styles.categoryContent}>
-                  {tourDetail.howManyDay && tourDetail.howManyDay[0]}박{' '}
-                  {tourDetail.howManyDay && tourDetail.howManyDay[1]}일
+                  {tourDetail.howManyDay &&
+                    (tourDetail.howManyDay[0] === '0'
+                      ? '하루'
+                      : `${tourDetail.howManyDay[0]}박 ${tourDetail.howManyDay[1]}일`)}
                 </div>
               </div>
             )}
@@ -189,15 +208,23 @@ function TourDetailPage() {
                 <div className={styles.category}>
                   <div className={styles.categoryTitle}>투어 일정</div>
                   <div className={styles.categoryContent}>
-                    {tourDetail.locations &&
-                      // locations 배열을 date 값에 따라 정렬
-                      tourDetail.locations
-                        .sort((a, b) => a.date - b.date)
-                        .map((location) => (
-                          <div key={location.date}>
-                            {location.date}일차: {location.title}
+                    {(() => {
+                      // locations 배열을 date 값에 따라 그룹화
+                      const groupedLocations = tourDetail.locations.reduce((acc, location) => {
+                        if (!acc[location.date]) acc[location.date] = [];
+                        acc[location.date].push(location);
+                        return acc;
+                      }, {});
+
+                      // 그룹화된 locations를 배열로 변환하여 정렬한 후 map
+                      return Object.entries(groupedLocations)
+                        .sort((a, b) => a[0] - b[0])
+                        .map(([date, locations]) => (
+                          <div key={date}>
+                            {date}일차: {locations.map((loc) => loc.title).join(' - ')}
                           </div>
-                        ))}
+                        ));
+                    })()}
                   </div>
                 </div>
               </div>
@@ -212,14 +239,42 @@ function TourDetailPage() {
             {tourDetail.themeResponses && (
               <div className={styles.category}>
                 <div className={styles.categoryTitle}>투어 테마</div>
-                {tourDetail.themeResponses &&
-                  tourDetail.themeResponses.map((theme, index) => (
-                    <div key={index} className={styles.categoryContent}>
-                      {theme.title}
-                    </div>
-                  ))}
+                <div className={styles.categoryContent} style={{ display: 'flex' }}>
+                  {tourDetail.themeResponses &&
+                    tourDetail.themeResponses.map((theme, index) => (
+                      <div key={index} style={{ marginRight: '10px' }}>
+                        {theme.title}
+                      </div>
+                    ))}
+                </div>
               </div>
             )}
+            {tourDetail.availableDates && (
+              <div className={styles.category}>
+                <div className={styles.categoryTitle}>예약 가능 날짜</div>
+                <div className={styles.categoryContent}>
+                  <div className={styles.calendarLayout}>
+                    <div>
+                      📆&nbsp;
+                      <span className={styles.calendar} onClick={() => setIsCalendarModalOpen(!isCalendarModalOpen)}>
+                        달력으로 확인하기
+                      </span>
+                    </div>
+                    {isCalendarModalOpen ? (
+                      <div style={{ display: 'flex' }}>
+                        <Calendar date={date} />
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <div onClick={openChat}>
+                <GuideButton text="가이드" />
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -5,7 +5,6 @@ import './slick.css';
 import './slick-theme.css';
 
 function TourDetailCarousel({ images = [] }) {
-  console.log(images);
   return (
     <div style={{ width: '500px', height: '500px' }}>
       <Slider infinite slidesToScroll={1} speed={800} arrows autoplay autoplaySpeed={3000}>

@@ -4,7 +4,6 @@ import { baseAxios } from '../Axios';
 export default async function TourAll() {
   try {
     const res = await baseAxios.get('tourProducts');
-    console.log('전체 투어 목록', res.data);
     return res.data;
   } catch (e) {
     console.error(e);
@@ -25,7 +24,6 @@ export async function TourPopular() {
 export async function TourDetail(props) {
   try {
     const res = await baseAxios.get(`tourProduct/${props}`, {}, {});
-    console.log('투어 디테일', res);
     return res;
   } catch (e) {
     console.error(e);
