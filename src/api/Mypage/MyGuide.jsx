@@ -35,6 +35,7 @@ export async function MytourResister(formData) {
   console.log("맞아");
   console.log(formData.get("tourProductRequest"));
   console.log(formData.get("files"));
+  console.log("투어등록", formData);
 
   for (let [key, value] of formData.entries()) {
     console.log(key, value);
