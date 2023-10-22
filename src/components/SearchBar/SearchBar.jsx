@@ -12,7 +12,6 @@ function SearchBar({ searchBar }) {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log(input);
     // 검색 axios
     searchBar(input);
     setInput('');

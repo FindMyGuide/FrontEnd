@@ -1,7 +1,9 @@
 /* global kakao */
 import { useEffect, useState } from 'react';
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
+import { Map, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { Grid } from '@mui/material';
+import styles from './TourRegistLocation.module.css';
 
 function TourRegistLocation({ onLocationSelect, searchWord, day }) {
   const [info, setInfo] = useState();
@@ -50,6 +52,16 @@ function TourRegistLocation({ onLocationSelect, searchWord, day }) {
     });
     setInfo({});
   };
+  // 커스텀 오버레이가 표시될 위치입니다
+  var position = info && info.position ? new kakao.maps.LatLng(info.position.lat, info.position.lng) : null;
+
+  // position이 유효한 경우에만 커스텀 오버레이를 생성합니다
+  var customOverlay = position
+    ? new kakao.maps.CustomOverlay({
+        position: position,
+        content: info.content
+      })
+    : null;
 
   return (
     <div>
@@ -69,12 +81,29 @@ function TourRegistLocation({ onLocationSelect, searchWord, day }) {
           <MapMarker
             key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
             position={marker.position}
-            onClick={() => setInfo(marker)}
+            onClick={() => {
+              setInfo(marker);
+              console.log(marker);
+            }}
           >
-            {info && info.content === marker.content && (
-              <div style={{ color: '#000' }}>
-                {marker.content}
-                <AddCircleOutlineIcon onClick={onLocation} />
+            {info && info.position && info.content === marker.content && (
+              <div
+                style={{
+                  border: '3px solid #90d2f0',
+                  // borderRadius: '3px',
+                  backgroundColor: '#90d2f0',
+                  width: '220px',
+                  maxWidth: '220px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}
+              >
+                {info.content}
+                <button className={styles.addButton} onClick={onLocation}>
+                  추가
+                </button>
+                {/* <AddCircleOutlineIcon onClick={onLocation} /> */}
               </div>
             )}
           </MapMarker>

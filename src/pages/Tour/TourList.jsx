@@ -6,25 +6,34 @@ import { SearchTour } from 'api/tour/SearchTour';
 import TourListCard from 'components/Card/TourListCard';
 import SearchBar from 'components/SearchBar/SearchBar';
 import tourListStyle from './TourList.module.css';
-// import BamtolImg from 'asset/images/bamtol.png';
-import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
+import { ReactComponent as Spinner } from 'asset/icons/Spinner.svg';
+import { Fade } from 'react-awesome-reveal';
 
 function TourList() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [randomItems, setRandomItems] = useState([]);
   const [selectedThemes, setSelectedThemes] = useState(['전체']);
   const themes = ['전체', '맛집탐방', '역사탐방', '애견동반', '힐링투어', '기타'];
   const [tourList, setTourList] = useState([]);
   const [selectedDatas, setSelectedDatas] = useState(tourList);
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // Spinner의 상태를 관리하는 상태 변수
+  const ITEMS_PER_LOAD = 10; // 한 번에 로드할 아이템의 수
+  const [displayedItemsCount, setDisplayedItemsCount] = useState(ITEMS_PER_LOAD); // 현재 표시될 아이템의 수
+  // 더보기 버튼을 표시할 상태 변수
+  const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
 
   const fetchData = async (keyword) => {
-    const data = await SearchTour(keyword);
-    if (data && data.tourProductResponses) {
-      setSelectedDatas(data.tourProductResponses);
+    if (keyword !== '') {
+      const data = await SearchTour(keyword);
+      if (data && data.tourProductResponses) {
+        setSelectedDatas(data.tourProductResponses);
+      }
     }
+  };
+  const handleLoadMore = () => {
+    setDisplayedItemsCount((prevCount) => prevCount + ITEMS_PER_LOAD);
   };
 
   // 상세 페이지로 이동하기 전에 스크롤 위치 저장
@@ -71,23 +80,13 @@ function TourList() {
     setSelectedDatas(filteredTours);
   };
 
-  function getRandomItemsFromArray(arr, count) {
-    const shuffled = arr.slice(0); // 배열 복사
-    for (let i = arr.length - 1; i > 0; i--) {
-      const rand = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[rand]] = [shuffled[rand], shuffled[i]]; // ES6 구조 분해 할당을 이용한 스왑
-    }
-    return shuffled.slice(0, count); // 랜덤으로 섞인 배열에서 상위 count 개의 요소를 선택
-  }
-
   useEffect(() => {
     (async () => {
+      setIsLoading(true);
       const data = await TourAll();
       if (data) {
         setTourList(data);
-        const randomSelectedItems = getRandomItemsFromArray(data, 3);
-        setRandomItems(randomSelectedItems);
-        console.log(randomSelectedItems);
+        setIsLoading(false);
         if (location.state && location.state.fromDetail) {
           restoreScrollPosition();
         } else {
@@ -107,6 +106,22 @@ function TourList() {
   }, [location.state, location.search]);
 
   useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 50 &&
+        !isLoading &&
+        displayedItemsCount < selectedDatas.length
+      ) {
+        // 스크롤이 바닥에 닿았고, 모든 데이터가 아직 표시되지 않았을 때 더보기 버튼을 표시
+        setShowLoadMoreButton(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isLoading, displayedItemsCount, selectedDatas]);
+
+  useEffect(() => {
     if (selectedThemes.includes('전체')) {
       setSelectedDatas(tourList);
     } else {
@@ -119,9 +134,9 @@ function TourList() {
 
   useEffect(() => {
     (async () => {
-      if (searchKeyword !== '') {
+      // 검색어가 비어있지 않을 때만 검색 API를 호출
+      if (searchKeyword && searchKeyword.trim() !== '') {
         const data = await SearchTour(searchKeyword);
-        console.log('data', data);
         if (data && data.tourProductResponses) {
           setSelectedDatas(data.tourProductResponses);
         }
@@ -138,129 +153,63 @@ function TourList() {
             <SearchBar searchBar={setSearchKeyword} />
           </header>
         </div>
-        <div style={{ position: 'relative' }}>
-          <div className={tourListStyle.topdiv}>
-            <div>TOP</div>
-            <button onClick={() => navigate('/tour/tourregist')} className={tourListStyle.registButton}>
-              투어 등록
-            </button>
-          </div>
-          <div
-            className={tourListStyle.topcard}
-            onClick={() => {
-              saveScrollPosition();
-              if (randomItems[0]) {
-                navigate(`/tour/tourdetail/${randomItems[0].tourProductId}`);
-              }
-            }}
-          >
-            {randomItems[0] && (
-              <div style={{ position: 'relative' }}>
-                <TourListCard title={randomItems[0].title || ''} likes={randomItems[0].likes || ''}></TourListCard>
-                <div className={tourListStyle.cardovertext}>1</div>
+        {!isLoading ? (
+          <div>
+            <div className={tourListStyle.content}>
+              <div className={tourListStyle.selectedtheme}>
+                <p style={{ fontSize: '46px', fontWeight: '900', margin: '0' }}>#</p>&nbsp;
+                <div style={{ color: '#0052b4' }}>{selectedThemes.join(', ')}</div>
+                &nbsp;투어
               </div>
-            )}
-
-            {randomItems[1] && (
-              <div
-                style={{ position: 'relative' }}
-                onClick={() => {
-                  saveScrollPosition();
-                  if (randomItems[1]) {
-                    navigate(`/tour/tourdetail/${randomItems[1].tourProductId}`);
-                  }
-                }}
-              >
-                <TourListCard title={randomItems[1].title || ''} likes={randomItems[1].likes || ''}></TourListCard>
-                <div className={tourListStyle.cardovertext}>2</div>
+              <button onClick={() => navigate('/tour/tourregist')} className={tourListStyle.registButton}>
+                투어 등록
+              </button>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+              <div className={tourListStyle.themes}>
+                {themes.map((theme, index) => (
+                  <div
+                    key={theme}
+                    className={`${tourListStyle.tourtheme} ${
+                      selectedThemes.includes(theme) ? tourListStyle.selected : ''
+                    }`}
+                    onClick={() => toggleTheme(theme)}
+                  >
+                    {theme}
+                  </div>
+                ))}
               </div>
-            )}
-
-            {randomItems[2] && (
-              <div
-                style={{ position: 'relative' }}
-                onClick={() => {
-                  saveScrollPosition();
-                  if (randomItems[2]) {
-                    navigate(`/tour/tourdetail/${randomItems[2].tourProductId}`);
-                  }
-                }}
-              >
-                <TourListCard title={randomItems[2].title || ''} likes={randomItems[2].likes || ''}></TourListCard>
-                <div className={tourListStyle.cardovertext}>3</div>
+            </div>
+            <hr style={{ width: '100%', margin: '40px auto' }} />
+            <p style={{ width: '100%', margin: '20px auto', fontSize: '30px', fontWeight: '600' }}>
+              총 <span style={{ color: '#0052b4', fontWeight: 'bold' }}>{selectedDatas.length}</span>개의 투어가
+              있습니다
+            </p>
+            <Fade cascade damping={0.1}>
+              <div className={tourListStyle.listItems}>
+                {selectedDatas.slice(0, displayedItemsCount).map((tour) => (
+                  <Fade key={tour.tourProductId}>
+                    <TourListCard tour={tour} />
+                  </Fade>
+                ))}
               </div>
-            )}
-          </div>
-        </div>
-
-        <div>
-          <div className={tourListStyle.selectedtheme}>
-            <p style={{ fontSize: '46px', fontWeight: '900', margin: '0' }}>#</p>&nbsp;
-            <div style={{ color: '#0052b4' }}>{selectedThemes.join(', ')}</div>
-            &nbsp;투어
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
-            <div className={tourListStyle.themes}>
-              {themes.map((theme, index) => (
-                <div
-                  key={theme}
-                  className={`${tourListStyle.tourtheme} ${
-                    selectedThemes.includes(theme) ? tourListStyle.selected : ''
-                  }`}
-                  onClick={() => toggleTheme(theme)}
-                >
-                  {theme}
-                </div>
-              ))}
+            </Fade>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              {showLoadMoreButton && displayedItemsCount < selectedDatas.length && (
+                <button className={tourListStyle.gamebutton} onClick={handleLoadMore}>
+                  <svg className={tourListStyle.playicon} viewBox="0 0 40 40">
+                    <path d="M 10,10 L 20,30 L 30,10 z"></path>
+                  </svg>
+                  더보기
+                </button>
+              )}{' '}
             </div>
           </div>
-          <hr style={{ width: '100%', margin: '40px auto' }} />
-
-          <p style={{ width: '100%', margin: '20px auto', fontSize: '30px', fontWeight: '600' }}>
-            총 <span style={{ color: '#0052b4', fontWeight: 'bold' }}>{selectedDatas.length}</span>개의 투어가 있습니다
-          </p>
-          <div className={tourListStyle.listItems}>
-            {selectedDatas.map((tour) => (
-              <div key={tour.tourProductId}>
-                <div
-                  className={tourListStyle.item}
-                  onClick={() => {
-                    saveScrollPosition();
-                    navigate(`/tour/tourdetail/${tour.tourProductId}`);
-                  }}
-                >
-                  {tour.imageUrls && tour.imageUrls.length > 0 && (
-                    <img src={tour.imageUrls[0]} alt={tour.title} className={tourListStyle.itemImg} />
-                  )}
-                  <div className={tourListStyle.itemDetail}>
-                    <p
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        margin: '5px 0px',
-                        fontSize: '25px',
-                        fontWeight: '900'
-                      }}
-                    >
-                      {tour.title}
-                    </p>
-                    {/* {tour.locations.map((location) => (
-                      <p key={location.title} style={{ display: 'flex', alignItems: 'center', margin: '5px 0px' }}>
-                        {location.title}
-                      </p>
-                    ))} */}
-                    <div style={{ display: 'flex', alignItems: 'center', margin: '5px 0px' }}>
-                      <FavoriteRoundedIcon className={styles.like} style={{ fill: '#FF6073' }} />
-
-                      {tour.likes}
-                    </div>
-                  </div>
-                </div>
-                <hr style={{ width: '90%' }} />
-              </div>
-            ))}
+        ) : (
+          <div className={styles.flex}>
+            <Spinner />
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
