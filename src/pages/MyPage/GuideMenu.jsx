@@ -20,9 +20,6 @@ const GuideMenuContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-width: 1px 1px 1px 1px;
-  border-style: solid;
-  border-radius: 0px 10px 10px 10px;
   gap: 100px;
 `;
 
@@ -50,10 +47,17 @@ const GuideTitle = styled.div`
   width: 1000px;
 `;
 
+const CenterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+`;
+
 // 등록한 투어
 const RegisterContainer = styled.div`
   display: flex;
-  align-items: center;
+  align-items: start;
   flex-direction: column;
   gap: 30px;
 `;
@@ -148,8 +152,6 @@ function RegisteredTour() {
     }
   };
 
-  console.log(tour);
-
   const toursToShow = showMore ? tour : tour.slice(0, 3);
 
   return (
@@ -159,33 +161,37 @@ function RegisteredTour() {
         <h4 style={{ fontWeight: "bold" }}> 등록한 투어 </h4>
       </GuideTitle>
       {tour.length > 0 ? (
-        <RegisterContainer>
-          <CardContainer>
-            {toursToShow.length > 0 &&
-              toursToShow.map((tour) => (
-                <div
-                  key={tour.id}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "30px",
-                  }}
-                >
-                  <Card tour={tour} />
-                  <CancelButton onClick={() => handleCancel(tour.id)}>
-                    투어 삭제
-                  </CancelButton>
-                </div>
-              ))}
-          </CardContainer>
+        <CenterContainer>
+          <RegisterContainer>
+            <CardContainer>
+              {toursToShow.length > 0 &&
+                toursToShow.map((tour) => (
+                  <div
+                    key={tour.tourProductId}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "30px",
+                    }}
+                  >
+                    <Card tour={tour} />
+                    <CancelButton
+                      onClick={() => handleCancel(tour.tourProductId)}
+                    >
+                      투어 삭제
+                    </CancelButton>
+                  </div>
+                ))}
+            </CardContainer>
+          </RegisterContainer>
           {tour.length > 3 &&
             (showMore ? (
               <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
             ) : (
               <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
             ))}
-        </RegisterContainer>
+        </CenterContainer>
       ) : (
         <p> 등록된 투어가 없습니다.</p>
       )}
@@ -208,8 +214,6 @@ function GuideBookedTour() {
     };
     fetchBookedTour();
   }, []);
-
-  // console.log(bookedTour);
 
   // 취소하기 버튼 클릭 이벤트 핸들러
   const handleCancelClick = async (tourHistoryManagerId) => {
@@ -276,8 +280,6 @@ function GuideWantList() {
     fetchBookedTour();
   }, []);
 
-  // console.log(wantList);
-
   const toursToShow = showMore ? wantList : wantList.slice(0, 3);
 
   // 취소하기 버튼 클릭 이벤트 핸들러
@@ -300,30 +302,31 @@ function GuideWantList() {
       </GuideTitle>
 
       {wantList.length > 0 ? (
-        <WantListContainer style={{ marginBottom: "60px" }}>
-          {toursToShow.map((tour) => (
-            <WantListBox style={{ marginBottom: "30px" }}>
-              <WantTitle> {tour.wantTourTitle} </WantTitle>
-              <div>
-                {new Date(tour.tourStartDate).toLocaleDateString()} ~{" "}
-                {new Date(tour.tourEndDate).toLocaleDateString()}
-              </div>
-              <ChatButton>채팅</ChatButton>
-              <CancelButton
-                onClick={() => handleCancelClick(tour.tourHistoryManagerId)}
-              >
-                취소
-              </CancelButton>
-            </WantListBox>
-          ))}
-
+        <CenterContainer>
+          <WantListContainer style={{ marginBottom: "60px" }}>
+            {toursToShow.map((tour) => (
+              <WantListBox style={{ marginBottom: "30px" }}>
+                <WantTitle> {tour.wantTourTitle} </WantTitle>
+                <div>
+                  {new Date(tour.tourStartDate).toLocaleDateString()} ~{" "}
+                  {new Date(tour.tourEndDate).toLocaleDateString()}
+                </div>
+                <ChatButton>채팅</ChatButton>
+                <CancelButton
+                  onClick={() => handleCancelClick(tour.tourHistoryManagerId)}
+                >
+                  취소
+                </CancelButton>
+              </WantListBox>
+            ))}
+          </WantListContainer>
           {wantList.length > 3 &&
             (showMore ? (
               <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
             ) : (
               <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
             ))}
-        </WantListContainer>
+        </CenterContainer>
       ) : (
         <p style={{ marginBottom: "30px" }}>매칭된 원해요 리스트가 없습니다.</p>
       )}
