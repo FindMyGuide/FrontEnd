@@ -8,6 +8,7 @@ import {
   UserInfo,
   UserInfoChange,
   PassWordChange,
+  CertificationRegistration,
 } from "../../api/Mypage/MyUser";
 
 // Slice
@@ -73,6 +74,16 @@ const EditModalContainer = styled(ModalContainer)`
   left: 35%;
 `;
 
+const CtfModalContainer = styled(ModalContainer)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 400px;
+  height: 200px;
+  gap: 40px;
+`;
+
 const EditCloseButton = styled.button`
   width: 20px;
   border-radius: 50%;
@@ -113,6 +124,10 @@ const EditCompleteButton = styled(EditBasicButton)`
 
 const ChangePasswordButton = styled(EditBasicButton)`
   background-color: #ff1212;
+`;
+
+const CertificationButton = styled(EditBasicButton)`
+  background-color: brown;
 `;
 
 const IntroductionP = styled.p`
@@ -278,8 +293,6 @@ function Privacy({
 }) {
   const userInformation = useSelector((state) => state.user);
 
-  console.log(userInformation);
-
   return (
     <PrivacyContainer>
       <PrivacyBox>
@@ -361,10 +374,57 @@ function Privacy({
   );
 }
 
+// 자격증 등록 모달
+function CertificationModal({ setCertificationModal }) {
+  const closeModal = () => {
+    setCertificationModal(false);
+  };
+
+  // 이미지 업로드 상태
+  const [image, setImage] = useState(null);
+
+  async function handleRegister() {
+    try {
+      await CertificationRegistration({
+        image: image,
+      });
+      alert("심사 후에 자격증 보유 여부가 수정됩니다.");
+      closeModal();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  return (
+    <CtfModalContainer>
+      <EditCloseButton
+        style={{
+          marginRight: "30px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        onClick={closeModal}
+      >
+        X
+      </EditCloseButton>
+
+      {/* 이미지 업로드 */}
+      <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+
+      {/* '등록' 버튼 */}
+      <EditCompleteButton onClick={handleRegister}>등록</EditCompleteButton>
+    </CtfModalContainer>
+  );
+}
+
 // 개인정보 수정 모달창
 function EditModal({ setEditModal }) {
   // 비밀번호 변경 모달 상태
   const [passwordChangeModal, setPasswordChangeModal] = useState(false);
+
+  // 자격증 등록 모달 상태
+  const [certificationModal, setCertificationModal] = useState(false);
 
   // 개인정보 수정 모달 닫기
   const closeModal = () => {
@@ -393,17 +453,47 @@ function EditModal({ setEditModal }) {
 
   const dispatch = useDispatch();
 
+  // 프로필 사진 상태
+  const [profilePictureFile, setProfilePictureFile] = useState(null); // 추가
+
+  // 프로필 사진 변경 핸들러 - 파일 객체를 상태에 저장
+  const handleProfilePictureChange = (e) => {
+    if (e.target.files[0]) {
+      setProfilePicture(URL.createObjectURL(e.target.files[0]));
+      setProfilePictureFile(e.target.files[0]);
+    }
+  };
+
   async function handleSubmit() {
     try {
-      await UserInfoChange({
+      let formData = new FormData();
+
+      // 프로필 사진을 File 객체로 추가
+      if (profilePictureFile) {
+        // 변경됨
+        formData.append("profilePicture", profilePictureFile);
+      }
+
+      // 나머지 데이터를 JSON 형태로 변환 후 Blob으로 추가
+      const data = {
         nickname: nickname,
         languages: languages,
         guideExperience: guideExperience,
         national_certification_of_quide_yn: certification === "Y",
         phoneNumber: phoneNumber,
-        profilePicture: profilePicture,
         guideIntro: guideIntro,
-      });
+      };
+
+      // formData.append("userRequest", JSON.stringify(data));
+
+      formData.append(
+        "userRequest",
+        new Blob([JSON.stringify(data)], {
+          type: "application/json; charset=UTF-8",
+        })
+      );
+
+      await UserInfoChange(formData);
 
       // 사용자 정보를 다시 가져옵니다.
       const res = await UserInfo();
@@ -421,13 +511,7 @@ function EditModal({ setEditModal }) {
       <EditModalTop>
         {/* 프로필 이미지 수정 */}
         <ProfileImg src={profilePicture} />
-        <input
-          type="file"
-          onChange={(e) =>
-            setProfilePicture(URL.createObjectURL(e.target.files[0]))
-          }
-        />
-        {/* <ProfileImg src={Pimg} /> */}
+        <input type="file" onChange={handleProfilePictureChange} />
 
         {/* 가이드 소개 수정 */}
         {userInformation.guideIntroduction && (
@@ -455,6 +539,9 @@ function EditModal({ setEditModal }) {
       />
 
       <EditModalBottom>
+        <CertificationButton onClick={() => setCertificationModal(true)}>
+          자격증 등록
+        </CertificationButton>
         <EditCompleteButton onClick={handleSubmit}>
           수정 완료
         </EditCompleteButton>
@@ -466,6 +553,10 @@ function EditModal({ setEditModal }) {
           <PasswordChangeModal
             setPasswordChangeModal={setPasswordChangeModal}
           />
+        )}
+
+        {certificationModal && (
+          <CertificationModal setCertificationModal={setCertificationModal} />
         )}
       </EditModalBottom>
     </EditModalContainer>
@@ -519,7 +610,6 @@ function Left() {
 
   return (
     <MyPageLeft>
-      {/* <ProfileImg src={Pimg} /> */}
       <ProfileImg src={userInformation.guideProfilePicture} />
       <BoldP>{userInformation.nickname}</BoldP>
       <EditProfile />
@@ -529,7 +619,6 @@ function Left() {
         </div>
         <div style={{ fontWeight: "bold" }}>지난 투어 : {lastTour.length}</div>
       </MyTour>
-      {/* <ChatList>대화목록</ChatList> */}
     </MyPageLeft>
   );
 }

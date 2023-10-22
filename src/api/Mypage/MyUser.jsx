@@ -91,27 +91,17 @@ export async function UserInfo(props) {
 }
 
 //개인정보 수정
-export async function UserInfoChange(props) {
+export async function UserInfoChange(formData) {
+  console.log("개인정보수정", formData);
+  console.log("사진", formData.get("profilePicture"));
+  console.log("데이터", formData.get("userRequest"));
   try {
-    const res = await baseAxios.post(
-      "find-my-guide/member/update",
-      {
-        nickname: props.nickname,
-        phoneNumber: props.phoneNumber,
-        nationalCertificationOfGuideYn:
-          props.national_certification_of_quide_yn,
-        guideExperience: props.guideExperience,
-        profilePicture: props.profilePicture,
-        languages: props.languages,
-        guideIntro: props.guideIntro,
+    const res = await baseAxios.post("find-my-guide/member/update", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: sessionStorage.getItem("accessToken"),
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionStorage.getItem("accessToken"),
-        },
-      }
-    );
+    });
     return res;
   } catch (e) {
     console.error(e);
@@ -142,28 +132,44 @@ export async function PassWordChange(props) {
 }
 
 // 리뷰 등록
-export async function PostReview(props) {
+export async function PostReview({ tour_id, content, rating, image }) {
   try {
+    let formData = new FormData();
+
+    // 이미지 파일을 File 객체로 추가
+    if (image) {
+      formData.append("file", image);
+    }
+
+    // 나머지 데이터를 JSON 형태로 변환 후 Blob으로 추가
+    const data = {
+      content: content,
+      rating: rating,
+    };
+
+    formData.append(
+      "tourProductReviewRequest",
+      new Blob([JSON.stringify(data)], {
+        type: "application/json; charset=UTF-8",
+      })
+    );
+
     const res = await baseAxios.post(
-      `tour-product-review/register/${props.tour_id}`,
-      {
-        content: props.content,
-        rating: props.rating,
-        image: props.image,
-      },
+      `tour-product-review/register/${tour_id}`,
+      formData,
       {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: sessionStorage.getItem("accessToken"),
         },
       }
     );
+
     return res;
   } catch (e) {
     console.error(e);
   }
 }
-
 // 내가 쓴 리뷰 리스트
 export async function GetReview(props) {
   try {
@@ -173,6 +179,43 @@ export async function GetReview(props) {
         Authorization: sessionStorage.getItem("accessToken"),
       },
     });
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// 리뷰 삭제
+export async function ReviewDelete(props) {
+  try {
+    const res = await baseAxios.delete(`tour-product-review/delete/${props}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionStorage.getItem("accessToken"),
+      },
+    });
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// 자격증 등록
+export async function CertificationRegistration(props) {
+  try {
+    let formData = new FormData();
+    formData.append("image", props.image);
+
+    const res = await baseAxios.post(
+      `find-my-guide/guide/register-guide-certification`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: sessionStorage.getItem("accessToken"),
+        },
+      }
+    );
     return res;
   } catch (e) {
     console.error(e);

@@ -31,24 +31,22 @@ import {
   MemberWantTour,
   PostReview,
   GetReview,
+  ReviewDelete,
 } from "../../api/Mypage/MyUser";
 import GuideCard from "components/Card/GuideCard";
+import { style } from "@mui/system";
 
 // 오른쪽 - 회원전용
 const MemberMenuContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-color: grey;
-  border-width: 1px 1px 1px 1px;
-  border-style: solid;
-  border-radius: 0px 10px 10px 10px;
   gap: 100px;
 `;
 
 const LastTourContainer = styled.div`
   display: flex;
-  align-items: center;
+  align-items: start;
   flex-direction: column;
   gap: 30px;
 `;
@@ -84,6 +82,13 @@ const SlideContainer = styled.div`
   display: flex;
 `;
 
+const CenterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+`;
+
 // 지난 투어
 const ShowButton = styled.button`
   width: 100px;
@@ -99,9 +104,9 @@ const ShowButton = styled.button`
 const MemberWantContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-
+  align-items: start;
   gap: 30px;
+  margin-bottom: 100px;
 `;
 
 const WantList = styled.div`
@@ -129,6 +134,11 @@ const ChatButton = styled(WantBasicButton)`
 
 const StatusButton = styled(WantBasicButton)`
   background-color: #e2e201;
+  width: 80px;
+`;
+
+const CancelButton = styled(WantBasicButton)`
+  background-color: red;
   width: 80px;
 `;
 
@@ -163,8 +173,6 @@ function MemberBookedTour() {
   const upComingTour = useSelector((state) => state.upComingTour);
 
   const [value, onChange] = useState(new Date());
-
-  // console.log(upComingTour);
 
   // Carousel의 현재 슬라이드 인덱스 상태
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -267,8 +275,6 @@ function LastTour() {
   const lastTour = useSelector((state) => state.lastTour);
 
   const toursToShow = showMore ? lastTour : lastTour.slice(0, 3);
-
-  console.log(lastTour);
 
   // 모달
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -472,8 +478,6 @@ function MemberLikeTour() {
 
   const toursToShow = showMore ? likeTours : likeTours.slice(0, 3);
 
-  // console.log(likeTours);
-
   return (
     <div>
       <MemberTitle>
@@ -481,19 +485,21 @@ function MemberLikeTour() {
         <h4 style={{ fontWeight: "bold" }}>좋아요한 투어</h4>
       </MemberTitle>
       {likeTours.length > 0 ? (
-        <LastTourContainer>
-          <CardContainer>
-            {toursToShow.map((tour) => (
-              <Card key={tour.id} tour={tour} />
-            ))}
-          </CardContainer>
+        <CenterContainer>
+          <LastTourContainer>
+            <CardContainer>
+              {toursToShow.map((tour) => (
+                <Card key={tour.id} tour={tour} />
+              ))}
+            </CardContainer>
+          </LastTourContainer>
           {likeTours.length > 3 &&
             (showMore ? (
               <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
             ) : (
               <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
             ))}
-        </LastTourContainer>
+        </CenterContainer>
       ) : (
         <p>좋아요한 투어가 없습니다.</p>
       )}
@@ -501,55 +507,55 @@ function MemberLikeTour() {
   );
 }
 
-// 좋아요한 가이드
-function MemberLikeGuide() {
-  const [likeGuides, setLikeGuides] = useState([]);
+// // 좋아요한 가이드
+// function MemberLikeGuide() {
+//   const [likeGuides, setLikeGuides] = useState([]);
 
-  // 3개씩 보여주기
-  const [showMore, setShowMore] = useState(false);
+//   // 3개씩 보여주기
+//   const [showMore, setShowMore] = useState(false);
 
-  useEffect(() => {
-    const fetchLikeGuides = async () => {
-      try {
-        const res = await LikeGuide();
-        setLikeGuides(res.data);
-      } catch (e) {
-        console.error(e);
-      }
-    };
+//   useEffect(() => {
+//     const fetchLikeGuides = async () => {
+//       try {
+//         const res = await LikeGuide();
+//         setLikeGuides(res.data);
+//       } catch (e) {
+//         console.error(e);
+//       }
+//     };
 
-    fetchLikeGuides();
-  }, []);
+//     fetchLikeGuides();
+//   }, []);
 
-  const toursToShow = showMore ? likeGuides : likeGuides.slice(0, 3);
+//   const toursToShow = showMore ? likeGuides : likeGuides.slice(0, 3);
 
-  // console.log(likeGuides);
-  return (
-    <div>
-      <MemberTitle>
-        <FavoriteIcon style={{ color: "red" }} />
-        <h4 style={{ fontWeight: "bold" }}>좋아요한 가이드</h4>
-      </MemberTitle>
-      {likeGuides.length > 0 ? (
-        <LastTourContainer>
-          <CardContainer>
-            {toursToShow.map((guide) => (
-              <GuideCard key={guide.id} guide={guide} />
-            ))}
-          </CardContainer>
-          {likeGuides.length > 3 &&
-            (showMore ? (
-              <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
-            ) : (
-              <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
-            ))}
-        </LastTourContainer>
-      ) : (
-        <p>좋아요한 가이드가 없습니다.</p>
-      )}
-    </div>
-  );
-}
+//   // console.log(likeGuides);
+//   return (
+//     <div>
+//       <MemberTitle>
+//         <FavoriteIcon style={{ color: "red" }} />
+//         <h4 style={{ fontWeight: "bold" }}>좋아요한 가이드</h4>
+//       </MemberTitle>
+//       {likeGuides.length > 0 ? (
+//         <LastTourContainer>
+//           <CardContainer>
+//             {toursToShow.map((guide) => (
+//               <GuideCard key={guide.id} guide={guide} />
+//             ))}
+//           </CardContainer>
+//           {likeGuides.length > 3 &&
+//             (showMore ? (
+//               <ShowButton onClick={() => setShowMore(false)}>접기</ShowButton>
+//             ) : (
+//               <ShowButton onClick={() => setShowMore(true)}>더 보기</ShowButton>
+//             ))}
+//         </LastTourContainer>
+//       ) : (
+//         <p>좋아요한 가이드가 없습니다.</p>
+//       )}
+//     </div>
+//   );
+// }
 
 // 원해요 글 목록
 function MemberWantList() {
@@ -571,8 +577,6 @@ function MemberWantList() {
   }, []);
 
   const toursToShow = showMore ? wantTour : wantTour.slice(0, 3);
-
-  // console.log(wantTour);
 
   return (
     <div>
@@ -618,20 +622,29 @@ function ReviewList() {
   const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
-    const fetchReview = async () => {
-      try {
-        const res = await GetReview();
-        setReview(res.data);
-      } catch (e) {
-        console.error(e);
-      }
-    };
     fetchReview();
   }, []);
 
-  const reviewsToShow = showMore ? review : review.slice(0, 3);
+  const fetchReview = async () => {
+    try {
+      const res = await GetReview();
+      setReview(res.data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
-  console.log(review);
+  const handleDelete = async (id) => {
+    try {
+      await ReviewDelete(id);
+      // 성공적으로 삭제 후 다시 리뷰 리스트 갱신
+      fetchReview();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const reviewsToShow = showMore ? review : review.slice(0, 3);
 
   return (
     <div>
@@ -639,14 +652,35 @@ function ReviewList() {
         <DriveFileRenameOutlineIcon />
         <h4 style={{ fontWeight: "bold" }}>자신이 쓴 리뷰</h4>
       </MemberTitle>
+      <div style={{ display: "flex", gap: "150px", color: "grey" }}>
+        <p> 투어 이름 </p>
+        <p> 별점 </p>
+        <p> 내용 </p>
+      </div>
       {review.length > 0 ? (
         <MemberWantContainer>
           <div>
             {reviewsToShow.length > 0 &&
               reviewsToShow.map((review) => (
-                <WantList key={review.id}>
-                  <WantTitle>{review.title}</WantTitle>
-                </WantList>
+                <div style={{ display: "flex" }} key={review.id}>
+                  <div style={{ marginRight: "150px" }}>{review.tourTitle}</div>
+                  <StarRatings
+                    rating={review.rating}
+                    numberOfStars={5}
+                    starDimension="20px"
+                    starSpacing="5px"
+                    starRatedColor="gold"
+                    starHoverColor="gold"
+                    starEmptyColor="gray"
+                    starResolution="half" // 별점 반개 단위로 줄 수 있게 설정
+                  />
+                  <div style={{ marginLeft: "37px", marginRight: "280px" }}>
+                    {review.content}
+                  </div>
+                  <CancelButton onClick={() => handleDelete(review.id)}>
+                    삭제
+                  </CancelButton>
+                </div>
               ))}
           </div>
           {review.length > 3 && showMore ? (
@@ -669,7 +703,7 @@ function MemberMenu() {
       <MemberBookedTour />
       <LastTour />
       <MemberLikeTour />
-      <MemberLikeGuide />
+      {/* <MemberLikeGuide /> */}
       <MemberWantList />
       <ReviewList />
     </MemberMenuContainer>
