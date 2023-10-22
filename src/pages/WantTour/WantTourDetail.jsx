@@ -192,10 +192,16 @@ function WantTourDetail() {
                     </div>
                   </div>
                 )}
-                {post.locationsResponses && (
+                {post.locationResponses && (
                   <div className={styles.category}>
                     <div className={styles.categoryTitle}>꼭 가고싶은 장소</div>
-                    <div className={styles.categoryContent}>{post.locationsResponses}</div>
+                    <div className={styles.categoryContent}>
+                      {post.locationResponses
+                        .map((location) => {
+                          return location.title;
+                        })
+                        .join(', ')}
+                    </div>
                   </div>
                 )}
               </div>

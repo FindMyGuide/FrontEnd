@@ -39,7 +39,7 @@ function TastyDetail() {
     }
 
     fetchTastyDetail(id);
-  }, [id]);
+  }, [id, info.mapx, info.mapy]);
 
   const handleCopyClipBoard = async (text) => {
     if (text !== null) {

@@ -21,7 +21,6 @@ function WantTour() {
   useEffect(() => {
     async function fetchWantList() {
       const wantList = await WantAll();
-      console.log(wantList, wantList.reverse(), '확인');
       setList(wantList.reverse());
       setListAll(wantList.reverse());
       setLoading(false);
@@ -41,6 +40,7 @@ function WantTour() {
       const filteredList = listAll.filter((item) => item.memberInfoResponse.email === userEmail);
       setList(filteredList);
       setMyArticle(true);
+      setWait(false);
     }
   };
 
@@ -48,6 +48,7 @@ function WantTour() {
     const filteredList = listAll.filter((item) => !item.isReserved);
     setList(filteredList);
     setWait(true);
+    setMyArticle(false);
   };
 
   const handleAllArticle = () => {
@@ -92,7 +93,7 @@ function WantTour() {
             ) : null}
             {!wait ? (
               <div onClick={handleWait} className={styles.listBtn}>
-                &nbsp;매칭대기 보기
+                &nbsp;&nbsp;매칭대기 보기
               </div>
             ) : null}
           </div>

@@ -16,7 +16,6 @@ function FestivalDetail() {
     async function fetchFestivalDetail(id) {
       const festivalDetail = await FestivalInfo(id);
       setInfo(festivalDetail);
-      console.log(festivalDetail);
 
       // 지도 초기화 및 표시
       if (festivalDetail.mapX && festivalDetail.mapY) {

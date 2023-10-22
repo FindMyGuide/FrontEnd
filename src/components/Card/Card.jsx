@@ -7,6 +7,7 @@ import NoImage from 'asset/images/NoImage2.png';
 import { TourLike, TourLikeCancel } from 'api/tour/Tour';
 
 function Card({ tour }) {
+  console.log(tour);
   const navigate = useNavigate();
   const isLoggedIn = sessionStorage.getItem('accessToken');
   const [likes, setLikes] = useState(parseInt(tour.likes));

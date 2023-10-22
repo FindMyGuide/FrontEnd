@@ -38,7 +38,7 @@ function GuideButton(props) {
           type="button"
           onClick={handleClick}
         >
-          <div className={styles.content} style={{ color: 'black', fontWeight: 'semi-bold' }}>
+          <div className={styles.content} style={{ fontWeight: 'semi-bold' }}>
             📩 {props.text}와 채팅하기
           </div>
         </IconButton>
