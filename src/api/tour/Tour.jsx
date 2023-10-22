@@ -89,7 +89,6 @@ export async function TourLike(id) {
         }
       }
     );
-    console.log(res.data);
     return res.data;
   } catch (e) {
     console.error(e);

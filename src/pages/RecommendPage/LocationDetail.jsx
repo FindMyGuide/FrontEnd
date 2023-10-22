@@ -15,7 +15,6 @@ function LocationDetail() {
   useEffect(() => {
     async function fetchTravelDetail(id) {
       const locationDetail = await TravelInfo(id);
-      console.log(locationDetail);
       setInfo(locationDetail);
 
       // 지도 초기화 및 표시
@@ -40,7 +39,7 @@ function LocationDetail() {
     }
 
     fetchTravelDetail(id);
-  }, [id]);
+  }, [id, info.mapX, info.mapY]);
 
   const handleCopyClipBoard = async (text) => {
     if (text !== null) {
