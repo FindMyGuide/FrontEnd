@@ -128,7 +128,7 @@ function TourDetailPage() {
     }
 
     fetchPostDetail(tourId);
-  }, [tourId]);
+  }, [tourId, id]);
 
   const getLanguagesInKorean = (languages) => {
     if (!languages) return ''; // languages가 undefined나 null일 경우 빈 문자열을 반환
