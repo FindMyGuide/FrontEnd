@@ -33,7 +33,6 @@ function LoginChange() {
   };
 
   const findEmail = async (e) => {
-    console.log(e);
     const res = await UserFindId(e.findEmail);
     if (res !== undefined) {
       setEmail(res.data.email);
@@ -44,7 +43,6 @@ function LoginChange() {
 
   const findPassword = async (e) => {
     const res = await UserFindPassword(e);
-    console.log(res);
   };
 
   return (

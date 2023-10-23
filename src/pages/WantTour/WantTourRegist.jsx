@@ -120,7 +120,6 @@ function WantTourRegist() {
     if (cleanedInput) {
       if (!locations.includes(cleanedInput)) {
         setLocations([...locations, cleanedInput]);
-        console.log(cleanedInput);
       } else {
         alert('이미 추가된 태그입니다');
       }

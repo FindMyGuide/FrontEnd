@@ -68,7 +68,6 @@ function TourDetailPage() {
   const [user, setUser] = useState('');
 
   const handleSearch = async (props) => {
-    console.log(props);
     if (props) {
       const q = query(collection(db, 'users'), where('email', '==', props));
       try {
@@ -112,7 +111,6 @@ function TourDetailPage() {
     async function fetchPostDetail(id) {
       try {
         const postDetail = await TourDetail(id);
-        console.log(postDetail);
         if (postDetail?.data) {
           setTourDetail(postDetail.data);
           handleSearch(postDetail.guideEmail);
