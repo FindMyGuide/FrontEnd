@@ -32,7 +32,7 @@ const GuideCard = ({ guideId, name, tour, imageLink }) => {
               borderRadius: '9999px',
               objectFit: 'cover'
             }}
-            src={imageLink !== '' ? image : profileImg}
+            src={image !== '' ? image : profileImg}
             alt=""
           />
         </div>
@@ -40,7 +40,7 @@ const GuideCard = ({ guideId, name, tour, imageLink }) => {
         {title?.length > 8 ? (
           <p style={{ marginBottom: '0', marginLeft: '10px' }}>{title?.substring(0, 12) + '...'}</p>
         ) : (
-          <p style={{ marginBottom: '0', marginLeft: '10px' }}>{tour}</p>
+          <p style={{ marginBottom: '0', marginLeft: '10px' }}>{title}</p>
         )}
       </div>
     </>
