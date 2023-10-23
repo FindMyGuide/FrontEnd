@@ -70,19 +70,19 @@ function MainPage() {
         {tourList !== null && guideList !== null && reviewList !== null ? (
           <>
             <Fade cascade damping={0.1}>
-              {tourList.length !== 0 ? (
+              {tourList !== undefined && tourList.length !== 0 ? (
                 <div className={styles.content}>
                   <div className={styles.subtitle}>인기 투어를 구경해보세요</div>
                   <Carousel list={tourList} />
                 </div>
               ) : null}
-              {guideList.length !== 0 ? (
+              {guideList !== undefined && guideList.length !== 0 ? (
                 <div className={styles.content}>
                   <div className={styles.subtitle}>인기 가이드를 구경해보세요</div>
                   <GuideCards list={guideList} />
                 </div>
               ) : null}
-              {reviewList.length !== 0 ? (
+              {reviewList !== undefined && reviewList.length !== 0 ? (
                 <div className={styles.content}>
                   <div className={styles.subtitle}>실제 이용자들의 후기를 둘러보세요</div>
                   <VerticalCarousel list={reviewList} />
