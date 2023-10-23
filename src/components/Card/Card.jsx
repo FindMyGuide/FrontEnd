@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styles from './Card.module.css';
-import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
-import LanguageIcon from '@mui/icons-material/Language';
-import NoImage from 'asset/images/NoImage2.png';
-import { TourLike, TourLikeCancel } from 'api/tour/Tour';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "./Card.module.css";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+import LanguageIcon from "@mui/icons-material/Language";
+import NoImage from "asset/images/NoImage2.png";
+import { TourLike, TourLikeCancel } from "api/tour/Tour";
 
 function Card({ tour }) {
   const navigate = useNavigate();
-  const isLoggedIn = sessionStorage.getItem('accessToken');
+  const isLoggedIn = sessionStorage.getItem("accessToken");
   const [likes, setLikes] = useState(parseInt(tour.likes));
   const [isLiked, setIsLiked] = useState(tour.likeExist);
 
@@ -27,23 +27,30 @@ function Card({ tour }) {
       }
       setIsLiked(!isLiked);
     } else {
-      if (window.confirm('로그인이 필요한 기능입니다. 로그인 하시겠습니까?')) {
-        navigate('/login');
+      if (window.confirm("로그인이 필요한 기능입니다. 로그인 하시겠습니까?")) {
+        navigate("/login");
       }
     }
   };
 
   return (
-    <div className={styles.card} onClick={() => onClickHandler(tour.tourProductId)}>
-      <div style={{ padding: '10px' }}>
+    <div
+      className={styles.card}
+      onClick={() => onClickHandler(tour.tourProductId)}
+    >
+      <div style={{ padding: "10px" }}>
         <div className={styles.content}>
           <div>
-            <img src={tour.bestImage ? tour.bestImage : NoImage} alt="img" className={styles.mainImg} />
+            <img
+              src={tour.bestImage ? tour.bestImage : NoImage}
+              alt="img"
+              className={styles.mainImg}
+            />
           </div>
           <div>
             <FavoriteRoundedIcon
               className={styles.like}
-              style={{ fill: isLiked ? '#FF6073' : '#FFFFFF' }}
+              style={{ fill: isLiked ? "#FF6073" : "#FFFFFF" }}
               onClick={(e) => {
                 e.stopPropagation();
                 onLikeHandler(tour.tourProductId);
@@ -52,7 +59,7 @@ function Card({ tour }) {
           </div>
         </div>
         <div className={styles.title}>{tour.title}</div>
-        <div style={{ fontSize: '15px' }}>
+        <div style={{ fontSize: "15px" }}>
           {tour.themes ? (
             <div>
               {tour.themes.map((theme, index) => (
@@ -62,21 +69,26 @@ function Card({ tour }) {
               ))}
             </div>
           ) : null}
-          <div style={{ color: '#8D8D8D' }}>
-            <LanguageIcon style={{ fill: '#8D8D8D', marginRight: '3px' }} />
-            {tour.languages.length > 2 ? (
+          <div style={{ color: "#8D8D8D" }}>
+            <LanguageIcon style={{ fill: "#8D8D8D", marginRight: "3px" }} />
+            {tour.languages && tour.languages.length > 2 ? (
               <>
-                {tour.languages.slice(0, 2).join(', ')} (+{tour.languages.length - 2})
+                {tour.languages.slice(0, 2).join(", ")} (+
+                {tour.languages.length - 2})
               </>
-            ) : (
-              tour.languages.join(', ')
-            )}
+            ) : tour.languages && tour.languages.length === 2 ? (
+              tour.languages.join(", ")
+            ) : null}
           </div>
           <div>
-            <FavoriteRoundedIcon style={{ fill: '#FF6073', marginRight: '3px' }} />
+            <FavoriteRoundedIcon
+              style={{ fill: "#FF6073", marginRight: "3px" }}
+            />
             {likes}
           </div>
-          <div style={{ textAlign: 'end' }}>￦&nbsp;{tour.price.toLocaleString()}</div>
+          <div style={{ textAlign: "end" }}>
+            ￦&nbsp;{tour.price && tour.price.toLocaleString()}
+          </div>
         </div>
       </div>
     </div>
