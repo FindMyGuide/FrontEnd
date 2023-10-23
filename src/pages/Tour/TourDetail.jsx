@@ -113,9 +113,10 @@ function TourDetailPage() {
         const postDetail = await TourDetail(id);
         if (postDetail?.data) {
           setTourDetail(postDetail.data);
-          handleSearch(postDetail.guideEmail);
-          const formattedDates = postDetail.availableDates.map((dateString) => {
-            const [year, month, day] = dateString.split('-').map(Number);
+          handleSearch(postDetail.data.guideEmail);
+
+          const formattedDates = postDetail.data.availableDates.map((dateString) => {
+            const [year, month, day] = dateString.date.split('-').map(Number);
             return new Date(year, month - 1, day);
           });
           setDate(formattedDates);

@@ -37,8 +37,8 @@ const GuideCard = ({ guideId, name, tour, imageLink }) => {
           />
         </div>
         <p style={{ marginBottom: '0', marginTop: '8px', marginLeft: '10px' }}>인기투어</p>
-        {title.length > 8 ? (
-          <p style={{ marginBottom: '0', marginLeft: '10px' }}>{title.substring(0, 12) + '...'}</p>
+        {title?.length > 8 ? (
+          <p style={{ marginBottom: '0', marginLeft: '10px' }}>{title?.substring(0, 12) + '...'}</p>
         ) : (
           <p style={{ marginBottom: '0', marginLeft: '10px' }}>{tour}</p>
         )}
