@@ -5,50 +5,41 @@
 FormGroup {
   display: flex;
 }
+.subtitle {
+  font-family: 'Happiness-Sans-Title';
+  font-size: 25px;
+  font-weight: 800;
+  margin: 60px 0 20px 0;
+}
 
-.topdiv {
-  position: absolute;
-  top: -25%;
-  /* left: -10%; */
-  font-size: 90px;
-  font-weight: bold;
+.content {
+  margin-top: 30px;
+  margin-bottom: 10px;
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
-.topdiv .registButton {
+.content .registButton {
   width: 100px;
-  height: 90px;
+  height: 60px;
   font-size: 20px;
-  font-weight: bold;
+  font-weight: 800;
+  color: #ffffff;
   border: 0px;
   border-radius: 10px;
-  margin-top: 10px;
-}
-
-.topcard {
-  display: flex;
-  justify-content: space-evenly;
-  margin-top: 30px;
-  padding-top: 20px;
-}
-
-.cardovertext {
-  position: absolute;
-  top: 50%;
-  left: 10%;
-  bottom: 50px;
-  font-size: 50px;
-  font-weight: bold;
-  zindex: 2;
+  background-color: #0052b4;
+  &:hover {
+    transform: scale(1.02);
+  }
 }
 
 .selectedtheme {
   display: flex;
   font-size: 40px;
   font-weight: bold;
-  margin: 100px 0px 30px;
+  margin: 0px 0px 30px;
 }
 .themes {
   width: 100%;
@@ -79,24 +70,60 @@ FormGroup {
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  justify-content: center;
 }
 
 .item {
   padding: 2%;
-  display: flex;
+  display: grid;
   height: 250px;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
 }
 
 .itemImg {
-  width: 50%;
+  width: 100%;
+  padding: 5px;
   /* height: 90%; */
 }
 
 .itemDetail {
-  width: 40%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   /* align-items: center; */
   justify-content: center;
   font-size: 18px;
+}
+
+/* 더보기 버튼 */
+.gamebutton {
+  background-color: skyblue;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 18px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: bold;
+  box-shadow: 2px 2px 10px skyblue;
+  transition: all 0.2s ease-in-out;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
+}
+
+.playicon {
+  width: 24px;
+  height: 24px;
+  fill: #fff;
+  margin-right: 6px;
+}
+
+.gamebutton:hover {
+  background-color: #2f3640;
+  color: skyblue;
+  box-shadow: 2px 2px 20px #2f3640;
+  transform: translateY(-1px);
 }
