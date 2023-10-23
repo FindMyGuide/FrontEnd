@@ -227,8 +227,6 @@ function GuideBookedTour() {
     }
   };
 
-  console.log(bookedTour);
-
   return (
     <div>
       <GuideTitle>
