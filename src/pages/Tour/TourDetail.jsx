@@ -68,7 +68,6 @@ function TourDetailPage() {
   const [user, setUser] = useState('');
 
   const handleSearch = async (props) => {
-    console.log(props);
     if (props) {
       const q = query(collection(db, 'users'), where('email', '==', props));
       try {

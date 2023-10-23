@@ -50,6 +50,9 @@ const RowResultGuideCard = ({ guide }) => {
           <img
             style={{
               width: '120px',
+              height: '120px',
+              borderRadius: '9999px',
+              objectFit: 'cover',
               position: 'absolute',
               right: '-8px',
               top: '-60px'
@@ -58,9 +61,9 @@ const RowResultGuideCard = ({ guide }) => {
             alt=""
           />
         </div>
-        <p style={{ marginBottom: '0', marginLeft: '10px' }}>
+        <p style={{ marginBottom: '0', marginLeft: '10px', display: 'flex' }}>
           언어{' '}
-          {uniqueLanguages?.map((language) => {
+          {uniqueLanguages?.slice(0, 8).map((language) => {
             return languageImage[`${language}`];
           })}
         </p>

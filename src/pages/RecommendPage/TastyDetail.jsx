@@ -14,7 +14,6 @@ function TastyDetail() {
   useEffect(() => {
     async function fetchTastyDetail(id) {
       const tastyDetail = await TastyInfo(id);
-      console.log(tastyDetail);
       setInfo(tastyDetail);
 
       // 지도 초기화 및 표시

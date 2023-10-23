@@ -20,7 +20,6 @@ const Chats = () => {
         if (docSnap.exists()) {
           setChats(docSnap.data());
         } else {
-          console.log('Document not found');
         }
       } catch (error) {
         console.error('Error getting document:', error);

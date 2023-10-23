@@ -83,7 +83,6 @@ function TourRegistLocation({ onLocationSelect, searchWord, day }) {
             position={marker.position}
             onClick={() => {
               setInfo(marker);
-              console.log(marker);
             }}
           >
             {info && info.position && info.content === marker.content && (

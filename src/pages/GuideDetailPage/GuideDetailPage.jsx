@@ -65,7 +65,6 @@ const GuideDetailPage = () => {
         const GuideDetail = getGuideDetail;
         setGuideDetail(GuideDetail);
         setShowingList(GuideDetail?.tourProductResponses?.slice(0, 6));
-        console.log(GuideDetail);
         const allLanguages = GuideDetail?.tourProductResponses.reduce((languagesList, tour) => {
           return languagesList.concat(tour.languages);
         }, []);
@@ -81,7 +80,6 @@ const GuideDetailPage = () => {
         const GuideReview = getGuideReview;
         setGuideReview(GuideReview);
         setShowingReview(GuideReview?.slice(0, 4));
-        console.log(GuideReview);
       })
       .catch((error) => {
         console.error(error);
@@ -119,7 +117,6 @@ const GuideDetailPage = () => {
   };
 
   const handleSearch = async (props) => {
-    console.log(props);
     const q = query(collection(db, 'users'), where('email', '==', props));
     try {
       const querySnapshot = await getDocs(q);
@@ -160,7 +157,7 @@ const GuideDetailPage = () => {
         <div className={styles.guideprofile}>
           <div style={{ textAlign: 'center', marginBottom: '30px' }}>
             <img
-              style={{ width: '240px' }}
+              style={{ width: '240px', height: '240px', borderRadius: '9999px' }}
               src={guideDetail?.profilePicture !== '' ? guideDetail.profilePicture : profileImg}
               alt="가이드 이미지"
             />
@@ -200,7 +197,7 @@ const GuideDetailPage = () => {
             </h5>
             <div className={styles.touring}>
               {showingList?.map((tourlist, idx) => (
-                <div style={{ marginLeft: 'auto', marginRight: 'auto' }} key={idx}>
+                <div style={{ marginLeft: 'auto', marginRight: 'auto' }} key={tourlist.tourProductId}>
                   <Card tour={tourlist}></Card>
                 </div>
               ))}

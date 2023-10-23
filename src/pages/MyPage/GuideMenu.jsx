@@ -238,7 +238,7 @@ function GuideBookedTour() {
             <BookedTourContainer key={tour.tourHistoryManagerId}>
               <BookedImg style={{ marginLeft: "60px" }} src={tour.images} />
               <BookedMemberContainer>
-                <BookedTitle>{tour.title}</BookedTitle>
+                <BookedTitle>{tour.tourTitle}</BookedTitle>
                 <MemberBox>
                   <div>{tour.touristEmail}</div>
                   <div>
