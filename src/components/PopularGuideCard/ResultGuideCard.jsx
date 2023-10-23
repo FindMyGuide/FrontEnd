@@ -51,6 +51,8 @@ const ResultGuideCard = ({ guide }) => {
           <img
             style={{
               width: '120px',
+              height: '120px',
+              borderRadius: '9999px',
               position: 'absolute',
               right: '-8px',
               top: '-60px'
