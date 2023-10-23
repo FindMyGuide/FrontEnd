@@ -24,10 +24,13 @@ const GuideCard = ({ guideId, name, tour, imageLink }) => {
               boxSizing: 'border',
               margin: '0',
               padding: '0',
-              width: '80px',
               position: 'absolute',
               right: '-10px',
-              top: '-30px'
+              top: '-30px',
+              width: '80px',
+              height: '80px',
+              borderRadius: '9999px',
+              objectFit: 'cover'
             }}
             src={imageLink !== '' ? image : profileImg}
             alt=""

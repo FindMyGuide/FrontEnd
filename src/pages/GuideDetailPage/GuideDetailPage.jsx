@@ -157,7 +157,7 @@ const GuideDetailPage = () => {
         <div className={styles.guideprofile}>
           <div style={{ textAlign: 'center', marginBottom: '30px' }}>
             <img
-              style={{ width: '240px' }}
+              style={{ width: '240px', height: '240px', borderRadius: '9999px' }}
               src={guideDetail?.profilePicture !== '' ? guideDetail.profilePicture : profileImg}
               alt="가이드 이미지"
             />

@@ -50,6 +50,9 @@ const RowResultGuideCard = ({ guide }) => {
           <img
             style={{
               width: '120px',
+              height: '120px',
+              borderRadius: '9999px',
+              objectFit: 'cover',
               position: 'absolute',
               right: '-8px',
               top: '-60px'
