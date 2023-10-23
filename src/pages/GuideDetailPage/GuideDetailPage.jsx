@@ -197,7 +197,7 @@ const GuideDetailPage = () => {
             </h5>
             <div className={styles.touring}>
               {showingList?.map((tourlist, idx) => (
-                <div style={{ marginLeft: 'auto', marginRight: 'auto' }} key={idx}>
+                <div style={{ marginLeft: 'auto', marginRight: 'auto' }} key={tourlist.tourProductId}>
                   <Card tour={tourlist}></Card>
                 </div>
               ))}

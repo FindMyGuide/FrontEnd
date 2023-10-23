@@ -61,9 +61,9 @@ const ResultGuideCard = ({ guide }) => {
             alt=""
           />
         </div>
-        <p style={{ marginBottom: '0', marginLeft: '10px' }}>
+        <p style={{ marginBottom: '0', marginLeft: '10px', display: 'flex' }}>
           언어{' '}
-          {uniqueLanguages?.map((language) => {
+          {uniqueLanguages?.slice(0, 8).map((language) => {
             return languageImage[`${language}`];
           })}
         </p>
