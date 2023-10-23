@@ -47,8 +47,6 @@ function WantTourRegist() {
         return new Date(year, month - 1, day);
       });
       setDate(formattedDates);
-
-      console.log(post);
     }
 
     fetchPostUpdate(id);
@@ -90,7 +88,6 @@ function WantTourRegist() {
       return formattedDate;
     });
     formattedDates.sort((a, b) => new Date(a) - new Date(b));
-    console.log(formattedDates);
 
     const res = await UpdateArticle({
       id,
@@ -150,7 +147,6 @@ function WantTourRegist() {
     if (cleanedInput) {
       if (!locations.includes(cleanedInput)) {
         setLocations([...locations, cleanedInput]);
-        console.log(cleanedInput);
       } else {
         alert('이미 추가된 태그입니다');
       }

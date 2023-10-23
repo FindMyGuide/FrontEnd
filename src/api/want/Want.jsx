@@ -64,17 +64,6 @@ export async function UpdateArticle(props) {
     );
     return res;
   } catch (e) {
-    console.log({
-      wantTourProductId: props.id,
-      vehicle: props.vehicle,
-      title: props.title,
-      wantDates: props.wantDates,
-      themeIds: props.themeIds,
-      location: props.location,
-      content: props.content,
-      price: props.price,
-      totalPeople: props.totalPeople
-    });
     console.error(e);
     return null;
   }
@@ -100,7 +89,6 @@ export async function DeleteArticle(id) {
 export async function DetailArticle(id) {
   try {
     const res = await baseAxios.get(`/want-tourProduct/${id}`, {}, {});
-    console.log(res.data);
     return res.data;
   } catch (e) {
     console.error(e);

@@ -65,7 +65,6 @@ const GuideDetailPage = () => {
         const GuideDetail = getGuideDetail;
         setGuideDetail(GuideDetail);
         setShowingList(GuideDetail?.tourProductResponses?.slice(0, 6));
-        console.log(GuideDetail);
         const allLanguages = GuideDetail?.tourProductResponses.reduce((languagesList, tour) => {
           return languagesList.concat(tour.languages);
         }, []);
@@ -81,7 +80,6 @@ const GuideDetailPage = () => {
         const GuideReview = getGuideReview;
         setGuideReview(GuideReview);
         setShowingReview(GuideReview?.slice(0, 4));
-        console.log(GuideReview);
       })
       .catch((error) => {
         console.error(error);
@@ -119,7 +117,6 @@ const GuideDetailPage = () => {
   };
 
   const handleSearch = async (props) => {
-    console.log(props);
     const q = query(collection(db, 'users'), where('email', '==', props));
     try {
       const querySnapshot = await getDocs(q);
